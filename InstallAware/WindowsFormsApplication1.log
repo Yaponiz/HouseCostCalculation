@@ -1,0 +1,17 @@
+Building Project: WindowsFormsApplication1
+Output Folder: C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\InstallAware\Release\Uncompressed\
+Deployment Type: Uncompressed Directory Layout
+Code Signing: Disabled
+Compression: Best
+Compiler Variables: UAC=requireAdministrator
+###
+Cleared output folder C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\InstallAware\Release\Uncompressed\
+Built plug-in action Windows Installer
+Built plug-in action (Un)Install MSI Setup
+Built plug-in action Windows Installer
+Built plug-in action File Bag
+Copied file C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\bin\Debug\HouseCostCalculation.exe
+Copied assembly C:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\Microsoft.Office.Interop.Word.dll
+Copied assembly C:\Program Files (x86)\MySQL\MySQL Connector Net 6.1.6\Assemblies\MySql.Data.dll
+Copied assembly C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\obj\x86\Debug\AxInterop.WMPLib.dll
+Error during build: Cannot open file "C:\Windows\assembly\GAC\Office\12.0.0.0__71e9bce111e9429c\Office.dll". Процесс не может получить доступ к файлу, так как этот файл занят другим процессом

@@ -1,0 +1,84 @@
+Install Files
+Create Shortcut
+Install Assembly
+Install Assembly
+Install Assembly
+Install Assembly
+Install Assembly
+Install Assembly
+$
+{8259C448-DFDA-49AC-B1CF-368F9A833B2B}
+{67D4F87D-D64B-4712-AED7-4F25DBB42A33}
+{C62B4088-2531-4ECF-92BF-3DF359919756}
+{9CE9125D-F76C-428F-B9DE-9A347A7CDA36}
+{C5799138-C9DF-448C-A2C4-A9315B251A69}
+{F95F4492-FB79-4ED1-B982-739751B3152B}
+{FADB85DA-B1F9-4B04-9B71-C98FAB785DBA}
+{AA35EC4A-0ABA-403F-A6C4-F56EEADA6974}
+$
+{8259C448-DFDA-49AC-B1CF-368F9A833B2B}
+C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\bin\Debug\HouseCostCalculation.exe
+FALSE
+$TARGETDIR$
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+{67D4F87D-D64B-4712-AED7-4F25DBB42A33}
+$TARGETDIR$\HouseCostCalculation.exe
+HouseCostCalculation
+$SHORTCUTFOLDER$
+HouseCostCalculation
+
+
+
+
+0
+{C62B4088-2531-4ECF-92BF-3DF359919756}
+C:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\Microsoft.Office.Interop.Word.dll
+FALSE
+$TARGETDIR$
+{9CE9125D-F76C-428F-B9DE-9A347A7CDA36}
+C:\Program Files (x86)\MySQL\MySQL Connector Net 6.1.6\Assemblies\MySql.Data.dll
+TRUE
+
+{C5799138-C9DF-448C-A2C4-A9315B251A69}
+C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\obj\x86\Debug\AxInterop.WMPLib.dll
+FALSE
+$TARGETDIR$
+{F95F4492-FB79-4ED1-B982-739751B3152B}
+C:\Windows\assembly\GAC\Office\12.0.0.0__71e9bce111e9429c\Office.dll
+FALSE
+$TARGETDIR$
+{FADB85DA-B1F9-4B04-9B71-C98FAB785DBA}
+C:\Windows\assembly\GAC\Microsoft.Office.Interop.Excel\12.0.0.0__71e9bce111e9429c\Microsoft.Office.Interop.Excel.dll
+FALSE
+$TARGETDIR$
+{AA35EC4A-0ABA-403F-A6C4-F56EEADA6974}
+C:\Windows\assembly\GAC\Microsoft.Vbe.Interop\12.0.0.0__71e9bce111e9429c\Microsoft.Vbe.Interop.dll
+FALSE
+$TARGETDIR$
+$
+
+
+
+
+
+
+
+
+$
+
+
+
+
+
+
+
+
+$

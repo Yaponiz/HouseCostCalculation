@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WindowsFormsApplication1.mainForm" Collapsed="true">
+    <Position X="1.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>/+9033CT6C88uPv72Mv+WhXei+x+c2unmv+1Dqr3dHo=</HashCode>
+      <FileName>mainForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WindowsFormsApplication1.Program" Collapsed="true">
+    <Position X="1.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.startForm" Collapsed="true">
+    <Position X="3.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAACAAAAAAggCAAAACAAAYAAAAAGAAAAAAAAA=</HashCode>
+      <FileName>startForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.Padeg" Collapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAQAASAAABCAAACAAABCIAAIAAAAEEQAAAAAAAA=</HashCode>
+      <FileName>Padeg.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.mapForm" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACAAAIAAAAACAAAABCAAA=</HashCode>
+      <FileName>Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.Properties.Resources" Collapsed="true">
+    <Position X="3.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAABAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.Properties.Settings" Collapsed="true">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RSDN.RusNumber" Collapsed="true">
+    <Position X="3.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAABAAAAAAAAIAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>RusNumber.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RSDN.RusCurrencySectionHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>RusNumber.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="RSDN.RusCurrency" Collapsed="true">
+    <Position X="5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAIAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RusNumber.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.House" Collapsed="true">
+    <Position X="7.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAgAAAAAAAAA=</HashCode>
+      <FileName>house.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.Owner" Collapsed="true">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAQAAAAABCAAQAAEAgAAAAgKYAQAogABMACAgBQAA=</HashCode>
+      <FileName>Owner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HouseCostCalculation.Address" Collapsed="true">
+    <Position X="9.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACAABAAggAAAAIAABEAAAAQAAAAAgAAAAIAAAACAAA=</HashCode>
+      <FileName>Address.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="RSDN.CurrencyInfo" Collapsed="true">
+    <Position X="1.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAICAECAAAAAAAAAQAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>RusNumber.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Microsoft Sans Serif" Size="8.25" />
+</ClassDiagram>

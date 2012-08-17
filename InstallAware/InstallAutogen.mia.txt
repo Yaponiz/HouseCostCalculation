@@ -1,0 +1,8 @@
+Install Files C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\bin\Debug\HouseCostCalculation.exe to $TARGETDIR$
+Create Shortcut $SHORTCUTFOLDER$\HouseCostCalculation to $TARGETDIR$\HouseCostCalculation.exe
+Install Assembly C:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\Microsoft.Office.Interop.Word.dll to $TARGETDIR$
+Install Assembly C:\Program Files (x86)\MySQL\MySQL Connector Net 6.1.6\Assemblies\MySql.Data.dll to Global Assembly Cache
+Install Assembly C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\obj\x86\Debug\AxInterop.WMPLib.dll to $TARGETDIR$
+Install Assembly C:\Windows\assembly\GAC\Office\12.0.0.0__71e9bce111e9429c\Office.dll to $TARGETDIR$
+Install Assembly C:\Windows\assembly\GAC\Microsoft.Office.Interop.Excel\12.0.0.0__71e9bce111e9429c\Microsoft.Office.Interop.Excel.dll to $TARGETDIR$
+Install Assembly C:\Windows\assembly\GAC\Microsoft.Vbe.Interop\12.0.0.0__71e9bce111e9429c\Microsoft.Vbe.Interop.dll to $TARGETDIR$

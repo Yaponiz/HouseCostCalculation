@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<iasettings>
+  <projectproperties>
+    <manufacturer>hp</manufacturer>
+    <productname>WindowsFormsApplication1</productname>
+    <productversion>1.0.0.0</productversion>
+    <productcode>{25b09096-a91c-4aab-96b7-b4d2f9f150f9}</productcode>
+    <upgradecode>{fcf05f57-8d8e-4c2b-8951-9823d2085e6a}</upgradecode>
+    <language>0</language>
+    <languagename>English</languagename>
+  </projectproperties>
+  <summary>
+    <title>WindowsFormsApplication1</title>
+    <subject>WindowsFormsApplication1</subject>
+    <author>hp</author>
+    <summarycomments>WindowsFormsApplication1</summarycomments>
+    <revisioncode>{f40389db-0392-43b9-92f9-155fc1a68321}</revisioncode>
+    <uacelevation>asInvoker</uacelevation>
+  </summary>
+  <addremove>
+    <publishername>hp</publishername>
+    <contactname>hp</contactname>
+    <helplink>http://www.mywebsite.com</helplink>
+    <productupdatelink>http://www.mywebsite.com</productupdatelink>
+    <addremovecomments>All Rights Reserved</addremovecomments>
+    <iconfile />
+  </addremove>
+  <codegen>
+    <generateincludefiles>1</generateincludefiles>
+    <generatefeatures>0</generatefeatures>
+    <refreshscript>0</refreshscript>
+  </codegen>
+  <compilervariables>
+    <variables />
+  </compilervariables>
+  <build>
+    <buildtype>0</buildtype>
+  </build>
+  <files>
+    <filedetails filename="C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\bin\Debug\HouseCostCalculation.exe" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="1" runprogram="1" installfilecommand="1" />
+  </files>
+  <dependencies>
+    <dependencydetails filename="C:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\Microsoft.Office.Interop.Word.dll" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+    <dependencydetails filename="C:\Program Files (x86)\MySQL\MySQL Connector Net 6.1.6\Assemblies\MySql.Data.dll" targetlocation="GAC" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+    <dependencydetails filename="C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\obj\x86\Debug\AxInterop.WMPLib.dll" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+    <dependencydetails filename="C:\Windows\assembly\GAC\Office\12.0.0.0__71e9bce111e9429c\Office.dll" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+    <dependencydetails filename="C:\Windows\assembly\GAC\Microsoft.Office.Interop.Excel\12.0.0.0__71e9bce111e9429c\Microsoft.Office.Interop.Excel.dll" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+    <dependencydetails filename="C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\obj\x86\Debug\Interop.Padeg.dll" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+    <dependencydetails filename="C:\Windows\assembly\GAC\Microsoft.Vbe.Interop\12.0.0.0__71e9bce111e9429c\Microsoft.Vbe.Interop.dll" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+    <dependencydetails filename="C:\Users\hp\Documents\Visual Studio 2010\Projects\HouseCostCalculation\WindowsFormsApplication1\obj\x86\Debug\Interop.WMPLib.dll" targetlocation="$TARGETDIR$" generatenativeimage="0" registerassembly="0" runinstallerclass="0" createshortcut="0" runprogram="0" installfilecommand="0" />
+  </dependencies>
+  <dialogtheme>
+    <themename>Official</themename>
+  </dialogtheme>
+  <authenticode>
+    <sign>0</sign>
+    <certificatefile />
+    <keyfile />
+    <productinfourl />
+    <authpassword />
+    <timestampurl />
+  </authenticode>
+  <compression>
+    <compressiontype>4</compressiontype>
+    <encrypt>0</encrypt>
+    <compressionpassword />
+  </compression>
+  <output>
+    <outputtype>0</outputtype>
+    <location />
+    <filename />
+    <calculatefilehash>0</calculatefilehash>
+    <refreshrevisioncode>1</refreshrevisioncode>
+  </output>
+</iasettings>
