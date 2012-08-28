@@ -118,7 +118,7 @@ namespace WindowsFormsApplication1
                         tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
                         tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
                         tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                        //tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
                         System.Data.DataTable test = getDataFromXLS("Черновик.xls");
 
                         addObjectData();
@@ -151,7 +151,7 @@ namespace WindowsFormsApplication1
                         tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
                         tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
                         tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                        //tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
                         addHouseData();
                         docType = type.ToLower();
                         houseCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
@@ -778,97 +778,9 @@ namespace WindowsFormsApplication1
 
         public void addGridData()
         {
-            dataGridView4.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-            dataGridView4.AutoResizeRows();
-            dataGridView4.AutoResizeColumns();
-            dataGridView4.Rows.Add("2.1.1", "Местоположение и окружение Объекта оценки");
-            dataGridView4.Rows.Add("Местоположение Объекта оценки", "");
-            dataGridView4.Rows.Add("Экологическая обстановка в районе", "");
-            dataGridView4.Rows.Add("Интенсивность движения транспорта мимо дома", "");
-            dataGridView4.Rows.Add("Транспортная доступность, обеспеченность общественным транспортом", "");
-            dataGridView4.Rows.Add("Прилегающая транспортная магистраль, улица", "");
-            dataGridView4.Rows.Add("Близость к скоростным магистралям, соседние улицы", "");
-            dataGridView4.Rows.Add("Эстетичность окружающей застройки", "");
-            dataGridView4.Rows.Add("Престижность района", "");
-            dataGridView4.Rows.Add("Зонирование района (преобладающий тип застройки)", "");
-            dataGridView4.Rows.Add("Близость к объектам социально-бытовой сферы", "");
-            dataGridView4.Rows.Add("Близость к объектам развлечений и отдыха", "");
-            dataGridView4.Rows.Add("Объекты промышленной инфраструктуры", "");
-            dataGridView4.Rows.Add("Придомовая территория", "");
-            dataGridView4.Rows.Add("Парковка возле дома", "");
-            dataGridView4.Rows.Add("Наличие зеленых насаждений", "");
-            dataGridView4.Rows.Add("2.1.2", "Описание дома, в котором расположена оцениваемая квартира");
-            dataGridView4.Rows.Add("Тип дома", "");
-            dataGridView4.Rows.Add("Год постройки", "");
-            dataGridView4.Rows.Add("Этажность", "");
-            dataGridView4.Rows.Add("Материал наружных стен", "");
-            dataGridView4.Rows.Add("Материал перегородок", "");
-            dataGridView4.Rows.Add("Группа капитальности", "");
-            dataGridView4.Rows.Add("Наружная отделка", "");
-            dataGridView4.Rows.Add("Состояние внеш.отделки, вид фасада", "");
-            dataGridView4.Rows.Add("Характеристика перекрытий", "");
-            dataGridView4.Rows.Add("Тип фундамента", "");
-            dataGridView4.Rows.Add("Защищенность подъезда", "");
-            dataGridView4.Rows.Add("Состояние обществ. зон подъезда", "");
-            dataGridView4.Rows.Add("Лифт", "");
-            dataGridView4.Rows.Add("Мусоропровод", "");
-            dataGridView4.Rows.Add("Газ", "");
-            dataGridView4.Rows.Add("Горячее водоснабжение", "");
-            dataGridView4.Rows.Add("Отопление", "");
-            dataGridView4.Rows.Add("Противопожарная безопасность", "");
-            dataGridView4.Rows.Add("Наличие и тип парковки", "");
-            dataGridView4.Rows.Add("Общее состояние дома", "");
-            dataGridView4.Rows.Add("Наличие/ отсутствие дополнительных услуг для жильцов", "");
-            dataGridView4.Rows.Add("Наличие/ отсутствие встроено-пристроенных нежилых помещений", "");
-            dataGridView4.Rows.Add("2.1.3", "Описание оцениваемой квартиры");
-            dataGridView4.Rows.Add("Документ органа (организации), осуществившей технический учет и инвентаризацию Объекта оценки", "");
-            dataGridView4.Rows.Add("Литер, согласно документа технического учета и инвентаризации", "");
-            dataGridView4.Rows.Add("Этаж", "");
-            dataGridView4.Rows.Add("Количество квартир на этаже", "");
-            dataGridView4.Rows.Add("Тип планировки", "");
-            dataGridView4.Rows.Add("Общая площадь (с учетом лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.", "");
-            dataGridView4.Rows.Add("Общая площадь (без учета лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.", "");
-            dataGridView4.Rows.Add("Жилая площадь, согласно документа технич.учета и инвентаризации, в кв.м.", "");
-            dataGridView4.Rows.Add("Площадь кухни, согласно документа технич.учета и инвентаризации, кв.м.", "");
-            dataGridView4.Rows.Add("Санузел, количество санузлов", "");
-            dataGridView4.Rows.Add("Балкон/лоджия, согласно документа технич.учета и инвентаризации", "");
-            dataGridView4.Rows.Add("Высота помещений по внутр. обмеру, согласно документа технического учета и инвентаризации, в м.", "");
-            dataGridView4.Rows.Add("Общая площадь квартиры, согласно правоустанавливающим документам (Свидетельства о государственной регистрации права Управления Федеральной регистрационной службы по РСО-Алания серия 15 АЕ №689866 от 24/05/05г.), в кв.м.", "");
-            dataGridView4.Rows.Add("Данные о неучтен. перепланировке", "");
-            dataGridView4.Rows.Add("Остекление балкона/лоджии", "");
-            dataGridView4.Rows.Add("Выход окон", "");
-            dataGridView4.Rows.Add("Вспомогательные помещения", "");
-            dataGridView4.Rows.Add("Смежные комнаты", "");
-            dataGridView4.Rows.Add("Телефон", "");
-            dataGridView4.Rows.Add("Дополн. системы безопасности", "");
-            dataGridView4.Rows.Add("Система кондиционирования", "");
-            dataGridView4.Rows.Add("Отделка: Полы", "");
-            dataGridView4.Rows.Add("Отделка: Стены", "");
-            dataGridView4.Rows.Add("Отделка: Потолки", "");
-
-            dataGridView4.Rows.Add("Входная дверь", "");
-            dataGridView4.Rows.Add("Межкомнатные двери", "");
-
-            dataGridView4.Rows.Add("Окна", "");
-            dataGridView4.Rows.Add("Сантехнические устройства", "");
-            dataGridView4.Rows.Add("Подключение к электричеству", "");
-            dataGridView4.Rows.Add("Подключение к холодному/горячему  водоснабжению", "");
-            dataGridView4.Rows.Add("Подключение к канализации", "");
-            dataGridView4.Rows.Add("Система отопления и отопительные приборы", "");
-            dataGridView4.Rows.Add("Кухонная плита", "");
-            dataGridView4.Rows.Add("Наличие следов протечек на потолке", "");
-            dataGridView4.Rows.Add("Дополнительные удобства", "");
-            dataGridView4.Rows.Add("Состояние отделки", "");
-
-            dataGridView4.Rows.Add("Необходимые ремонтные работы", "");
-            dataGridView4.Rows.Add("Текущее использование Объекта оценки", "");
-
-
             dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             dirtCalcGrid.AutoResizeRows();
-            dirtCalcGrid.AutoResizeColumns();
-
-           
+            dirtCalcGrid.AutoResizeColumns();           
             dirtCalcGrid.Rows.Add("Адрес объекта", "г.Владикавказ, «Иристон»", "г.Владикавказ, «Иристон»", "г.Владикавказ, «Иристон»");//1
             dirtCalcGrid.Rows.Add("Цена предложения за участок, руб.", "350 000", "350 000", "350 000");//2
             dirtCalcGrid.Rows.Add("Площадь участка, сот.", "6", "6", "6");//3
@@ -903,8 +815,6 @@ namespace WindowsFormsApplication1
             dirtCalcGrid.Rows.Add(" Итоговая стоимость оцениваемого зем. участка, руб.", "1", "", "");//32
             dirtCalcGrid.Rows.Add(" Итоговая стоимость оцениваемого зем. участка с учетом округления, тыс. руб.", "1", "", "");//33
             dirtCalcGrid.Rows.Add("Ликвидационная стоимость оцениваемого зем. участка с учетом округления, тыс. руб.", "1", "", "");//34
-            
-
         }
 
 
@@ -1234,584 +1144,32 @@ namespace WindowsFormsApplication1
             try
             {
                 string cellValue;
-                cost_count1 = 0;
-                cost_count2 = 0;
-                cost_count3 = 0;
-                cellValue = houseCalcGrid.Rows[0].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cost1 = double.Parse(cellValue);
-                }
-                cellValue = houseCalcGrid.Rows[1].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    m1 = double.Parse(cellValue);
-
-                }
-                cellValue = houseCalcGrid.Rows[3].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_torg = double.Parse(cellValue);
-                    if (cor_torg != 1.00)
-                    {
-                        cost_count1++;
-                    }
-
-                }
-                cellValue = houseCalcGrid.Rows[6].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor1 = double.Parse(cellValue);
-                    if (cor1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-
-                }
-                cellValue = houseCalcGrid.Rows[9].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_place1 = double.Parse(cellValue);
-                    if (cor_place1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[11].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_type1 = double.Parse(cellValue);
-                    if (cor_type1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[13].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_date1 = double.Parse(cellValue);
-                    if (cor_date1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[15].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_floor1 = double.Parse(cellValue);
-                    if (cor_floor1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[17].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_m1 = double.Parse(cellValue);
-                    if (cor_m1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[19].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_b1 = double.Parse(cellValue);
-                    if (cor_b1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[21].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_height1 = double.Parse(cellValue);
-                    if (cor_height1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[23].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_class1 = double.Parse(cellValue);
-                    if (cor_class1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[25].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_phone1 = double.Parse(cellValue);
-                    if (cor_phone1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[27].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_com1 = double.Parse(cellValue);
-                    if (cor_com1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[29].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_t1 = double.Parse(cellValue);
-                    if (cor_t1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[31].Cells[2].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_lift1 = double.Parse(cellValue);
-                    if (cor_lift1 != 1.00)
-                    {
-                        cost_count1++;
-                    }
-                }
+                cost_count1 = calcHouseAnalog(2); ;
+                cost_count2 = calcHouseAnalog(3);
+                cost_count3 = calcHouseAnalog(4);
                 cellValue = houseCalcGrid.Rows[37].Cells[2].Value.ToString();
                 if (cellValue != "")
                 {
                     m_final = double.Parse(cellValue);
 
                 }
-
-
-                //cost_m1 = Math.Round(cost1 / m1);
-                //houseCalcGrid.Rows[2].Cells[2].Value = cost_m1.ToString();
-                cor_cost1 = Math.Round(double.Parse(houseCalcGrid.Rows[0].Cells[2].Value.ToString()) - double.Parse(houseCalcGrid.Rows[2].Cells[2].Value.ToString()));
-                houseCalcGrid.Rows[3].Cells[2].Value = cor_cost1.ToString();
-
-                cost_m1 = Math.Round(cor_cost1 / double.Parse(houseCalcGrid.Rows[4].Cells[2].Value.ToString()));
-                houseCalcGrid.Rows[5].Cells[2].Value = cost_m1;
-
-                cor_cost11 = Math.Round(cor1 * cost_m1);
-                houseCalcGrid.Rows[7].Cells[2].Value = cor_cost11.ToString();
-
-                cor_cost12 = Math.Round(cor_cost11 * cor_place1);
-                houseCalcGrid.Rows[10].Cells[2].Value = cor_cost12.ToString();
-
-                cor_cost13 = Math.Round(cor_cost12 * cor_type1);
-                houseCalcGrid.Rows[12].Cells[2].Value = cor_cost13.ToString();
-
-                cor_cost14 = Math.Round(cor_cost13 * cor_date1);
-                houseCalcGrid.Rows[14].Cells[2].Value = cor_cost14.ToString();
-
-                cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
-                houseCalcGrid.Rows[16].Cells[2].Value = cor_cost15.ToString();
-
-                cor_cost16 = Math.Round(cor_cost15 * cor_m1);
-                houseCalcGrid.Rows[18].Cells[2].Value = cor_cost16.ToString();
-
-                cor_cost17 = Math.Round(cor_cost16 * cor_b1);
-                houseCalcGrid.Rows[20].Cells[2].Value = cor_cost17.ToString();
-
-                cor_cost18 = Math.Round(cor_cost17 * cor_height1);
-                houseCalcGrid.Rows[22].Cells[2].Value = cor_cost18.ToString();
-
-                cor_cost19 = Math.Round(cor_cost18 * cor_class1);
-                houseCalcGrid.Rows[24].Cells[2].Value = cor_cost19.ToString();
-
-                cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
-                houseCalcGrid.Rows[26].Cells[2].Value = cor_cost110.ToString();
-
-                cor_cost111 = Math.Round(cor_cost110 * cor_com1);
-                houseCalcGrid.Rows[28].Cells[2].Value = cor_cost111.ToString();
-
-                cor_cost112 = Math.Round(cor_cost111 * cor_t1);
-                houseCalcGrid.Rows[30].Cells[2].Value = cor_cost112.ToString();
-
-                cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
-                houseCalcGrid.Rows[32].Cells[2].Value = cor_cost113.ToString();
-
-                houseCalcGrid.Rows[33].Cells[2].Value = cost_count1.ToString();
-
-                //Аналог 2
-                cellValue = houseCalcGrid.Rows[0].Cells[3].Value.ToString();
+                cellValue = houseCalcGrid.Rows[32].Cells[2].Value.ToString();
                 if (cellValue != "")
                 {
-                    cost2 = double.Parse(cellValue);
+                    cor_cost113 = double.Parse(cellValue);
                 }
-                cellValue = houseCalcGrid.Rows[1].Cells[3].Value.ToString();
+                cellValue = houseCalcGrid.Rows[32].Cells[3].Value.ToString();
                 if (cellValue != "")
                 {
-                    m2 = double.Parse(cellValue);
-
+                    cor_cost213 = double.Parse(cellValue);
                 }
-                cellValue = houseCalcGrid.Rows[3].Cells[3].Value.ToString();
+                cellValue = houseCalcGrid.Rows[32].Cells[4].Value.ToString();
                 if (cellValue != "")
                 {
-                    cor_torg2 = double.Parse(cellValue);
-                    if (cor_torg2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-
-                }
-                cellValue = houseCalcGrid.Rows[6].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor2 = double.Parse(cellValue);
-                    if (cor2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-
-                }
-                cellValue = houseCalcGrid.Rows[9].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_place2 = double.Parse(cellValue);
-                    if (cor_place2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[11].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_type2 = double.Parse(cellValue);
-                    if (cor_type2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[13].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_date2 = double.Parse(cellValue);
-                    if (cor_date2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[15].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_floor2 = double.Parse(cellValue);
-                    if (cor_floor2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[17].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_m2 = double.Parse(cellValue);
-                    if (cor_m2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[19].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_b2 = double.Parse(cellValue);
-                    if (cor_b2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[21].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_height2 = double.Parse(cellValue);
-                    if (cor_height2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[23].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_class2 = double.Parse(cellValue);
-                    if (cor_class2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[25].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_phone2 = double.Parse(cellValue);
-                    if (cor_phone2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[27].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_com2 = double.Parse(cellValue);
-                    if (cor_com2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[29].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_t2 = double.Parse(cellValue);
-                    if (cor_t2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[31].Cells[3].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_lift2 = double.Parse(cellValue);
-                    if (cor_lift2 != 1.00)
-                    {
-                        cost_count2++;
-                    }
+                    cor_cost313 = double.Parse(cellValue);
                 }
 
 
-                //            cost_m2 = Math.Round(cost2 / m2);
-                //            houseCalcGrid.Rows[2].Cells[3].Value = cost_m2.ToString();
-                cor_cost2 = Math.Round(double.Parse(houseCalcGrid.Rows[0].Cells[3].Value.ToString()) - double.Parse(houseCalcGrid.Rows[2].Cells[3].Value.ToString()));
-                houseCalcGrid.Rows[3].Cells[3].Value = cor_cost2.ToString();
-                cost_m2 = Math.Round(cor_cost2 / double.Parse(houseCalcGrid.Rows[4].Cells[3].Value.ToString()));
-                houseCalcGrid.Rows[5].Cells[3].Value = cost_m2;
-
-                cor_cost21 = Math.Round(cor2 * cost_m2);
-                houseCalcGrid.Rows[7].Cells[3].Value = cor_cost21.ToString();
-
-                cor_cost22 = Math.Round(cor_cost21 * cor_place2);
-                houseCalcGrid.Rows[10].Cells[3].Value = cor_cost22.ToString();
-
-                cor_cost23 = Math.Round(cor_cost22 * cor_type2);
-                houseCalcGrid.Rows[12].Cells[3].Value = cor_cost23.ToString();
-
-                cor_cost24 = Math.Round(cor_cost23 * cor_date2);
-                houseCalcGrid.Rows[14].Cells[3].Value = cor_cost24.ToString();
-
-                cor_cost25 = Math.Round(cor_cost24 * cor_floor2);
-                houseCalcGrid.Rows[16].Cells[3].Value = cor_cost25.ToString();
-
-                cor_cost26 = Math.Round(cor_cost25 * cor_m2);
-                houseCalcGrid.Rows[18].Cells[3].Value = cor_cost26.ToString();
-
-                cor_cost27 = Math.Round(cor_cost26 * cor_b2);
-                houseCalcGrid.Rows[20].Cells[3].Value = cor_cost27.ToString();
-
-                cor_cost28 = Math.Round(cor_cost27 * cor_height2);
-                houseCalcGrid.Rows[22].Cells[3].Value = cor_cost28.ToString();
-
-                cor_cost29 = Math.Round(cor_cost28 * cor_class2);
-                houseCalcGrid.Rows[24].Cells[3].Value = cor_cost29.ToString();
-
-                cor_cost210 = Math.Round(cor_cost29 * cor_phone2);
-                houseCalcGrid.Rows[26].Cells[3].Value = cor_cost210.ToString();
-
-                cor_cost211 = Math.Round(cor_cost210 * cor_com2);
-                houseCalcGrid.Rows[28].Cells[3].Value = cor_cost211.ToString();
-
-                cor_cost212 = Math.Round(cor_cost211 * cor_t2);
-                houseCalcGrid.Rows[30].Cells[3].Value = cor_cost212.ToString();
-
-                cor_cost213 = Math.Round(cor_cost212 * cor_lift2);
-                houseCalcGrid.Rows[32].Cells[3].Value = cor_cost213.ToString();
-
-                houseCalcGrid.Rows[33].Cells[3].Value = cost_count2.ToString();
-
-                //Аналог 3
-                cellValue = houseCalcGrid.Rows[0].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cost3 = double.Parse(cellValue);
-                }
-                cellValue = houseCalcGrid.Rows[1].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    m3 = double.Parse(cellValue);
-
-                }
-                cellValue = houseCalcGrid.Rows[3].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_torg3 = double.Parse(cellValue);
-                    if (cor_torg3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-
-                }
-                cellValue = houseCalcGrid.Rows[6].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor3 = double.Parse(cellValue);
-                    if (cor3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-
-                }
-                cellValue = houseCalcGrid.Rows[9].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_place3 = double.Parse(cellValue);
-                    if (cor_place3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[11].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_type3 = double.Parse(cellValue);
-                    if (cor_type3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[13].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_date3 = double.Parse(cellValue);
-                    if (cor_date3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[15].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_floor3 = double.Parse(cellValue);
-                    if (cor_floor3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[17].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_m3 = double.Parse(cellValue);
-                    if (cor_m3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[19].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_b3 = double.Parse(cellValue);
-                    if (cor_b3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[21].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_height3 = double.Parse(cellValue);
-                    if (cor_height3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[23].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_class3 = double.Parse(cellValue);
-                    if (cor_class3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[25].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_phone3 = double.Parse(cellValue);
-                    if (cor_phone3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[27].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_com3 = double.Parse(cellValue);
-                    if (cor_com3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[29].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_t3 = double.Parse(cellValue);
-                    if (cor_t3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-                cellValue = houseCalcGrid.Rows[31].Cells[4].Value.ToString();
-                if (cellValue != "")
-                {
-                    cor_lift3 = double.Parse(cellValue);
-                    if (cor_lift3 != 1.00)
-                    {
-                        cost_count3++;
-                    }
-                }
-
-
-                //
-                //houseCalcGrid.Rows[2].Cells[4].Value = cost_m3.ToString();
-                cor_cost3 = Math.Round(double.Parse(houseCalcGrid.Rows[0].Cells[4].Value.ToString()) - double.Parse(houseCalcGrid.Rows[2].Cells[4].Value.ToString()));
-                houseCalcGrid.Rows[3].Cells[4].Value = cor_cost3.ToString();
-                cost_m3 = Math.Round(cor_cost3 / double.Parse(houseCalcGrid.Rows[4].Cells[4].Value.ToString()));
-                houseCalcGrid.Rows[5].Cells[4].Value = cost_m3;
-
-                cor_cost31 = Math.Round(cor3 * cost_m3);
-                houseCalcGrid.Rows[7].Cells[4].Value = cor_cost31.ToString();
-
-                cor_cost32 = Math.Round(cor_cost31 * cor_place3);
-                houseCalcGrid.Rows[10].Cells[4].Value = cor_cost32.ToString();
-
-                cor_cost33 = Math.Round(cor_cost32 * cor_type3);
-                houseCalcGrid.Rows[12].Cells[4].Value = cor_cost33.ToString();
-
-                cor_cost34 = Math.Round(cor_cost33 * cor_date3);
-                houseCalcGrid.Rows[14].Cells[4].Value = cor_cost34.ToString();
-
-                cor_cost35 = Math.Round(cor_cost34 * cor_floor3);
-                houseCalcGrid.Rows[16].Cells[4].Value = cor_cost35.ToString();
-
-                cor_cost36 = Math.Round(cor_cost35 * cor_m3);
-                houseCalcGrid.Rows[18].Cells[4].Value = cor_cost36.ToString();
-
-                cor_cost37 = Math.Round(cor_cost36 * cor_b3);
-                houseCalcGrid.Rows[20].Cells[4].Value = cor_cost37.ToString();
-
-                cor_cost38 = Math.Round(cor_cost37 * cor_height3);
-                houseCalcGrid.Rows[22].Cells[4].Value = cor_cost38.ToString();
-
-                cor_cost39 = Math.Round(cor_cost38 * cor_class3);
-                houseCalcGrid.Rows[24].Cells[4].Value = cor_cost39.ToString();
-
-                cor_cost310 = Math.Round(cor_cost39 * cor_phone3);
-                houseCalcGrid.Rows[26].Cells[4].Value = cor_cost310.ToString();
-
-                cor_cost311 = Math.Round(cor_cost310 * cor_com3);
-                houseCalcGrid.Rows[28].Cells[4].Value = cor_cost311.ToString();
-
-                cor_cost312 = Math.Round(cor_cost311 * cor_t3);
-                houseCalcGrid.Rows[30].Cells[4].Value = cor_cost312.ToString();
-
-                cor_cost313 = Math.Round(cor_cost312 * cor_lift3);
-                houseCalcGrid.Rows[32].Cells[4].Value = cor_cost313.ToString();
-
-                houseCalcGrid.Rows[33].Cells[4].Value = cost_count3.ToString();
                 //Final costs
                 cellValue = houseCalcGrid.Rows[34].Cells[2].Value.ToString();
                 if (cellValue != "")
@@ -1832,13 +1190,7 @@ namespace WindowsFormsApplication1
                 double koef_count, t2;
                 koef_count = cost_count1 + cost_count2 + cost_count3;
                 t2 = 1 / koef_count;
-                //cost_cor_koef1 = 0.33; //Math.Round(cost_count1 * t2, 4);
-                //cost_cor_koef2 = 0.33; //Math.Round(cost_count2 * t2, 4);
-                //cost_cor_koef3 = 0.33; //Math.Round(cost_count3 * t2, 4);
 
-                //houseCalcGrid.Rows[34].Cells[2].Value = cost_cor_koef1.ToString();
-                //houseCalcGrid.Rows[34].Cells[3].Value = cost_cor_koef2.ToString();
-                //houseCalcGrid.Rows[34].Cells[4].Value = cost_cor_koef3.ToString();
 
                 cor_cost_final1 = Math.Round(cor_cost113 * cost_cor_koef1);
                 houseCalcGrid.Rows[35].Cells[2].Value = cor_cost_final1.ToString();
@@ -1873,6 +1225,210 @@ namespace WindowsFormsApplication1
             catch (Exception except)
             {
                 MessageBox.Show(except.Message);
+            }
+        }
+
+        private int calcHouseAnalog(int i)
+        {
+            try
+            {
+                string cellValue;
+                int costCount = 0;
+                cellValue = houseCalcGrid.Rows[0].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cost1 = double.Parse(cellValue);
+                }
+                cellValue = houseCalcGrid.Rows[1].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    m1 = double.Parse(cellValue);
+
+                }
+                cellValue = houseCalcGrid.Rows[3].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_torg = double.Parse(cellValue);
+                    if (cor_torg != 1.00)
+                    {
+                        costCount++;
+                    }
+
+                }
+                cellValue = houseCalcGrid.Rows[6].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor1 = double.Parse(cellValue);
+                    if (cor1 != 1.00)
+                    {
+                        costCount++;
+                    }
+
+                }
+                cellValue = houseCalcGrid.Rows[9].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_place1 = double.Parse(cellValue);
+                    if (cor_place1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[11].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_type1 = double.Parse(cellValue);
+                    if (cor_type1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[13].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_date1 = double.Parse(cellValue);
+                    if (cor_date1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[15].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_floor1 = double.Parse(cellValue);
+                    if (cor_floor1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[17].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_m1 = double.Parse(cellValue);
+                    if (cor_m1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[19].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_b1 = double.Parse(cellValue);
+                    if (cor_b1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[21].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_height1 = double.Parse(cellValue);
+                    if (cor_height1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[23].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_class1 = double.Parse(cellValue);
+                    if (cor_class1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[25].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_phone1 = double.Parse(cellValue);
+                    if (cor_phone1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[27].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_com1 = double.Parse(cellValue);
+                    if (cor_com1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[29].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_t1 = double.Parse(cellValue);
+                    if (cor_t1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+                cellValue = houseCalcGrid.Rows[31].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_lift1 = double.Parse(cellValue);
+                    if (cor_lift1 != 1.00)
+                    {
+                        costCount++;
+                    }
+                }
+
+
+
+                //cost_m1 = Math.Round(cost1 / m1);
+                //houseCalcGrid.Rows[2].Cells[i].Value = cost_m1.ToString();
+                cor_cost1 = Math.Round(double.Parse(houseCalcGrid.Rows[0].Cells[i].Value.ToString()) - double.Parse(houseCalcGrid.Rows[2].Cells[i].Value.ToString()));
+                houseCalcGrid.Rows[3].Cells[i].Value = cor_cost1.ToString();
+
+                cost_m1 = Math.Round(cor_cost1 / double.Parse(houseCalcGrid.Rows[4].Cells[i].Value.ToString()));
+                houseCalcGrid.Rows[5].Cells[i].Value = cost_m1;
+
+                cor_cost11 = Math.Round(cor1 * cost_m1);
+                houseCalcGrid.Rows[7].Cells[i].Value = cor_cost11.ToString();
+
+                cor_cost12 = Math.Round(cor_cost11 * cor_place1);
+                houseCalcGrid.Rows[10].Cells[i].Value = cor_cost12.ToString();
+
+                cor_cost13 = Math.Round(cor_cost12 * cor_type1);
+                houseCalcGrid.Rows[12].Cells[i].Value = cor_cost13.ToString();
+
+                cor_cost14 = Math.Round(cor_cost13 * cor_date1);
+                houseCalcGrid.Rows[14].Cells[i].Value = cor_cost14.ToString();
+
+                cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
+                houseCalcGrid.Rows[16].Cells[i].Value = cor_cost15.ToString();
+
+                cor_cost16 = Math.Round(cor_cost15 * cor_m1);
+                houseCalcGrid.Rows[18].Cells[i].Value = cor_cost16.ToString();
+
+                cor_cost17 = Math.Round(cor_cost16 * cor_b1);
+                houseCalcGrid.Rows[20].Cells[i].Value = cor_cost17.ToString();
+
+                cor_cost18 = Math.Round(cor_cost17 * cor_height1);
+                houseCalcGrid.Rows[22].Cells[i].Value = cor_cost18.ToString();
+
+                cor_cost19 = Math.Round(cor_cost18 * cor_class1);
+                houseCalcGrid.Rows[24].Cells[i].Value = cor_cost19.ToString();
+
+                cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
+                houseCalcGrid.Rows[26].Cells[i].Value = cor_cost110.ToString();
+
+                cor_cost111 = Math.Round(cor_cost110 * cor_com1);
+                houseCalcGrid.Rows[28].Cells[i].Value = cor_cost111.ToString();
+
+                cor_cost112 = Math.Round(cor_cost111 * cor_t1);
+                houseCalcGrid.Rows[30].Cells[i].Value = cor_cost112.ToString();
+
+
+
+                houseCalcGrid.Rows[33].Cells[i].Value = costCount.ToString();
+                return costCount;
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show(except.Message);
+                return 0;
             }
         }
 
@@ -10773,261 +10329,12 @@ if (newSentence.Contains("@@uvaj@@"))
                             }
                         }
 
-                        //for (int k = 1; k < x; k++)
-                        //{
-                        //    Microsoft.Office.Interop.Word.Shape shape = wdDoc.Shapes[k];
-
-                        //    if (shape.AlternativeText.Contains("first"))
-                        //    {
-                        //        System.Drawing.Image firstPageImg = System.Drawing.Image.FromFile(imagesGrid.Rows[0].Cells[2].Value.ToString());
-
-                        //       //Clipboard.SetImage(firstPageImg);
-                        //        shape.Select();
-                        //        wdDoc.Shapes[k].CanvasItems.AddPicture(imagesGrid.Rows[0].Cells[2].Value.ToString());
-                        //        wdDoc.Shapes[k].Apply();
-                        //       // wdApp.Selection.PasteSpecial();
-                        //       // wdApp.ActiveDocument.Shapes.AddPicture(imagesGrid.Rows[0].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing, Type.Missing, 500, 370, Type.Missing);
-                        //        //wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[0].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                        //        //wdApp.Selection.InlineShapes
-                        //        //Clipboard.Clear();
-                        //    }
-
-                        //}
                     }
                     catch (Exception exp)
                     {
 
                     }
 
-                    //foreach (Microsoft.Office.Interop.Word.Table table in wdApp.ActiveDocument.Tables)
-                    //{
-
-                    //    try
-                    //    {
-
-
-                    //        //  if (table.Columns[0].Cells[0].Range.Text.Contains("@@1@@"))
-                    //        //{
-                    //        foreach (Microsoft.Office.Interop.Word.Column col in table.Columns)
-                    //        {
-
-                    //            foreach (Microsoft.Office.Interop.Word.Cell cell in col.Cells)
-                    //            {
-                    //                int rowCount = imagesGrid.RowCount;
-                    //                string l = cell.Range.Text;
-                    //                if (l.Contains("@@1@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[1].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@1@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@2@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[2].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@2@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-                    //                if (l.Contains("@@3@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[3].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@3@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@4@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[4].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@4@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@5@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[5].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@5@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@6@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[6].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@6@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@7@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[7].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@7@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@8@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[8].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@8@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@9@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[9].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@9@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-                    //                if (l.Contains("@@10@@"))
-                    //                {
-                    //                    cell.Select();
-                    //                    //cell.Range.Text = "";
-                    //                    wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[10].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
-                    //                    wdApp.Selection.Find.ClearFormatting();
-                    //                    wdApp.Selection.Find.Text = "@@10@@";
-                    //                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    //                    wdApp.Selection.Find.Replacement.Text = "";
-
-                    //                    wdApp.Selection.Find.Execute(
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    //                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    //                }
-
-
-
-
-                    //            }
-                    //        }
-
-                    //    }
-                    //    //  }
-                    //    catch (Exception except)
-                    //    {
-                    //    }
-                    //}
-
-
-
-
-
-
-
-
-                    /*for (int k = 1; k < x; k++)
-                    {
-                        Microsoft.Office.Interop.Word.Shape shape = wdDoc.Shapes[k];
-                        float shift = 150;
-                        string l = shape.AlternativeText;
-                        if (l == "facade")
-                        {
-                            shape.IncrementTop(-shift);
-
-                        }
-                        if (l == "appartmentNum")
-                        {
-                            shape.IncrementTop(-shift);
-                            //shape. = "Оцениваемая квартира №"+appartmentNum.Text;
-                        }
-                        if (l == "podezd")
-                        {
-                            shape.IncrementTop(-shift);
-                        
-
-                        }
-                        if (l == "stairway")
-                        {
-                            shape.IncrementTop(-shift);
-
-                        }
-                    }*/
-
-
-
-
-
-
-                    // 
 
                     wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
 
@@ -11055,39 +10362,68 @@ if (newSentence.Contains("@@uvaj@@"))
 
         private void dirtCalcGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            try
-            {
-                if (!dirtCalcGrid.SelectedCells[0].Value.ToString().Contains('.'))
-                {
-                    calculateCostDirt();
-                }
-                else
-                {
-                    MessageBox.Show("Была введена точка, вместо запятой");
-                }
-            }
-            catch (Exception except)
-            {
-               // MessageBox.Show(except.Message);
-            }
+           
         }
 
         private void houseCalcGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+           
+        }
+
+        private void dirtGridAnalogs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void houseCalcGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
+        
+
+        private void dirtCalcGrid_Enter(object sender, EventArgs e)
+        {
             try
             {
-                if (!houseCalcGrid.SelectedCells[0].Value.ToString().Contains('.'))
+                if (dirtCalcGrid.SelectedCells.Count > 0)
                 {
-                    calculateCostHouse();
-                }
-                else
-                {
-                    MessageBox.Show("Была введена точка, вместо запятой");
+                    if (!dirtCalcGrid.SelectedCells[0].Value.ToString().Contains('.'))
+                    {
+                        calculateCostDirt();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Была введена точка, вместо запятой");
+                    }
                 }
             }
             catch (Exception except)
             {
-               // MessageBox.Show(except.Message);
+                MessageBox.Show(except.Message);
+            }
+        }
+
+
+        private void houseCalcGrid_Enter(object sender, EventArgs e)
+        {
+            try
+            {
+                if (houseCalcGrid.SelectedCells.Count > 0)
+                {
+                    if (!houseCalcGrid.SelectedCells[0].Value.ToString().Contains('.'))
+                    {
+                        calculateCostHouse();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Была введена точка, вместо запятой");
+                    }
+                }
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show(except.Message);
             }
         }
 
