@@ -206,6 +206,10 @@ namespace WindowsFormsApplication1
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.form1BindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.gridDoc2 = new System.Windows.Forms.TextBox();
+            this.gridDoc = new System.Windows.Forms.TextBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
             this.dirtCalcPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dirtGridAnalogs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dirtCalcGrid)).BeginInit();
@@ -246,6 +250,10 @@ namespace WindowsFormsApplication1
             // 
             // dirtCalcPage
             // 
+            this.dirtCalcPage.Controls.Add(this.gridDoc2);
+            this.dirtCalcPage.Controls.Add(this.gridDoc);
+            this.dirtCalcPage.Controls.Add(this.label47);
+            this.dirtCalcPage.Controls.Add(this.label48);
             this.dirtCalcPage.Controls.Add(this.label41);
             this.dirtCalcPage.Controls.Add(this.dirtKadastr);
             this.dirtCalcPage.Controls.Add(this.label40);
@@ -264,7 +272,7 @@ namespace WindowsFormsApplication1
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(625, 570);
+            this.label41.Location = new System.Drawing.Point(627, 613);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(110, 13);
             this.label41.TabIndex = 13;
@@ -272,7 +280,7 @@ namespace WindowsFormsApplication1
             // 
             // dirtKadastr
             // 
-            this.dirtKadastr.Location = new System.Drawing.Point(741, 570);
+            this.dirtKadastr.Location = new System.Drawing.Point(743, 613);
             this.dirtKadastr.Name = "dirtKadastr";
             this.dirtKadastr.Size = new System.Drawing.Size(284, 20);
             this.dirtKadastr.TabIndex = 12;
@@ -280,7 +288,7 @@ namespace WindowsFormsApplication1
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(575, 536);
+            this.label40.Location = new System.Drawing.Point(577, 579);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(160, 13);
             this.label40.TabIndex = 11;
@@ -288,10 +296,11 @@ namespace WindowsFormsApplication1
             // 
             // dirtm2
             // 
-            this.dirtm2.Location = new System.Drawing.Point(741, 536);
+            this.dirtm2.Location = new System.Drawing.Point(743, 579);
             this.dirtm2.Name = "dirtm2";
             this.dirtm2.Size = new System.Drawing.Size(100, 20);
             this.dirtm2.TabIndex = 10;
+            this.dirtm2.TextChanged += new System.EventHandler(this.dirtm2_TextChanged_1);
             // 
             // saveGridToWordButton
             // 
@@ -314,10 +323,9 @@ namespace WindowsFormsApplication1
             this.dirtGridAnalogs.RightToLeft = System.Windows.Forms.RightToLeft.No;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dirtGridAnalogs.RowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dirtGridAnalogs.Size = new System.Drawing.Size(552, 525);
+            this.dirtGridAnalogs.Size = new System.Drawing.Size(552, 313);
             this.dirtGridAnalogs.TabIndex = 7;
             this.dirtGridAnalogs.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dirtGridAnalogs_CellLeave);
-            this.dirtGridAnalogs.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dirtGridAnalogs_CellValueChanged);
             // 
             // button8
             // 
@@ -369,6 +377,7 @@ namespace WindowsFormsApplication1
             this.dirtCalcGrid.RowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dirtCalcGrid.Size = new System.Drawing.Size(550, 716);
             this.dirtCalcGrid.TabIndex = 4;
+            this.dirtCalcGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dirtCalcGrid_CellEndEdit_1);
             this.dirtCalcGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dirtCalcGrid_CellValueChanged);
             this.dirtCalcGrid.Enter += new System.EventHandler(this.dirtCalcGrid_Enter);
             // 
@@ -429,7 +438,7 @@ namespace WindowsFormsApplication1
             this.houseAnalogs.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.houseAnalogs.Size = new System.Drawing.Size(533, 625);
             this.houseAnalogs.TabIndex = 7;
-            this.houseAnalogs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
+            this.houseAnalogs.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.houseAnalogs_CellEndEdit);
             // 
             // button1
             // 
@@ -486,7 +495,7 @@ namespace WindowsFormsApplication1
             this.houseCalcGrid.RowsDefaultCellStyle = dataGridViewCellStyle10;
             this.houseCalcGrid.Size = new System.Drawing.Size(595, 716);
             this.houseCalcGrid.TabIndex = 4;
-            this.houseCalcGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.houseCalcGrid_CellLeave);
+            this.houseCalcGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.houseCalcGrid_CellEndEdit);
             this.houseCalcGrid.Enter += new System.EventHandler(this.houseCalcGrid_Enter);
             // 
             // housePage
@@ -2209,11 +2218,54 @@ namespace WindowsFormsApplication1
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1142, 742);
             this.tabControl1.TabIndex = 1;
-            
             // 
             // form1BindingSource
             // 
             this.form1BindingSource.DataSource = typeof(WindowsFormsApplication1.mainForm);
+            // 
+            // gridDoc2
+            // 
+            this.gridDoc2.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.gridDoc2.Location = new System.Drawing.Point(577, 486);
+            this.gridDoc2.Multiline = true;
+            this.gridDoc2.Name = "gridDoc2";
+            this.gridDoc2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.gridDoc2.Size = new System.Drawing.Size(361, 87);
+            this.gridDoc2.TabIndex = 36;
+            this.gridDoc2.Text = "Договор купли-продажи от 26/04/05г., зарегистрированный в Едином государственном " +
+                "реестре прав за №15-15-01/026/2005-416; Акт приема-передачи от 26/04/05г.";
+            // 
+            // gridDoc
+            // 
+            this.gridDoc.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.gridDoc.Location = new System.Drawing.Point(577, 350);
+            this.gridDoc.Multiline = true;
+            this.gridDoc.Name = "gridDoc";
+            this.gridDoc.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.gridDoc.Size = new System.Drawing.Size(361, 90);
+            this.gridDoc.TabIndex = 34;
+            this.gridDoc.Text = "Свидетельства о государственной регистрации права Управления Федеральной регистра" +
+                "ционной службы по РСО-Алания серия 15 АЕ №689866 от 24/05/05г.";
+            // 
+            // label47
+            // 
+            this.label47.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(577, 470);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(193, 13);
+            this.label47.TabIndex = 35;
+            this.label47.Text = "Документы на право собственности";
+            // 
+            // label48
+            // 
+            this.label48.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(577, 334);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(180, 13);
+            this.label48.TabIndex = 33;
+            this.label48.Text = "Свидетельство о гос.регистрации";
             // 
             // mainForm
             // 
@@ -2412,6 +2464,10 @@ namespace WindowsFormsApplication1
         private System.Windows.Forms.TextBox dirtKadastr;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.TextBox dirtm2;
+        private System.Windows.Forms.TextBox gridDoc2;
+        private System.Windows.Forms.TextBox gridDoc;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label48;
 
     }
 }

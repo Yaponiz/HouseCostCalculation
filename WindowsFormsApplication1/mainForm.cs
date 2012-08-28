@@ -79,6 +79,7 @@ namespace WindowsFormsApplication1
         public static double finalCostRounded;
         public static double finalDirtCost;
         public static double likvidCost;
+        public static double likvidCostDirt;
         public static string costStr = "0";
         public static string uvaj;
         public static string houseTypeAdds;
@@ -1144,7 +1145,7 @@ namespace WindowsFormsApplication1
             try
             {
                 string cellValue;
-                cost_count1 = calcHouseAnalog(2); ;
+                cost_count1 = calcHouseAnalog(2);
                 cost_count2 = calcHouseAnalog(3);
                 cost_count3 = calcHouseAnalog(4);
                 cellValue = houseCalcGrid.Rows[37].Cells[2].Value.ToString();
@@ -1420,7 +1421,8 @@ namespace WindowsFormsApplication1
                 cor_cost112 = Math.Round(cor_cost111 * cor_t1);
                 houseCalcGrid.Rows[30].Cells[i].Value = cor_cost112.ToString();
 
-
+                cor_cost113 = Math.Round(cor_cost111 * cor_lift1);
+                houseCalcGrid.Rows[32].Cells[i].Value = cor_cost113.ToString();
 
                 houseCalcGrid.Rows[33].Cells[i].Value = costCount.ToString();
                 return costCount;
@@ -1658,6 +1660,7 @@ namespace WindowsFormsApplication1
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     ReplaceTextWord(ref wdApp, "@@kadastrNum@@", dirtKadastr.Text);
+                    ReplaceTextWord(ref wdApp, "@@dirtDoc@@", gridDoc.Text);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@calculationDateStr@@";
@@ -1953,7 +1956,7 @@ namespace WindowsFormsApplication1
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", dirtCalcGrid.Rows[33].Cells[1].Value.ToString());
-
+                    ReplaceTextWord(ref wdApp, "@@likvidCostFull@@", (likvidCostDirt + likvidCost).ToString());
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@contractNum@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -2728,6 +2731,1122 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@a3.9@@", dirtGridAnalogs.Rows[8].Cells[3].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a3.10@@", dirtGridAnalogs.Rows[9].Cells[3].Value.ToString());
 
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.1@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[0].Cells[2].Value)).ToString("N", nfi);
+                   
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.2@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[1].Cells[2].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.3@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[2].Cells[2].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.4@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[3].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.5@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[4].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.6@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[5].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.7@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[6].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.8@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[7].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.9@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[8].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.10@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[9].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.11@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[10].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.12@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[11].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.13@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[12].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.14@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[13].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.15@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[14].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.16@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[15].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.17@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[16].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.18@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[17].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.19@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[18].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.20@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.21@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[20].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.22@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.23@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[22].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.24@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[23].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.25@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[24].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.26@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[25].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.27@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[26].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.28@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[27].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.29@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[28].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.30@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[29].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.31@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[30].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.32@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[31].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.33@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[32].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.34@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[33].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.35@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[34].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.1@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[0].Cells[3].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.2@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[1].Cells[3].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.3@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[2].Cells[3].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.4@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[3].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.5@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[4].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.6@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[5].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.7@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[6].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.8@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[7].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.9@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[8].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.10@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[9].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.11@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[10].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.12@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[11].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.13@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[12].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.14@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[13].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.15@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[14].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.16@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[15].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.17@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[16].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.18@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[17].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.19@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[18].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.20@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing); wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.21@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[20].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.22@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.23@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[22].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.24@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[23].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.25@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[24].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.26@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[25].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.27@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[26].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.28@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[27].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.29@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[28].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.30@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[29].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.31@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[30].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.32@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[31].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.33@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[32].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.34@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[33].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.35@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[34].Cells[3].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.1@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[0].Cells[4].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.2@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[1].Cells[4].Value)).ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.3@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[2].Cells[4].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.4@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[3].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.5@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[4].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.6@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[5].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.7@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[6].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.8@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[7].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.9@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[8].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.10@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[9].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.11@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[10].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.12@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[11].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.13@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[12].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.14@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[13].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.15@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[14].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.16@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[15].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.17@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[16].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.18@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[17].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.19@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[18].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.20@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing); wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.21@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[20].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.22@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.23@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[22].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.24@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[23].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.25@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[24].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.26@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[25].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.27@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[26].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.28@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[27].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.29@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[28].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.30@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[29].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.31@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[30].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.32@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[31].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.33@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[32].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.34@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[33].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.35@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[34].Cells[4].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b1.36@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[35].Cells[2].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b2.36@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[35].Cells[3].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b3.36@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[35].Cells[4].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b4.1@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[36].Cells[2].Value.ToString();
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b4.2@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[37].Cells[2].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    wdApp.Selection.Find.ClearFormatting();
+                    wdApp.Selection.Find.Text = "@@b4.3@@";
+                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[38].Cells[2].Value)).ToString("N", nfi);
+
+                    wdApp.Selection.Find.Execute(
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);                     
+
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "м2";
                     while (wdApp.Selection.Find.Execute(
@@ -3267,6 +4386,7 @@ namespace WindowsFormsApplication1
                 dirtCalcGrid.Rows[32].Cells[1].Value = Math.Round(final_cost_m / 1000).ToString();
                 dirtCalcGrid.Rows[33].Cells[1].Value = Math.Round(Double.Parse(dirtCalcGrid.Rows[32].Cells[1].Value.ToString()) * 0.66).ToString();
                 finalDirtCost = final_cost_m;
+                likvidCostDirt = Math.Round(final_cost_m * 0.66);
             }
             catch (Exception e)
             { 
@@ -3794,7 +4914,8 @@ namespace WindowsFormsApplication1
                     {
                         dataGridView1.Rows[35].Cells[1].Value = m2text.Text;
                         dataGridView1.Rows[38].Cells[1].Value = m2text.Text;
-
+                        houseCalcGrid.Rows[37].Cells[2].Value = m2text.Text;
+                        houseAnalogs.Rows[6].Cells[1].Value = m2text.Text;
                     }
                     break;
                 case "Земельный участок":
@@ -3806,6 +4927,8 @@ namespace WindowsFormsApplication1
                     {
                         dataGridView1.Rows[35].Cells[1].Value = m2text.Text;
                         dataGridView1.Rows[38].Cells[1].Value = m2text.Text;
+                        houseCalcGrid.Rows[37].Cells[2].Value = m2text.Text;
+                        houseAnalogs.Rows[6].Cells[1].Value = m2text.Text;
                     }
                     break;
 
@@ -8206,6 +9329,7 @@ if (newSentence.Contains("@@uvaj@@"))
 
                 ReplaceTextWord(ref wdApp, "@@dirtCostR@@", dirtCalcGrid.Rows[32].Cells[1].Value.ToString());
                 ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", dirtCalcGrid.Rows[33].Cells[1].Value.ToString());
+                ReplaceTextWord(ref wdApp, "@@likvidCostFulle@@", (likvidCostDirt+likvidCost).ToString());
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@contractNum@@";
                 wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10349,12 +11473,7 @@ if (newSentence.Contains("@@uvaj@@"))
             }
 
         }
-
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
+        
         private void ownerDocs_TextChanged(object sender, EventArgs e)
         {
 
@@ -10425,6 +11544,97 @@ if (newSentence.Contains("@@uvaj@@"))
             {
                 MessageBox.Show(except.Message);
             }
+        }
+
+        private void dirtCalcGrid_CellLeave_1(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
+        private void dirtCalcGrid_CellEndEdit_1(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dirtCalcGrid.SelectedCells.Count > 0)
+                {
+                    if (!dirtCalcGrid.SelectedCells[0].Value.ToString().Contains('.'))
+                    {
+                        calculateCostDirt();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Была введена точка, вместо запятой");
+                    }
+                }
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show(except.Message);
+            }
+        }
+
+        private void houseCalcGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (houseCalcGrid.SelectedCells.Count > 0)
+                {
+                    if (!houseCalcGrid.SelectedCells[0].Value.ToString().Contains('.'))
+                    {
+                        calculateCostHouse();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Была введена точка, вместо запятой");
+                    }
+                }
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show(except.Message);
+            }
+        }
+
+        private void dirtm2_TextChanged_1(object sender, EventArgs e)
+        {
+            dirtCalcGrid.Rows[30].Cells[1].Value = dirtm2.Text;
+            calculateCostDirt();
+        }
+
+        private void houseAnalogs_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            //площади
+            string t = houseAnalogs.Rows[6].Cells[2].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[4].Cells[2].Value = t;
+            t = houseAnalogs.Rows[6].Cells[3].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[4].Cells[3].Value = t;
+            t = houseAnalogs.Rows[6].Cells[4].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[4].Cells[4].Value = t;
+
+            //площадь земли
+            t = houseAnalogs.Rows[9].Cells[2].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[1].Cells[2].Value = t;
+            t = houseAnalogs.Rows[9].Cells[3].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[1].Cells[3].Value = t;
+            t = houseAnalogs.Rows[9].Cells[4].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[1].Cells[4].Value = t;
+            //цена
+            t = houseAnalogs.Rows[14].Cells[2].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[0].Cells[2].Value = t;
+            t = houseAnalogs.Rows[14].Cells[3].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[0].Cells[3].Value = t;
+            t = houseAnalogs.Rows[14].Cells[4].Value.ToString();
+            t = t.Replace(" ", "");
+            houseCalcGrid.Rows[0].Cells[4].Value = t;
+            calculateCostHouse();
         }
 
 
