@@ -5059,11 +5059,12 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Copy();
                     wdDoc.Close();                  
                     string template = "\\template.doc";
-                    
 
-                    if (ownerOrg.Checked)
+
+                    if (bankName.Text == "втб 24")
                     {
-                        template = "\\orgOwner.doc";
+                        template = "\\orgZakaz.doc";
+
                     }
                     wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + template, Missing, true);
                     object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
@@ -5113,14 +5114,15 @@ namespace WindowsFormsApplication1
                    
                     if (ownerOrg.Checked)
                     {
+                        if (bankName.Text == "втб 24")
+                        {
 
-                        ReplaceTextWord(ref wdApp, "@@ownerOrgname@@", orgName.Text);
-                        ReplaceTextWord(ref wdApp, "@@INN@@", orgINN.Text);
-                        ReplaceTextWord(ref wdApp, "@@OGRN@@", orgOGRN.Text);
-                        ReplaceTextWord(ref wdApp, "@@regDate@@", orgRegDate.Text);
-                        ReplaceTextWord(ref wdApp, "@@KPP@@", orgKPP.Text);
-                        ReplaceTextWord(ref wdApp, "@@orgAddress@@", orgAdd.Text);
-
+                            ReplaceTextWord(ref wdApp, "@@ownerOrgname@@", "Операционный офис «Владикавказский» филиала №2351 ВТБ 24 (ЗАО)");
+                            ReplaceTextWord(ref wdApp, "@@INN@@", "7710353606");
+                            ReplaceTextWord(ref wdApp, "@@OGRN@@", "1027739207462");                            
+                            ReplaceTextWord(ref wdApp, "@@KPP@@", "231002001");
+                            ReplaceTextWord(ref wdApp, "@@orgAddress@@", "РСО-Алания, г. Владикавказ, ул. Коцоева, д.13");
+                        }
 
                 }
                     ReplaceTextWord(ref wdApp, "@@houseType1@@", houseType1);

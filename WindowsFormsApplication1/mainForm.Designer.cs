@@ -62,6 +62,10 @@ namespace WindowsFormsApplication1
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.dirtCalcPage = new System.Windows.Forms.TabPage();
+            this.gridDoc2 = new System.Windows.Forms.TextBox();
+            this.gridDoc = new System.Windows.Forms.TextBox();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
             this.dirtKadastr = new System.Windows.Forms.TextBox();
             this.label40 = new System.Windows.Forms.Label();
@@ -206,10 +210,6 @@ namespace WindowsFormsApplication1
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.form1BindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.gridDoc2 = new System.Windows.Forms.TextBox();
-            this.gridDoc = new System.Windows.Forms.TextBox();
-            this.label47 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
             this.dirtCalcPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dirtGridAnalogs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dirtCalcGrid)).BeginInit();
@@ -268,6 +268,50 @@ namespace WindowsFormsApplication1
             this.dirtCalcPage.TabIndex = 7;
             this.dirtCalcPage.Text = "Таблица оценки земли";
             this.dirtCalcPage.UseVisualStyleBackColor = true;
+            // 
+            // gridDoc2
+            // 
+            this.gridDoc2.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.gridDoc2.Location = new System.Drawing.Point(577, 486);
+            this.gridDoc2.Multiline = true;
+            this.gridDoc2.Name = "gridDoc2";
+            this.gridDoc2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.gridDoc2.Size = new System.Drawing.Size(361, 87);
+            this.gridDoc2.TabIndex = 36;
+            this.gridDoc2.Text = "Договор купли-продажи от 26/04/05г., зарегистрированный в Едином государственном " +
+                "реестре прав за №15-15-01/026/2005-416; Акт приема-передачи от 26/04/05г.";
+            // 
+            // gridDoc
+            // 
+            this.gridDoc.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.gridDoc.Location = new System.Drawing.Point(577, 350);
+            this.gridDoc.Multiline = true;
+            this.gridDoc.Name = "gridDoc";
+            this.gridDoc.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.gridDoc.Size = new System.Drawing.Size(361, 90);
+            this.gridDoc.TabIndex = 34;
+            this.gridDoc.Text = "Свидетельства о государственной регистрации права Управления Федеральной регистра" +
+                "ционной службы по РСО-Алания серия 15 АЕ №689866 от 24/05/05г.";
+            // 
+            // label47
+            // 
+            this.label47.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(577, 470);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(193, 13);
+            this.label47.TabIndex = 35;
+            this.label47.Text = "Документы на право собственности";
+            // 
+            // label48
+            // 
+            this.label48.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(577, 334);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(180, 13);
+            this.label48.TabIndex = 33;
+            this.label48.Text = "Свидетельство о гос.регистрации";
             // 
             // label41
             // 
@@ -873,7 +917,7 @@ namespace WindowsFormsApplication1
             // 
             // orgName
             // 
-            this.orgName.Location = new System.Drawing.Point(108, 16);
+            this.orgName.Location = new System.Drawing.Point(108, 76);
             this.orgName.Name = "orgName";
             this.orgName.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.orgName.Size = new System.Drawing.Size(204, 20);
@@ -2222,50 +2266,6 @@ namespace WindowsFormsApplication1
             // form1BindingSource
             // 
             this.form1BindingSource.DataSource = typeof(WindowsFormsApplication1.mainForm);
-            // 
-            // gridDoc2
-            // 
-            this.gridDoc2.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.gridDoc2.Location = new System.Drawing.Point(577, 486);
-            this.gridDoc2.Multiline = true;
-            this.gridDoc2.Name = "gridDoc2";
-            this.gridDoc2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.gridDoc2.Size = new System.Drawing.Size(361, 87);
-            this.gridDoc2.TabIndex = 36;
-            this.gridDoc2.Text = "Договор купли-продажи от 26/04/05г., зарегистрированный в Едином государственном " +
-                "реестре прав за №15-15-01/026/2005-416; Акт приема-передачи от 26/04/05г.";
-            // 
-            // gridDoc
-            // 
-            this.gridDoc.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.gridDoc.Location = new System.Drawing.Point(577, 350);
-            this.gridDoc.Multiline = true;
-            this.gridDoc.Name = "gridDoc";
-            this.gridDoc.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.gridDoc.Size = new System.Drawing.Size(361, 90);
-            this.gridDoc.TabIndex = 34;
-            this.gridDoc.Text = "Свидетельства о государственной регистрации права Управления Федеральной регистра" +
-                "ционной службы по РСО-Алания серия 15 АЕ №689866 от 24/05/05г.";
-            // 
-            // label47
-            // 
-            this.label47.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(577, 470);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(193, 13);
-            this.label47.TabIndex = 35;
-            this.label47.Text = "Документы на право собственности";
-            // 
-            // label48
-            // 
-            this.label48.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(577, 334);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(180, 13);
-            this.label48.TabIndex = 33;
-            this.label48.Text = "Свидетельство о гос.регистрации";
             // 
             // mainForm
             // 
