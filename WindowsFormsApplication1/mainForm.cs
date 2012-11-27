@@ -18,6 +18,7 @@ using System.Xml;
 using System.Globalization;
 using HouseCostCalculation;
 using MySql.Data.MySqlClient;
+using System.Xml.Linq;
 
 
 namespace WindowsFormsApplication1
@@ -120,7 +121,7 @@ namespace WindowsFormsApplication1
                         tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
                         tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
                         //tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        System.Data.DataTable test = getDataFromXLS("Черновик.xls");
+                       
 
                         addObjectData();
                         calculationAppartaments.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
@@ -130,13 +131,14 @@ namespace WindowsFormsApplication1
                         //analogsGrid.AutoResizeRows();
                         //analogsGrid.AutoResizeColumns();
                         docType = type.ToLower();
+                        System.Data.DataTable test = getDataFromXLS("Черновик.xls");
                         calculationAppartaments.DataSource = test;
                         calculationAppartaments.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
                         calculationAppartaments.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                         calculationAppartaments.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
                         calculationAppartaments.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
                         calculationAppartaments.Columns[4].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        calculateCost();
+                        //calculateCost();
                         test = null;
                         test = getDataFromXLS("analogs.xls");
                         analogsGrid.DataSource = test;
@@ -158,9 +160,9 @@ namespace WindowsFormsApplication1
                         houseCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
                         houseCalcGrid.AutoResizeRows();
                         houseCalcGrid.AutoResizeColumns();
-                        System.Data.DataTable test = getDataFromXLS("analogsHouse.xls");
+                        //System.Data.DataTable test = getDataFromXLS("analogsHouse.xls");
 
-                        houseAnalogs.DataSource = test;
+                        //houseAnalogs.DataSource = test;
                         houseAnalogs.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
                         houseAnalogs.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                         houseAnalogs.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -179,9 +181,9 @@ namespace WindowsFormsApplication1
                         dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
                         dirtCalcGrid.AutoResizeRows();
                         dirtCalcGrid.AutoResizeColumns();
-                        System.Data.DataTable test = getDataFromXLS("analogsDirt.xls");
+                        //System.Data.DataTable test = getDataFromXLS("analogsDirt.xls");
                         saveGridToWordButton.Show();
-                        dirtGridAnalogs.DataSource = test;
+                        //dirtGridAnalogs.DataSource = test;
                        
                     }
                     break;
@@ -197,20 +199,20 @@ namespace WindowsFormsApplication1
                         dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
                         dirtCalcGrid.AutoResizeRows();
                         dirtCalcGrid.AutoResizeColumns();
-                        System.Data.DataTable test = getDataFromXLS("дом.xls");
-                        houseCalcGrid.DataSource = test;
+                        //System.Data.DataTable test = getDataFromXLS("дом.xls");
+                        //houseCalcGrid.DataSource = test;
 
-                        test = getDataFromXLS("analogsHouse.xls");
-                        houseAnalogs.DataSource = test;
+                        //test = getDataFromXLS("analogsHouse.xls");
+                        //houseAnalogs.DataSource = test;
                         houseAnalogs.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
                         houseAnalogs.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                         houseAnalogs.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
                         houseAnalogs.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
                         docType = type.ToLower();
-                        test = null;
-                        test = getDataFromXLS("analogsDirt.xls");
+                        //test = null;
+                        //test = getDataFromXLS("analogsDirt.xls");
 
-                        dirtGridAnalogs.DataSource = test;
+                        //dirtGridAnalogs.DataSource = test;
                     }
                     break;
 
@@ -226,7 +228,8 @@ namespace WindowsFormsApplication1
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-
+            try
+            {
             switch (docTypeT)
             {
                 
@@ -243,7 +246,11 @@ namespace WindowsFormsApplication1
 
 
                 default: break;
+
             }
+            }
+            catch (Exception exp)
+            { }
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -847,297 +854,309 @@ namespace WindowsFormsApplication1
 
         public void calculateCost()
         {
-            string cellValue;
-            //todo: Добавить цикл для обхода всех столбцов
-            cost_count1 = 0;
-            cost_count2 = 0;
-            cost_count3 = 0;
-            int analogsCount = calculationAppartaments.ColumnCount - 3;
-            cost_count1 = CalcCost(2);
-            cost_count2 = CalcCost(3);
-            cost_count3 = CalcCost(4);
-            //Аналог 2
-            
-            //Final costs
-            double koef_count, t2;
-            koef_count = cost_count1 + cost_count2 + cost_count3;
-            t2 = 1 / koef_count;
-            cellValue = calculationAppartaments.Rows[33].Cells[2].Value.ToString();
-            if (cellValue != "")
+            try
             {
-                cost_cor_koef1 = double.Parse(cellValue);
-            }
-            cellValue = calculationAppartaments.Rows[33].Cells[3].Value.ToString();
-            if (cellValue != "")
-            {
-                cost_cor_koef2 = double.Parse(cellValue);
-            }
-            cellValue = calculationAppartaments.Rows[33].Cells[4].Value.ToString();
-            if (cellValue != "")
-            {
-                cost_cor_koef3 = double.Parse(cellValue);
-            }
+                string cellValue;
+                //todo: Добавить цикл для обхода всех столбцов
+                cost_count1 = 0;
+                cost_count2 = 0;
+                cost_count3 = 0;
+                int analogsCount = calculationAppartaments.ColumnCount - 3;
+                cost_count1 = CalcCost(2);
+                cost_count2 = CalcCost(3);
+                cost_count3 = CalcCost(4);
+                //Аналог 2
 
-            cellValue = calculationAppartaments.Rows[31].Cells[2].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_cost113 = double.Parse(cellValue);
+                //Final costs
+                double koef_count, t2;
+                koef_count = cost_count1 + cost_count2 + cost_count3;
+                t2 = 1 / koef_count;
+                cellValue = calculationAppartaments.Rows[33].Cells[2].Value.ToString();
+                if (cellValue != "")
+                {
+                    cost_cor_koef1 = double.Parse(cellValue);
+                }
+                cellValue = calculationAppartaments.Rows[33].Cells[3].Value.ToString();
+                if (cellValue != "")
+                {
+                    cost_cor_koef2 = double.Parse(cellValue);
+                }
+                cellValue = calculationAppartaments.Rows[33].Cells[4].Value.ToString();
+                if (cellValue != "")
+                {
+                    cost_cor_koef3 = double.Parse(cellValue);
+                }
+
+                cellValue = calculationAppartaments.Rows[31].Cells[2].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_cost113 = double.Parse(cellValue);
+                }
+                cellValue = calculationAppartaments.Rows[31].Cells[3].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_cost213 = double.Parse(cellValue);
+                }
+                cellValue = calculationAppartaments.Rows[31].Cells[4].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_cost313 = double.Parse(cellValue);
+                }
+
+                cor_cost_final1 = Math.Round(cor_cost113 * cost_cor_koef1);
+                calculationAppartaments.Rows[34].Cells[2].Value = cor_cost_final1.ToString();
+
+                if (cost_cor_koef2 != 0)
+                {
+                    cor_cost_final2 = Math.Round(cor_cost213 * cost_cor_koef2);
+
+                }
+                else
+                {
+                    cor_cost_final2 = 0;
+                }
+
+                calculationAppartaments.Rows[34].Cells[3].Value = cor_cost_final2.ToString();
+                if (cost_cor_koef3 != 0)
+                {
+                    cor_cost_final3 = Math.Round(cor_cost313 * cost_cor_koef3);
+
+                }
+                else
+                {
+                    cor_cost_final3 = 0;
+                }
+
+                calculationAppartaments.Rows[34].Cells[4].Value = cor_cost_final3.ToString();
+                final_cost_m = Math.Round(cor_cost_final1 + cor_cost_final2 + cor_cost_final3);
+                calculationAppartaments.Rows[35].Cells[2].Value = final_cost_m.ToString();
+
+
+
+                finalCost = Math.Round(final_cost_m * m_final);
+                calculationAppartaments.Rows[37].Cells[2].Value = finalCost.ToString();
+
+                finalCostRounded = Math.Round(finalCost / 1000);
+                calculationAppartaments.Rows[38].Cells[2].Value = finalCostRounded.ToString();
+                costStr = RSDN.RusCurrency.Str(finalCostRounded * 1000, "RUR");
+                costStr = costStr.Replace("00 копеек", "");
+                likvidCost = Math.Round(finalCostRounded * 0.66);
+                calculationAppartaments.Rows[39].Cells[2].Value = likvidCost.ToString();
+                //date1 = contractDate.Text;
+                //if (date1 != "")
+                //{
+                //    dataGridView2.Rows[5].Cells[2].ValueType = System.Type.;
+                //    dataGridView2.Rows[5].Cells[2].Value = date1.ToString();
+                //}
             }
-            cellValue = calculationAppartaments.Rows[31].Cells[3].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_cost213 = double.Parse(cellValue);
-            }
-            cellValue = calculationAppartaments.Rows[31].Cells[4].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_cost313 = double.Parse(cellValue);
-            }
-
-            cor_cost_final1 = Math.Round(cor_cost113 * cost_cor_koef1);
-            calculationAppartaments.Rows[34].Cells[2].Value = cor_cost_final1.ToString();
-
-            if (cost_cor_koef2 != 0)
-            {
-                cor_cost_final2 = Math.Round(cor_cost213 * cost_cor_koef2);
-
-            }
-            else
-            {
-                cor_cost_final2 = 0;
-            }
-            
-            calculationAppartaments.Rows[34].Cells[3].Value = cor_cost_final2.ToString();
-            if (cost_cor_koef3 != 0)
-            {
-                cor_cost_final3 = Math.Round(cor_cost313 * cost_cor_koef3);
-                
-            }
-            else
-            {
-                cor_cost_final3 = 0;
-            }
-
-            calculationAppartaments.Rows[34].Cells[4].Value = cor_cost_final3.ToString();
-            final_cost_m = Math.Round(cor_cost_final1 + cor_cost_final2 + cor_cost_final3);
-            calculationAppartaments.Rows[35].Cells[2].Value = final_cost_m.ToString();
-
-
-
-            finalCost = Math.Round(final_cost_m * m_final);
-            calculationAppartaments.Rows[37].Cells[2].Value = finalCost.ToString();
-
-            finalCostRounded = Math.Round(finalCost / 1000);
-            calculationAppartaments.Rows[38].Cells[2].Value = finalCostRounded.ToString();
-            costStr = RSDN.RusCurrency.Str(finalCostRounded * 1000, "RUR");
-            costStr = costStr.Replace("00 копеек", "");
-            likvidCost = Math.Round(finalCostRounded * 0.66);
-            calculationAppartaments.Rows[39].Cells[2].Value = likvidCost.ToString();
-            //date1 = contractDate.Text;
-            //if (date1 != "")
-            //{
-            //    dataGridView2.Rows[5].Cells[2].ValueType = System.Type.;
-            //    dataGridView2.Rows[5].Cells[2].Value = date1.ToString();
-            //}
+            catch (Exception exp)
+            { }
         }
 
         private int CalcCost(int i)
         {
-            cost_count1 = 0;
-            string cellValue;
-            cellValue = calculationAppartaments.Rows[0].Cells[i].Value.ToString();
-            if (cellValue != "")
+            try
             {
-                cost1 = double.Parse(cellValue);
-            }
-            cellValue = calculationAppartaments.Rows[1].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                m1 = double.Parse(cellValue);
-
-            }
-            cellValue = calculationAppartaments.Rows[3].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_torg = double.Parse(cellValue);
-                if (cor_torg != 1.00)
+                cost_count1 = 0;
+                string cellValue;
+                cellValue = calculationAppartaments.Rows[0].Cells[i].Value.ToString();
+                if (cellValue != "")
                 {
-                    cost_count1++;
+                    cost1 = double.Parse(cellValue);
+                }
+                cellValue = calculationAppartaments.Rows[1].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    m1 = double.Parse(cellValue);
+
+                }
+                cellValue = calculationAppartaments.Rows[3].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_torg = double.Parse(cellValue);
+                    if (cor_torg != 1.00)
+                    {
+                        cost_count1++;
+                    }
+
+                }
+                cellValue = calculationAppartaments.Rows[6].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor1 = double.Parse(cellValue);
+                    if (cor1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+
+                }
+                cellValue = calculationAppartaments.Rows[8].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_place1 = double.Parse(cellValue);
+                    if (cor_place1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[10].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_type1 = double.Parse(cellValue);
+                    if (cor_type1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[12].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_date1 = double.Parse(cellValue);
+                    if (cor_date1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[14].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_floor1 = double.Parse(cellValue);
+                    if (cor_floor1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[16].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_m1 = double.Parse(cellValue);
+                    if (cor_m1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[18].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_b1 = double.Parse(cellValue);
+                    if (cor_b1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[20].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_height1 = double.Parse(cellValue);
+                    if (cor_height1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[22].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_class1 = double.Parse(cellValue);
+                    if (cor_class1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[24].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_phone1 = double.Parse(cellValue);
+                    if (cor_phone1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[26].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_com1 = double.Parse(cellValue);
+                    if (cor_com1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[28].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_t1 = double.Parse(cellValue);
+                    if (cor_t1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[30].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    cor_lift1 = double.Parse(cellValue);
+                    if (cor_lift1 != 1.00)
+                    {
+                        cost_count1++;
+                    }
+                }
+                cellValue = calculationAppartaments.Rows[36].Cells[i].Value.ToString();
+                if (cellValue != "")
+                {
+                    m_final = double.Parse(cellValue);
+
                 }
 
-            }
-            cellValue = calculationAppartaments.Rows[6].Cells[i].Value.ToString();
-            if (cellValue != "")
+
+                cost_m1 = Math.Round(cost1 / m1);
+                calculationAppartaments.Rows[2].Cells[i].Value = cost_m1.ToString();
+                cor_cost1 = Math.Round(cost_m1 * cor_torg);
+                calculationAppartaments.Rows[4].Cells[i].Value = cor_cost1.ToString();
+
+                cor_cost11 = Math.Round(cor1 * cor_cost1);
+                calculationAppartaments.Rows[7].Cells[i].Value = cor_cost11.ToString();
+
+                cor_cost12 = Math.Round(cor_cost11 * cor_place1);
+                calculationAppartaments.Rows[9].Cells[i].Value = cor_cost12.ToString();
+
+                cor_cost13 = Math.Round(cor_cost12 * cor_type1);
+                calculationAppartaments.Rows[11].Cells[i].Value = cor_cost13.ToString();
+
+                cor_cost14 = Math.Round(cor_cost13 * cor_date1);
+                calculationAppartaments.Rows[13].Cells[i].Value = cor_cost14.ToString();
+
+                cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
+                calculationAppartaments.Rows[15].Cells[i].Value = cor_cost15.ToString();
+
+                cor_cost16 = Math.Round(cor_cost15 * cor_m1);
+                calculationAppartaments.Rows[17].Cells[i].Value = cor_cost16.ToString();
+
+                cor_cost17 = Math.Round(cor_cost16 * cor_b1);
+                calculationAppartaments.Rows[19].Cells[i].Value = cor_cost17.ToString();
+
+                cor_cost18 = Math.Round(cor_cost17 * cor_height1);
+                calculationAppartaments.Rows[21].Cells[i].Value = cor_cost18.ToString();
+
+                cor_cost19 = Math.Round(cor_cost18 * cor_class1);
+                calculationAppartaments.Rows[23].Cells[i].Value = cor_cost19.ToString();
+
+                cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
+                calculationAppartaments.Rows[25].Cells[i].Value = cor_cost110.ToString();
+
+                cor_cost111 = Math.Round(cor_cost110 * cor_com1);
+                calculationAppartaments.Rows[27].Cells[i].Value = cor_cost111.ToString();
+
+                cor_cost112 = Math.Round(cor_cost111 * cor_t1);
+                calculationAppartaments.Rows[29].Cells[i].Value = cor_cost112.ToString();
+
+                cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
+                calculationAppartaments.Rows[31].Cells[i].Value = cor_cost113.ToString();
+
+                calculationAppartaments.Rows[32].Cells[i].Value = cost_count1.ToString();
+                return cost_count1;
+            } 
+            catch (Exception exp)
             {
-                cor1 = double.Parse(cellValue);
-                if (cor1 != 1.00)
-                {
-                    cost_count1++;
-                }
-
+                return 0;
             }
-            cellValue = calculationAppartaments.Rows[8].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_place1 = double.Parse(cellValue);
-                if (cor_place1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[10].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_type1 = double.Parse(cellValue);
-                if (cor_type1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[12].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_date1 = double.Parse(cellValue);
-                if (cor_date1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[14].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_floor1 = double.Parse(cellValue);
-                if (cor_floor1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[16].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_m1 = double.Parse(cellValue);
-                if (cor_m1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[18].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_b1 = double.Parse(cellValue);
-                if (cor_b1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[20].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_height1 = double.Parse(cellValue);
-                if (cor_height1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[22].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_class1 = double.Parse(cellValue);
-                if (cor_class1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[24].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_phone1 = double.Parse(cellValue);
-                if (cor_phone1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[26].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_com1 = double.Parse(cellValue);
-                if (cor_com1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[28].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_t1 = double.Parse(cellValue);
-                if (cor_t1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[30].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                cor_lift1 = double.Parse(cellValue);
-                if (cor_lift1 != 1.00)
-                {
-                    cost_count1++;
-                }
-            }
-            cellValue = calculationAppartaments.Rows[36].Cells[i].Value.ToString();
-            if (cellValue != "")
-            {
-                m_final = double.Parse(cellValue);
-
-            }
-
-
-            cost_m1 = Math.Round(cost1 / m1);
-            calculationAppartaments.Rows[2].Cells[i].Value = cost_m1.ToString();
-            cor_cost1 = Math.Round(cost_m1 * cor_torg);
-            calculationAppartaments.Rows[4].Cells[i].Value = cor_cost1.ToString();
-
-            cor_cost11 = Math.Round(cor1 * cor_cost1);
-            calculationAppartaments.Rows[7].Cells[i].Value = cor_cost11.ToString();
-
-            cor_cost12 = Math.Round(cor_cost11 * cor_place1);
-            calculationAppartaments.Rows[9].Cells[i].Value = cor_cost12.ToString();
-
-            cor_cost13 = Math.Round(cor_cost12 * cor_type1);
-            calculationAppartaments.Rows[11].Cells[i].Value = cor_cost13.ToString();
-
-            cor_cost14 = Math.Round(cor_cost13 * cor_date1);
-            calculationAppartaments.Rows[13].Cells[i].Value = cor_cost14.ToString();
-
-            cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
-            calculationAppartaments.Rows[15].Cells[i].Value = cor_cost15.ToString();
-
-            cor_cost16 = Math.Round(cor_cost15 * cor_m1);
-            calculationAppartaments.Rows[17].Cells[i].Value = cor_cost16.ToString();
-
-            cor_cost17 = Math.Round(cor_cost16 * cor_b1);
-            calculationAppartaments.Rows[19].Cells[i].Value = cor_cost17.ToString();
-
-            cor_cost18 = Math.Round(cor_cost17 * cor_height1);
-            calculationAppartaments.Rows[21].Cells[i].Value = cor_cost18.ToString();
-
-            cor_cost19 = Math.Round(cor_cost18 * cor_class1);
-            calculationAppartaments.Rows[23].Cells[i].Value = cor_cost19.ToString();
-
-            cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
-            calculationAppartaments.Rows[25].Cells[i].Value = cor_cost110.ToString();
-
-            cor_cost111 = Math.Round(cor_cost110 * cor_com1);
-            calculationAppartaments.Rows[27].Cells[i].Value = cor_cost111.ToString();
-
-            cor_cost112 = Math.Round(cor_cost111 * cor_t1);
-            calculationAppartaments.Rows[29].Cells[i].Value = cor_cost112.ToString();
-
-            cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
-            calculationAppartaments.Rows[31].Cells[i].Value = cor_cost113.ToString();
-
-            calculationAppartaments.Rows[32].Cells[i].Value = cost_count1.ToString();
-            return cost_count1;
         }
 
         public void calculateCostHouse()
@@ -1374,9 +1393,7 @@ namespace WindowsFormsApplication1
                         costCount++;
                     }
                 }
-
-
-
+                
                 //cost_m1 = Math.Round(cost1 / m1);
                 //houseCalcGrid.Rows[2].Cells[i].Value = cost_m1.ToString();
                 cor_cost1 = Math.Round(double.Parse(houseCalcGrid.Rows[0].Cells[i].Value.ToString()) - double.Parse(houseCalcGrid.Rows[2].Cells[i].Value.ToString()));
@@ -1421,7 +1438,7 @@ namespace WindowsFormsApplication1
                 cor_cost112 = Math.Round(cor_cost111 * cor_t1);
                 houseCalcGrid.Rows[30].Cells[i].Value = cor_cost112.ToString();
 
-                cor_cost113 = Math.Round(cor_cost111 * cor_lift1);
+                cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
                 houseCalcGrid.Rows[32].Cells[i].Value = cor_cost113.ToString();
 
                 houseCalcGrid.Rows[33].Cells[i].Value = costCount.ToString();
@@ -1444,6 +1461,8 @@ namespace WindowsFormsApplication1
 
         private void floors_ValueChanged(object sender, EventArgs e)
         {
+            try
+            {
             string str;
             
             if (floors.Value == 1)
@@ -1514,6 +1533,10 @@ namespace WindowsFormsApplication1
             {
                 lift.SelectedIndex = 0;
             }
+
+            }
+            catch (Exception exp)
+            { }
         }
 
         private void button11_Click(object sender, EventArgs e)
@@ -1523,7 +1546,8 @@ namespace WindowsFormsApplication1
 
         private void saveHouse(object sender, EventArgs e)
         {
-
+            try
+            {
             //HouseCostCalculation.House h = new HouseCostCalculation.House();
             //h.saveHouse(this);
             string townName = " " + town.Text + ", ";
@@ -1548,14 +1572,13 @@ namespace WindowsFormsApplication1
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(".", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("-", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
-            try
-            {
+
                 if (DialogResult.OK == saveFileDialog1.ShowDialog())
                 {
                     wdApp = new Microsoft.Office.Interop.Word.Application();
                     Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
 
-                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\house.doc", Missing, true);
+                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\шаблоны\\Дом.doc", Missing, true);
                     object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
 
                     // Gets a NumberFormatInfo associated with the en-US culture.
@@ -4868,6 +4891,23 @@ namespace WindowsFormsApplication1
                                 objectDataGrid.Rows[77].Cells[1].Value = settings.GetAttribute("data2.1.3.37");
                                 objectDataGrid.Rows[78].Cells[1].Value = settings.GetAttribute("data2.1.3.38");
                                 objectDataGrid.Rows[79].Cells[1].Value = settings.GetAttribute("data2.1.3.39");
+                                int colsCount = int.Parse(settings.GetAttribute("analogsColsCount"));
+                                for (int i = 0; i <  19; i++)
+                                {
+                                    for (int j = 0; j <colsCount ; j++)
+                                    {
+                                        analogsGrid.Rows[i].Cells[j].Value=settings.GetAttribute("analog"+i.ToString()+"."+j.ToString());
+                                    }
+                                }
+                                colsCount = int.Parse(settings.GetAttribute("calcColsCount"));
+                                
+                                for (int i = 0; i < 39; i++)
+                                {
+                                    for (int j = 0; j < colsCount; j++)
+                                    {
+                                        calculationAppartaments.Rows[i].Cells[j].Value = settings.GetAttribute("calc" + i.ToString() + "." + j.ToString());                                        
+                                    }
+                                }
                             }
                             ownerDocs.Text = settings.GetAttribute(ownerDocs.Name);
 
@@ -5058,12 +5098,12 @@ namespace WindowsFormsApplication1
                     wdApp.ActiveDocument.Words[1].Select();
                     wdApp.Selection.Copy();
                     wdDoc.Close();                  
-                    string template = "\\template.doc";
+                    string template = "\\шаблоны\\ОсновнойШаблон.doc";
 
 
                     if (bankName.Text == "втб 24")
                     {
-                        template = "\\orgZakaz.doc";
+                        template = "\\шаблоны\\ВТБ24.doc";
 
                     }
                     wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + template, Missing, true);
@@ -8424,7 +8464,7 @@ namespace WindowsFormsApplication1
             {
                 //MessageBox.Show(except.Message);
                 saveState();
-                //wdApp.Documents.Close(false);
+                //wdApp.Documents.Close();
                 wdApp.Quit();
             }
 
@@ -8459,8 +8499,13 @@ namespace WindowsFormsApplication1
             {
                 wdApp = new Microsoft.Office.Interop.Word.Application();
                 Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
+                string template = "\\шаблоны\\Приложение.doc";
+                if (bankName.Text == "втб 24")
+                {
+                    template = "\\шаблоны\\ПриложениеВТБ24.doc";
 
-                wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\adds.doc");
+                }
+                wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + template);
 
                 //button4.Text = System.Windows.Forms.Application.StartupPath + "\\template.doc";
 
@@ -9072,7 +9117,7 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp = new Microsoft.Office.Interop.Word.Application();
                 Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
 
-                wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\addsHouse.doc");
+                wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\шаблоны\\ДомПриложение.doc");
 
                 //button4.Text = System.Windows.Forms.Application.StartupPath + "\\template.doc";
 
@@ -9613,26 +9658,31 @@ if (newSentence.Contains("@@uvaj@@"))
         private void analogsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             //copy costs to calc table
-            string t = analogsGrid.Rows[15].Cells[2].Value.ToString();
-            t = t.Replace(" ", "");
-            calculationAppartaments.Rows[0].Cells[2].Value = t;
-            t = analogsGrid.Rows[15].Cells[3].Value.ToString();
-            t = t.Replace(" ", "");
-            calculationAppartaments.Rows[0].Cells[3].Value = t;
-            t = analogsGrid.Rows[15].Cells[4].Value.ToString();
-            t = t.Replace(" ", "");
-            calculationAppartaments.Rows[0].Cells[4].Value = t;
+            try
+            {
+                string t = analogsGrid.Rows[15].Cells[2].Value.ToString();
+                t = t.Replace(" ", "");
+                calculationAppartaments.Rows[0].Cells[2].Value = t;
+                t = analogsGrid.Rows[15].Cells[3].Value.ToString();
+                t = t.Replace(" ", "");
+                calculationAppartaments.Rows[0].Cells[3].Value = t;
+                t = analogsGrid.Rows[15].Cells[4].Value.ToString();
+                t = t.Replace(" ", "");
+                calculationAppartaments.Rows[0].Cells[4].Value = t;
 
-            //копирует площади в таблицу расчета
-            t = analogsGrid.Rows[7].Cells[2].Value.ToString();
-            t = t.Replace(" ", "");
-            calculationAppartaments.Rows[1].Cells[2].Value = t;
-            t = analogsGrid.Rows[7].Cells[3].Value.ToString();
-            t = t.Replace(" ", "");
-            calculationAppartaments.Rows[1].Cells[3].Value = t;
-            t = analogsGrid.Rows[7].Cells[4].Value.ToString();
-            t = t.Replace(" ", "");
-            calculationAppartaments.Rows[1].Cells[4].Value = t;
+                //копирует площади в таблицу расчета
+                t = analogsGrid.Rows[7].Cells[2].Value.ToString();
+                t = t.Replace(" ", "");
+                calculationAppartaments.Rows[1].Cells[2].Value = t;
+                t = analogsGrid.Rows[7].Cells[3].Value.ToString();
+                t = t.Replace(" ", "");
+                calculationAppartaments.Rows[1].Cells[3].Value = t;
+                t = analogsGrid.Rows[7].Cells[4].Value.ToString();
+                t = t.Replace(" ", "");
+                calculationAppartaments.Rows[1].Cells[4].Value = t;
+            }
+            catch (Exception exp)
+            { }
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -9781,7 +9831,23 @@ if (newSentence.Contains("@@uvaj@@"))
                     addAtributeToXml(settings, "data2.1.3.37", objectDataGrid.Rows[77].Cells[1].Value.ToString());
                     addAtributeToXml(settings, "data2.1.3.38", objectDataGrid.Rows[78].Cells[1].Value.ToString());
                     addAtributeToXml(settings, "data2.1.3.39", objectDataGrid.Rows[79].Cells[1].Value.ToString());
+                    addAtributeToXml(settings, "analogsColsCount", analogsGrid.Columns.Count.ToString());
+                    for (int i = 0; i < analogsGrid.Rows.Count-1;i++ )
+                    {
+                        for (int j = 0; j < analogsGrid.Columns.Count;j++ )
+                        {
+                            addAtributeToXml(settings, "analog" + i.ToString() + "." + j.ToString(), analogsGrid.Rows[i].Cells[j].Value.ToString());
+                        }
+                    }
 
+                    addAtributeToXml(settings, "calcColsCount", calculationAppartaments.Columns.Count.ToString());
+                    for (int i = 0; i < calculationAppartaments.Rows.Count - 1; i++)
+                    {
+                        for (int j = 0; j < calculationAppartaments.Columns.Count; j++)
+                        {
+                            addAtributeToXml(settings, "calc" + i.ToString() + "." + j.ToString(), calculationAppartaments.Rows[i].Cells[j].Value.ToString());
+                        }
+                    }
                 }
 
                 settings.WriteEndElement();
@@ -9791,8 +9857,8 @@ if (newSentence.Contains("@@uvaj@@"))
             }
             catch (Exception e)
             {
-                
-                this.Close();
+                MessageBox.Show(e.Message);
+                //this.Close();
             }
            
         }
@@ -11638,8 +11704,6 @@ if (newSentence.Contains("@@uvaj@@"))
             houseCalcGrid.Rows[0].Cells[4].Value = t;
             calculateCostHouse();
         }
-
-
 
     }
 
