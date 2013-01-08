@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using Padeg;
-using HouseCostCalculation;
+﻿using Padeg;
 
 namespace HouseCostCalculation
 {
@@ -24,21 +19,21 @@ namespace HouseCostCalculation
         public string ownerFullNameV;
         public string ownerFullNameT;
         public string ownerFullNameP;
+
         public Owner(string address1, string OVD1, string ownerInit1, string ownerName1, string ownerSurname1, string passDate1, string passNum1, string passportSerial1, string phone1)
         {
-           address = address1;
-           
-           OVD = OVD1;
-           ownerInit = ownerInit1;
-           ownerName = ownerName1;
-           ownerSurname = ownerSurname1;
-           passportSerial = passportSerial1;
-           passNum = passNum1;
-           passDate = passDate1;
-           phone = phone1;
-           ownerPadeg();
-           ownerFullName = ownerSurname + " " + ownerName + " " + ownerInit;
-           
+            address = address1;
+
+            OVD = OVD1;
+            ownerInit = ownerInit1;
+            ownerName = ownerName1;
+            ownerSurname = ownerSurname1;
+            passportSerial = passportSerial1;
+            passNum = passNum1;
+            passDate = passDate1;
+            phone = phone1;
+            ownerPadeg();
+            ownerFullName = ownerSurname + " " + ownerName + " " + ownerInit;
         }
 
         public string ownerName
@@ -57,7 +52,7 @@ namespace HouseCostCalculation
         {
             get
             {
-                return lastName ;
+                return lastName;
             }
             set
             {
@@ -148,7 +143,6 @@ namespace HouseCostCalculation
                 ownerOVD = value;
             }
         }
-
 
         public void ownerPadeg()
         {

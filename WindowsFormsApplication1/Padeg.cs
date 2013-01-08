@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Padeg;
 using WindowsFormsApplication1;
-using HouseCostCalculation.Properties;
 
 namespace HouseCostCalculation
 {
     public partial class Padeg : Form
     {
         public int t;
+
         public Padeg()
         {
             InitializeComponent();
@@ -28,7 +22,7 @@ namespace HouseCostCalculation
             string firstName = null;
             string lastName = null;
             string init = null;
-            padeg.SeparateFIO(fullNameR, ref lastName,  ref firstName, ref init);
+            padeg.SeparateFIO(fullNameR, ref lastName, ref firstName, ref init);
             textBox1.Text = lastName;
             textBox2.Text = firstName;
             textBox3.Text = init;
@@ -45,7 +39,7 @@ namespace HouseCostCalculation
         private void button1_Click(object sender, EventArgs e)
         {
             mainForm f = new mainForm();
-            
+
             f.fullNameRSet(textBox1.Text + " " + textBox2.Text + " " + textBox3.Text, t);
             f.fullNameDSet(textBox4.Text + " " + textBox5.Text + " " + textBox6.Text, t);
             this.Close();
@@ -53,7 +47,6 @@ namespace HouseCostCalculation
 
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

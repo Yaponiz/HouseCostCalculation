@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using HouseCostCalculation;
-
 
 namespace HouseCostCalculation
 {
@@ -21,8 +13,8 @@ namespace HouseCostCalculation
         public ownerForm(List<Owner> owners)
         {
             InitializeComponent();
-            
-            foreach(HouseCostCalculation.Owner owner in owners)
+
+            foreach (HouseCostCalculation.Owner owner in owners)
             {
                 ownerList.Rows.Add(owner.ownerName, owner.ownerInit, owner.ownerSurname, owner.address, owner.passportSerial, owner.passNum, owner.OVD, owner.passDate);
             }

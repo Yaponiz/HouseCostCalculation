@@ -1,6 +1,8 @@
 ﻿using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
+using System.Windows.Forms;
+
 namespace WindowsFormsApplication1
 {
 
@@ -538,7 +540,7 @@ namespace WindowsFormsApplication1
             this.button12.TabIndex = 5;
             this.button12.Text = "Выгрузить в Word";
             this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.saveHouse);
+            this.button12.Click += new System.EventHandler(this.SaveHouse);
             // 
             // houseCalcGrid
             // 
@@ -2679,6 +2681,130 @@ namespace WindowsFormsApplication1
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
 
+        public mainForm(string type, string banks)
+        {
+            InitializeComponent();
+            Missing = System.Reflection.Missing.Value;
+            int t = tabControl1.TabPages.Count;
+            for (int i = 0; i < t; i++)
+            {
+                //tabControl1.TabPages[i].;            
+            }
+            docTypeT = type;
+            switch (type)
+            {
+                case "Квартира":
+                    {
+                        string fileName = System.Windows.Forms.Application.StartupPath + "\\calcState.xml";
+                        
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                        //tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                       
+
+                        addObjectData();
+                        calculationAppartaments.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                        calculationAppartaments.AutoResizeRows();
+                        calculationAppartaments.AutoResizeColumns();
+                        //analogsGrid.AutoSizeRowsMode  = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                        //analogsGrid.AutoResizeRows();
+                        //analogsGrid.AutoResizeColumns();
+                        docType = type.ToLower();
+                        System.Data.DataTable test = getDataFromXLS("Черновик.xls");
+                        calculationAppartaments.DataSource = test;
+                        calculationAppartaments.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        calculationAppartaments.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        calculationAppartaments.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        calculationAppartaments.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        calculationAppartaments.Columns[4].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        //calculateCost();
+                        test = null;
+                        test = getDataFromXLS("analogs.xls");
+                        analogsGrid.DataSource = test;
+                        analogsGrid.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        analogsGrid.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        analogsGrid.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        analogsGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        loadState(fileName);
+
+                    } break;
+                case "Домовладение":
+                    {
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                        //tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
+                        addHouseData();
+                        docType = type.ToLower();
+                        houseCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                        houseCalcGrid.AutoResizeRows();
+                        houseCalcGrid.AutoResizeColumns();
+                        System.Data.DataTable test = getDataFromXLS("analogsHouse.xls");
+
+                        houseAnalogs.DataSource = test;
+                        houseAnalogs.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        houseAnalogs.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        houseAnalogs.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        houseAnalogs.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                    }
+                    break;
+                case "Земельный участок":
+                    {
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        addGridData();
+                        docType = type.ToLower();
+                        dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                        dirtCalcGrid.AutoResizeRows();
+                        dirtCalcGrid.AutoResizeColumns();
+                        System.Data.DataTable test = getDataFromXLS("analogsDirt.xls");
+                        saveGridToWordButton.Show();
+                        dirtGridAnalogs.DataSource = test;
+                       
+                    }
+                    break;
+                case "Домовладение с земельным участком":
+                    {
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
+                        addGridData();
+                        addHouseData();
+                        houseCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                        houseCalcGrid.AutoResizeRows();
+                        houseCalcGrid.AutoResizeColumns();
+                        dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                        dirtCalcGrid.AutoResizeRows();
+                        dirtCalcGrid.AutoResizeColumns();
+                        System.Data.DataTable test = getDataFromXLS("дом.xls");
+                        houseCalcGrid.DataSource = test;
+                        test = null;
+                        test = getDataFromXLS("analogsHouse.xls");
+                        houseAnalogs.DataSource = test;
+                        houseAnalogs.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        houseAnalogs.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        houseAnalogs.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        houseAnalogs.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        docType = type.ToLower();
+                        test = null;
+                        test = getDataFromXLS("analogsDirt.xls");
+
+                        dirtGridAnalogs.DataSource = test;
+                    }
+                    break;
+
+
+                default: break;
+            }
+
+
+            bankName.Text = banks;
+            
+
+        }
     }
 }
 

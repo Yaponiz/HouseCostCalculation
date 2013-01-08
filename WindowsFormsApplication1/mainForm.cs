@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Data.OleDb;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Office.Interop;
-using Microsoft.Office.Interop.Word;
+using System.Xml;
+using HouseCostCalculation;
 using Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Word;
 using Padeg;
-using System.Data.OleDb;
 using RSDN;
 using WMPLib;
-using System.IO;
-using System.Xml;
-using System.Globalization;
-using HouseCostCalculation;
-using MySql.Data.MySqlClient;
-using System.Xml.Linq;
-
+using Application = Microsoft.Office.Interop.Word.Application;
+using DataTable = System.Data.DataTable;
+using Shape = Microsoft.Office.Interop.Word.Shape;
 
 namespace WindowsFormsApplication1
 {
@@ -88,169 +84,42 @@ namespace WindowsFormsApplication1
         public static string docType;
         public static string houseType1, houseType2;
         public static string docTypeT;
-        public System.Collections.Generic.List<Owner> owners = new List<HouseCostCalculation.Owner>();
 
         public object Missing;
-        public Microsoft.Office.Interop.Word.Application wdApp;
-        public string roomsX;
+        public List<Owner> owners = new List<Owner>();
         public string roomsN;
+        public string roomsX;
+        public Application wdApp;
+
         public mainForm()
         {
             InitializeComponent();
-
-
-        }
-
-        public mainForm(string type, string banks)
-        {
-            InitializeComponent();
-            Missing = System.Reflection.Missing.Value;
-            int t = tabControl1.TabPages.Count;
-            for (int i = 0; i < t; i++)
-            {
-                //tabControl1.TabPages[i].;            
-            }
-            docTypeT = type;
-            switch (type)
-            {
-                case "Квартира":
-                    {
-                        string fileName = System.Windows.Forms.Application.StartupPath + "\\calcState.xml";
-                        
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        //tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                       
-
-                        addObjectData();
-                        calculationAppartaments.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-                        calculationAppartaments.AutoResizeRows();
-                        calculationAppartaments.AutoResizeColumns();
-                        //analogsGrid.AutoSizeRowsMode  = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-                        //analogsGrid.AutoResizeRows();
-                        //analogsGrid.AutoResizeColumns();
-                        docType = type.ToLower();
-                        System.Data.DataTable test = getDataFromXLS("Черновик.xls");
-                        calculationAppartaments.DataSource = test;
-                        calculationAppartaments.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        calculationAppartaments.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        calculationAppartaments.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        calculationAppartaments.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        calculationAppartaments.Columns[4].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        //calculateCost();
-                        test = null;
-                        test = getDataFromXLS("analogs.xls");
-                        analogsGrid.DataSource = test;
-                        analogsGrid.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        analogsGrid.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        analogsGrid.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        analogsGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        loadState(fileName);
-
-                    } break;
-                case "Домовладение":
-                    {
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        //tabControl1.TabPages.Remove(tabControl1.TabPages[3]);
-                        addHouseData();
-                        docType = type.ToLower();
-                        houseCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-                        houseCalcGrid.AutoResizeRows();
-                        houseCalcGrid.AutoResizeColumns();
-                        //System.Data.DataTable test = getDataFromXLS("analogsHouse.xls");
-
-                        //houseAnalogs.DataSource = test;
-                        houseAnalogs.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        houseAnalogs.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        houseAnalogs.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        houseAnalogs.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
-
-                    }
-                    break;
-                case "Земельный участок":
-                    {
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        addGridData();
-                        docType = type.ToLower();
-                        dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-                        dirtCalcGrid.AutoResizeRows();
-                        dirtCalcGrid.AutoResizeColumns();
-                        //System.Data.DataTable test = getDataFromXLS("analogsDirt.xls");
-                        saveGridToWordButton.Show();
-                        //dirtGridAnalogs.DataSource = test;
-                       
-                    }
-                    break;
-                case "Домовладение с земельным участком":
-                    {
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                        addGridData();
-                        addHouseData();
-                        houseCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-                        houseCalcGrid.AutoResizeRows();
-                        houseCalcGrid.AutoResizeColumns();
-                        dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-                        dirtCalcGrid.AutoResizeRows();
-                        dirtCalcGrid.AutoResizeColumns();
-                        //System.Data.DataTable test = getDataFromXLS("дом.xls");
-                        //houseCalcGrid.DataSource = test;
-
-                        //test = getDataFromXLS("analogsHouse.xls");
-                        //houseAnalogs.DataSource = test;
-                        houseAnalogs.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        houseAnalogs.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        houseAnalogs.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        houseAnalogs.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
-                        docType = type.ToLower();
-                        //test = null;
-                        //test = getDataFromXLS("analogsDirt.xls");
-
-                        //dirtGridAnalogs.DataSource = test;
-                    }
-                    break;
-
-
-                default: break;
-            }
-
-
-            bankName.Text = banks;
-            
-
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             try
             {
-            switch (docTypeT)
-            {
-                
-                case "Квартира":
-                    {
-                        
-                        objectDataGrid.Rows[43].Cells[1].Value = floor.Value.ToString()+" этаж";
-                        analogsGrid.Rows[6].Cells[1].Value = floor.Value.ToString().ToLower();
-                        //analogsGrid.Rows[6].Cells[2].Value = floor.Value.ToString().ToLower();
-                        //analogsGrid.Rows[6].Cells[3].Value = floor.Value.ToString().ToLower();
-                        //analogsGrid.Rows[6].Cells[4].Value = floor.Value.ToString().ToLower();
-                    }
-                    break;
+                switch (docTypeT)
+                {
+                    case "Квартира":
+                        {
+                            objectDataGrid.Rows[43].Cells[1].Value = floor.Value.ToString() + " этаж";
+                            analogsGrid.Rows[6].Cells[1].Value = floor.Value.ToString().ToLower();
+                            //analogsGrid.Rows[6].Cells[2].Value = floor.Value.ToString().ToLower();
+                            //analogsGrid.Rows[6].Cells[3].Value = floor.Value.ToString().ToLower();
+                            //analogsGrid.Rows[6].Cells[4].Value = floor.Value.ToString().ToLower();
+                        }
+                        break;
 
 
-                default: break;
-
-            }
+                    default:
+                        break;
+                }
             }
             catch (Exception exp)
-            { }
+            {
+            }
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -264,7 +133,6 @@ namespace WindowsFormsApplication1
             }
         }
 
-        
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -319,7 +187,7 @@ namespace WindowsFormsApplication1
         }
 
         /// <summary>
-        /// Return Header string
+        ///     Return Header string
         /// </summary>
         public string topColontitulCreator()
         {
@@ -333,8 +201,8 @@ namespace WindowsFormsApplication1
             }
 
 
-
-            fullAddress = "Объект оценки - " + rooms + " квартира №" + appartmentNum.Text + " по адресу: " + town.Text + ", " + street.Text + " " + houseNum.Text + buildNum;
+            fullAddress = "Объект оценки - " + rooms + " квартира №" + appartmentNum.Text + " по адресу: " + town.Text +
+                          ", " + street.Text + " " + houseNum.Text + buildNum;
             return fullAddress;
         }
 
@@ -350,36 +218,74 @@ namespace WindowsFormsApplication1
             }
 
 
-
-            fullAddress = "Частное домовладение и зем. участок по адресу: " + town.Text + ", " + street.Text + " " + houseNum.Text + buildNum;
+            fullAddress = "Частное домовладение и зем. участок по адресу: " + town.Text + ", " + street.Text + " " +
+                          houseNum.Text + buildNum;
             return fullAddress;
         }
 
         /// <summary>
-        /// Convert roomsNum to String
+        ///     Convert roomsNum to String
         /// </summary>
         public string roomsAsString()
         {
             string rooms = null;
             switch (roomsNum.Value.ToString())
             {
-                //ToDo проверить комнаты
-                case "1": rooms = "однокомнатная"; rooms1 = "однокомнатной"; roomsT = "Однокомнатная"; roomsN = "1 комн";  roomsX = "1-на комн. квартира"; break;
-                case "2": rooms = "двухкомнатная"; rooms1 = "двухкомнатной"; roomsT = "Двухкомнатная"; roomsN = "2 комн"; roomsX = "2-ух комн. квартира"; break;
-                case "3": rooms = "трехкомнатная"; rooms1 = "трехкомнатной"; roomsT = "Трехкомнатная"; roomsN = "3 комн"; roomsX = "3-ех комн. квартира"; break;
-                case "4": rooms = "четырехкомнатная"; rooms1 = "четырехкомнатной"; roomsT = "Четырехкомнатная"; roomsN = "4 комн"; roomsX = "4-ех комн. квартира"; break;
-                case "5": rooms = "пятикомнатная"; rooms1 = "пятикомнатной"; roomsT = "Пятикомнатная"; roomsN = "5 комн"; roomsX = "5-ти комн. квартира"; break;
-                case "6": rooms = "шестикомнатная"; rooms1 = "шестикомнатной"; roomsT = "Шестикомнатная"; roomsN = "6 комн"; roomsX = "6-ти комн. квартира"; break;
-                //case "7": rooms = "семикомнатная"; break;
-                //case '8': roomsNum = "однокомнатная": break;
-                //case '9': roomsNum = "однокомнатная": break;
-                default: rooms = ""; break;
+                    //ToDo проверить комнаты
+                case "1":
+                    rooms = "однокомнатная";
+                    rooms1 = "однокомнатной";
+                    roomsT = "Однокомнатная";
+                    roomsN = "1 комн";
+                    roomsX = "1-на комн. квартира";
+                    break;
+                case "2":
+                    rooms = "двухкомнатная";
+                    rooms1 = "двухкомнатной";
+                    roomsT = "Двухкомнатная";
+                    roomsN = "2 комн";
+                    roomsX = "2-ух комн. квартира";
+                    break;
+                case "3":
+                    rooms = "трехкомнатная";
+                    rooms1 = "трехкомнатной";
+                    roomsT = "Трехкомнатная";
+                    roomsN = "3 комн";
+                    roomsX = "3-ех комн. квартира";
+                    break;
+                case "4":
+                    rooms = "четырехкомнатная";
+                    rooms1 = "четырехкомнатной";
+                    roomsT = "Четырехкомнатная";
+                    roomsN = "4 комн";
+                    roomsX = "4-ех комн. квартира";
+                    break;
+                case "5":
+                    rooms = "пятикомнатная";
+                    rooms1 = "пятикомнатной";
+                    roomsT = "Пятикомнатная";
+                    roomsN = "5 комн";
+                    roomsX = "5-ти комн. квартира";
+                    break;
+                case "6":
+                    rooms = "шестикомнатная";
+                    rooms1 = "шестикомнатной";
+                    roomsT = "Шестикомнатная";
+                    roomsN = "6 комн";
+                    roomsX = "6-ти комн. квартира";
+                    break;
+                    //case "7": rooms = "семикомнатная"; break;
+                    //case '8': roomsNum = "однокомнатная": break;
+                    //case '9': roomsNum = "однокомнатная": break;
+                default:
+                    rooms = "";
+                    break;
             }
             return rooms;
         }
 
         /// <summary>
-        /// Return Full Address String
+        ///     Return Full Address String
         /// </summary>
         public string fullAddress()
         {
@@ -393,8 +299,8 @@ namespace WindowsFormsApplication1
             }
 
 
-
-            fullAddress = rooms + " квартира №" + appartmentNum.Text + " " + town.Text + ", " + street.Text + ", " + houseNum.Text + buildNum;
+            fullAddress = rooms + " квартира №" + appartmentNum.Text + " " + town.Text + ", " + street.Text + ", " +
+                          houseNum.Text + buildNum;
             return fullAddress;
         }
 
@@ -408,7 +314,6 @@ namespace WindowsFormsApplication1
             {
                 buildNum = ", корп. " + buildingNum.Text;
             }
-
 
 
             fullAddress = " домовладение " + town.Text + ", " + street.Text + ", " + houseNum.Text + buildNum;
@@ -425,7 +330,6 @@ namespace WindowsFormsApplication1
             {
                 buildNum = ", корп. " + buildingNum.Text;
             }
-
 
 
             fullAddress = " земельный участок " + town.Text + ", " + street.Text + ", " + houseNum.Text + buildNum;
@@ -453,116 +357,127 @@ namespace WindowsFormsApplication1
 
         private void Player_PlayStateChange(int NewState)
         {
-            if ((WMPLib.WMPPlayState)NewState == WMPLib.WMPPlayState.wmppsStopped)
+            if ((WMPPlayState) NewState == WMPPlayState.wmppsStopped)
             {
-
             }
         }
 
         private void Player_MediaError(object pMediaObject)
         {
             MessageBox.Show("Cannot play media file.");
-            this.Close();
+            Close();
         }
 
 
         public void addObjectData()
         {
-
             objectDataGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             objectDataGrid.AutoResizeRows();
             objectDataGrid.AutoResizeColumns();
-            
-            objectDataGrid.Rows.Add("2.1.1", "Местоположение и окружение Объекта оценки");//0
-            objectDataGrid.Rows.Add("Местоположение Объекта оценки", " ");//1
-            objectDataGrid.Rows.Add("Экологическая обстановка в районе", " ");//2
-            objectDataGrid.Rows.Add("Интенсивность движения транспорта мимо дома", " ");//3
-            objectDataGrid.Rows.Add("Транспортная доступность, обеспеченность общественным транспортом", " ");//4
-            objectDataGrid.Rows.Add("Прилегающая транспортная магистраль, улица", " ");//5
-            objectDataGrid.Rows.Add("Близость к скоростным магистралям, соседние улицы", " ");//6
-            objectDataGrid.Rows.Add("Эстетичность окружающей застройки", " ");//7
-            objectDataGrid.Rows.Add("Престижность района", " ");//8
-            objectDataGrid.Rows.Add("Зонирование района (преобладающий тип застройки)", " ");//9
-            objectDataGrid.Rows.Add("Близость к объектам социально-бытовой сферы", " ");//10
-            objectDataGrid.Rows.Add("Близость к объектам развлечений и отдыха", " ");//11
-            objectDataGrid.Rows.Add("Объекты промышленной инфраструктуры", " ");//12
-            objectDataGrid.Rows.Add("Придомовая территория", " ");//13
-            objectDataGrid.Rows.Add("Парковка возле дома", " ");//14
-            objectDataGrid.Rows.Add("Наличие зеленых насаждений", " ");//15
-            objectDataGrid.Rows.Add("Прочие особенности местоположения", " ");//16
-            objectDataGrid.Rows.Add("2.1.2", "Описание дома, в котором расположена оцениваемая квартира");//17
-            objectDataGrid.Rows.Add("Тип дома", " ");//17
-            objectDataGrid.Rows.Add("Год постройки", " ");//18
-            objectDataGrid.Rows.Add("Этажность", " ");//19
-            objectDataGrid.Rows.Add("Материал наружных стен", " ");//20
-            objectDataGrid.Rows.Add("Материал перегородок", " ");//21
-            objectDataGrid.Rows.Add("Группа капитальности", " ");//22
-            objectDataGrid.Rows.Add("Наружная отделка", " ");//23
-            objectDataGrid.Rows.Add("Состояние внеш.отделки, вид фасада", " ");//24
-            objectDataGrid.Rows.Add("Характеристика перекрытий", " ");//25
-            objectDataGrid.Rows.Add("Тип фундамента", " ");//26
-            objectDataGrid.Rows.Add("Защищенность подъезда", " ");//27
-            objectDataGrid.Rows.Add("Состояние обществ. зон подъезда", " ");//28
-            objectDataGrid.Rows.Add("Лифт", " ");//29
-            objectDataGrid.Rows.Add("Мусоропровод", " ");//30
-            objectDataGrid.Rows.Add("Газ", " ");//31
-            objectDataGrid.Rows.Add("Горячее водоснабжение", " ");//32
-            objectDataGrid.Rows.Add("Отопление", " ");//33
-            objectDataGrid.Rows.Add("Противопожарная безопасность", " ");//34
-            objectDataGrid.Rows.Add("Наличие и тип парковки", " ");//35
-            objectDataGrid.Rows.Add("Общее состояние дома", " ");//36
-            objectDataGrid.Rows.Add("Наличие/ отсутствие дополнительных услуг для жильцов", " ");//37
-            objectDataGrid.Rows.Add("Наличие/ отсутствие встроено-пристроенных нежилых помещений", " ");//38
-            objectDataGrid.Rows.Add("2.1.3", "Описание оцениваемой квартиры");//39
-            objectDataGrid.Rows.Add("Документ органа (организации), осуществившей технический учет и инвентаризацию Объекта оценки", " ");//40
-            objectDataGrid.Rows.Add("Литер, согласно документа технического учета и инвентаризации", " ");//41
-            objectDataGrid.Rows.Add("Этаж", " ");//42
-            objectDataGrid.Rows.Add("Количество квартир на этаже", " ");//43
-            objectDataGrid.Rows.Add("Тип планировки", " ");//44
+
+            objectDataGrid.Rows.Add("2.1.1", "Местоположение и окружение Объекта оценки"); //0
+            objectDataGrid.Rows.Add("Местоположение Объекта оценки", " "); //1
+            objectDataGrid.Rows.Add("Экологическая обстановка в районе", " "); //2
+            objectDataGrid.Rows.Add("Интенсивность движения транспорта мимо дома", " "); //3
+            objectDataGrid.Rows.Add("Транспортная доступность, обеспеченность общественным транспортом", " "); //4
+            objectDataGrid.Rows.Add("Прилегающая транспортная магистраль, улица", " "); //5
+            objectDataGrid.Rows.Add("Близость к скоростным магистралям, соседние улицы", " "); //6
+            objectDataGrid.Rows.Add("Эстетичность окружающей застройки", " "); //7
+            objectDataGrid.Rows.Add("Престижность района", " "); //8
+            objectDataGrid.Rows.Add("Зонирование района (преобладающий тип застройки)", " "); //9
+            objectDataGrid.Rows.Add("Близость к объектам социально-бытовой сферы", " "); //10
+            objectDataGrid.Rows.Add("Близость к объектам развлечений и отдыха", " "); //11
+            objectDataGrid.Rows.Add("Объекты промышленной инфраструктуры", " "); //12
+            objectDataGrid.Rows.Add("Придомовая территория", " "); //13
+            objectDataGrid.Rows.Add("Парковка возле дома", " "); //14
+            objectDataGrid.Rows.Add("Наличие зеленых насаждений", " "); //15
+            objectDataGrid.Rows.Add("Прочие особенности местоположения", " "); //16
+            objectDataGrid.Rows.Add("2.1.2", "Описание дома, в котором расположена оцениваемая квартира"); //17
+            objectDataGrid.Rows.Add("Тип дома", " "); //17
+            objectDataGrid.Rows.Add("Год постройки", " "); //18
+            objectDataGrid.Rows.Add("Этажность", " "); //19
+            objectDataGrid.Rows.Add("Материал наружных стен", " "); //20
+            objectDataGrid.Rows.Add("Материал перегородок", " "); //21
+            objectDataGrid.Rows.Add("Группа капитальности", " "); //22
+            objectDataGrid.Rows.Add("Наружная отделка", " "); //23
+            objectDataGrid.Rows.Add("Состояние внеш.отделки, вид фасада", " "); //24
+            objectDataGrid.Rows.Add("Характеристика перекрытий", " "); //25
+            objectDataGrid.Rows.Add("Тип фундамента", " "); //26
+            objectDataGrid.Rows.Add("Защищенность подъезда", " "); //27
+            objectDataGrid.Rows.Add("Состояние обществ. зон подъезда", " "); //28
+            objectDataGrid.Rows.Add("Лифт", " "); //29
+            objectDataGrid.Rows.Add("Мусоропровод", " "); //30
+            objectDataGrid.Rows.Add("Газ", " "); //31
+            objectDataGrid.Rows.Add("Горячее водоснабжение", " "); //32
+            objectDataGrid.Rows.Add("Отопление", " "); //33
+            objectDataGrid.Rows.Add("Противопожарная безопасность", " "); //34
+            objectDataGrid.Rows.Add("Наличие и тип парковки", " "); //35
+            objectDataGrid.Rows.Add("Общее состояние дома", " "); //36
+            objectDataGrid.Rows.Add("Наличие/ отсутствие дополнительных услуг для жильцов", " "); //37
+            objectDataGrid.Rows.Add("Наличие/ отсутствие встроено-пристроенных нежилых помещений", " "); //38
+            objectDataGrid.Rows.Add("2.1.3", "Описание оцениваемой квартиры"); //39
+            objectDataGrid.Rows.Add(
+                "Документ органа (организации), осуществившей технический учет и инвентаризацию Объекта оценки", " ");
+            //40
+            objectDataGrid.Rows.Add("Литер, согласно документа технического учета и инвентаризации", " "); //41
+            objectDataGrid.Rows.Add("Этаж", " "); //42
+            objectDataGrid.Rows.Add("Количество квартир на этаже", " "); //43
+            objectDataGrid.Rows.Add("Тип планировки", " "); //44
             objectDataGrid.Rows.Add("Количество жил. комнат, их площадь", " ");
-            objectDataGrid.Rows.Add("Общая площадь (с учетом лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.", " ");//45
-            objectDataGrid.Rows.Add("Общая площадь (без учета лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.", " ");//46
-            objectDataGrid.Rows.Add("Жилая площадь, согласно документа технич.учета и инвентаризации, в кв.м.", " ");//47
-            objectDataGrid.Rows.Add("Площадь кухни, согласно документа технич.учета и инвентаризации, кв.м.", " ");//48
-            objectDataGrid.Rows.Add("Санузел, количество санузлов", " ");//49
-            objectDataGrid.Rows.Add("Балкон/лоджия, согласно документа технич.учета и инвентаризации", " ");//50
-            objectDataGrid.Rows.Add("Высота помещений по внутр. обмеру, согласно документа технического учета и инвентаризации, в м.", " ");//51
-            objectDataGrid.Rows.Add("Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text + "), в кв.м.", " ");//52
-            objectDataGrid.Rows.Add("Данные о неучтен. перепланировке", " ");//53
-            objectDataGrid.Rows.Add("Остекление балкона/лоджии", " ");//54
-            objectDataGrid.Rows.Add("Выход окон", " ");//55
-            objectDataGrid.Rows.Add("Вспомогательные помещения", " ");//56
-            objectDataGrid.Rows.Add("Смежные комнаты", " ");//57
-            objectDataGrid.Rows.Add("Телефон", " ");//58
-            objectDataGrid.Rows.Add("Дополн. системы безопасности", " ");//59
-            objectDataGrid.Rows.Add("Система кондиционирования", " ");//60
-            objectDataGrid.Rows.Add("Отделка: Полы", " ");//61
-            objectDataGrid.Rows.Add("Отделка: Стены", " ");//62
-            objectDataGrid.Rows.Add("Отделка: Потолки", " ");//63
-            objectDataGrid.Rows.Add("Входная дверь", " ");//64
-            objectDataGrid.Rows.Add("Межкомнатные двери", " ");//65
-            objectDataGrid.Rows.Add("Окна", " ");//66
-            objectDataGrid.Rows.Add("Сантехнические устройства", " ");//67
-            objectDataGrid.Rows.Add("Подключение к электричеству", " ");//68
-            objectDataGrid.Rows.Add("Подключение к холодному/горячему  водоснабжению", " ");//69
-            objectDataGrid.Rows.Add("Подключение к канализации", " ");//70
-            objectDataGrid.Rows.Add("Система отопления и отопительные приборы", " ");//71
-            objectDataGrid.Rows.Add("Кухонная плита", " ");//72
-            objectDataGrid.Rows.Add("Наличие следов протечек на потолке", " ");//73
-            objectDataGrid.Rows.Add("Дополнительные удобства", " ");//74
-            objectDataGrid.Rows.Add("Состояние отделки", " ");//75
-            objectDataGrid.Rows.Add("Необходимые ремонтные работы", " ");//76
-            objectDataGrid.Rows.Add("Текущее использование Объекта оценки", " ");//77
+            objectDataGrid.Rows.Add(
+                "Общая площадь (с учетом лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.",
+                " "); //45
+            objectDataGrid.Rows.Add(
+                "Общая площадь (без учета лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.",
+                " "); //46
+            objectDataGrid.Rows.Add("Жилая площадь, согласно документа технич.учета и инвентаризации, в кв.м.", " ");
+            //47
+            objectDataGrid.Rows.Add("Площадь кухни, согласно документа технич.учета и инвентаризации, кв.м.", " "); //48
+            objectDataGrid.Rows.Add("Санузел, количество санузлов", " "); //49
+            objectDataGrid.Rows.Add("Балкон/лоджия, согласно документа технич.учета и инвентаризации", " "); //50
+            objectDataGrid.Rows.Add(
+                "Высота помещений по внутр. обмеру, согласно документа технического учета и инвентаризации, в м.", " ");
+            //51
+            objectDataGrid.Rows.Add(
+                "Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text +
+                "), в кв.м.", " "); //52
+            objectDataGrid.Rows.Add("Данные о неучтен. перепланировке", " "); //53
+            objectDataGrid.Rows.Add("Остекление балкона/лоджии", " "); //54
+            objectDataGrid.Rows.Add("Выход окон", " "); //55
+            objectDataGrid.Rows.Add("Вспомогательные помещения", " "); //56
+            objectDataGrid.Rows.Add("Смежные комнаты", " "); //57
+            objectDataGrid.Rows.Add("Телефон", " "); //58
+            objectDataGrid.Rows.Add("Дополн. системы безопасности", " "); //59
+            objectDataGrid.Rows.Add("Система кондиционирования", " "); //60
+            objectDataGrid.Rows.Add("Отделка: Полы", " "); //61
+            objectDataGrid.Rows.Add("Отделка: Стены", " "); //62
+            objectDataGrid.Rows.Add("Отделка: Потолки", " "); //63
+            objectDataGrid.Rows.Add("Входная дверь", " "); //64
+            objectDataGrid.Rows.Add("Межкомнатные двери", " "); //65
+            objectDataGrid.Rows.Add("Окна", " "); //66
+            objectDataGrid.Rows.Add("Сантехнические устройства", " "); //67
+            objectDataGrid.Rows.Add("Подключение к электричеству", " "); //68
+            objectDataGrid.Rows.Add("Подключение к холодному/горячему  водоснабжению", " "); //69
+            objectDataGrid.Rows.Add("Подключение к канализации", " "); //70
+            objectDataGrid.Rows.Add("Система отопления и отопительные приборы", " "); //71
+            objectDataGrid.Rows.Add("Кухонная плита", " "); //72
+            objectDataGrid.Rows.Add("Наличие следов протечек на потолке", " "); //73
+            objectDataGrid.Rows.Add("Дополнительные удобства", " "); //74
+            objectDataGrid.Rows.Add("Состояние отделки", " "); //75
+            objectDataGrid.Rows.Add("Необходимые ремонтные работы", " "); //76
+            objectDataGrid.Rows.Add("Текущее использование Объекта оценки", " "); //77
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (docTypeT == "Квартира")
             {
-                Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
+                var excelApp = new Microsoft.Office.Interop.Excel.Application();
 
 
-                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\Черновик.xls", Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing);
+                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\Черновик.xls", Missing,
+                                        Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
+                                        Missing, Missing, Missing, Missing);
 
                 int i = 0;
                 int j = 0;
@@ -577,19 +492,18 @@ namespace WindowsFormsApplication1
                 }
 
 
-
                 excelApp.ActiveWorkbook.Save();
+                excelApp.ActiveWorkbook.SaveAs(contractNum.Text + "Calc.xls");
                 excelApp.ActiveWorkbook.Close(Missing);
                 excelApp.Quit();
-
 
 
                 excelApp = new Microsoft.Office.Interop.Excel.Application();
 
 
-
-
-                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\analogs.xls", Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing);
+                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\analogs.xls", Missing, Missing,
+                                        Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
+                                        Missing, Missing, Missing);
 
                 i = 0;
                 j = 0;
@@ -605,7 +519,7 @@ namespace WindowsFormsApplication1
 
 
                 excelApp.ActiveWorkbook.Save();
-
+                excelApp.ActiveWorkbook.SaveAs(contractNum.Text + "Analogs.xls");
                 excelApp.ActiveWorkbook.Close(Missing);
                 excelApp.Quit();
 
@@ -619,12 +533,11 @@ namespace WindowsFormsApplication1
             objectDataGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             objectDataGrid.AutoResizeRows();
             objectDataGrid.AutoResizeColumns();
-
-
         }
+
         private string getUvaj()
         {
-            Declension padeg = new Declension();
+            var padeg = new Declension();
             int sex = padeg.GetSex(customerInit.Text);
             string cSex;
             if (sex == 1)
@@ -640,10 +553,10 @@ namespace WindowsFormsApplication1
 
             return cSex;
         }
+
         private void customerPadeg()
         {
-
-            Declension padeg = new Declension();
+            var padeg = new Declension();
 
             int sex = padeg.GetSex(customerInit.Text);
             string cSex = getUvaj();
@@ -653,17 +566,17 @@ namespace WindowsFormsApplication1
             customerFullNameV = padeg.GetFIOPadeg(customerSurname.Text, customerName.Text, customerInit.Text, cSex, 4);
             customerFullNameT = padeg.GetFIOPadeg(customerSurname.Text, customerName.Text, customerInit.Text, cSex, 5);
             customerFullNameP = padeg.GetFIOPadeg(customerSurname.Text, customerName.Text, customerInit.Text, cSex, 6);
-           
         }
+
         private void customerPadBut_Click(object sender, EventArgs e)
         {
-
             customerPadeg();
-            new HouseCostCalculation.Padeg(customerFullNameR, customerFullNameD, customerFullNameV, customerFullNameT, customerFullNameP, 0);
+            new HouseCostCalculation.Padeg(customerFullNameR, customerFullNameD, customerFullNameV, customerFullNameT,
+                                           customerFullNameP, 0);
         }
 
         /// <summary>
-        /// sets FullNameR
+        ///     sets FullNameR
         /// </summary>
         public void fullNameRSet(string fullName, int t)
         {
@@ -674,7 +587,7 @@ namespace WindowsFormsApplication1
         }
 
         /// <summary>
-        /// sets FullNameD
+        ///     sets FullNameD
         /// </summary>
         public void fullNameDSet(string fullName, int t)
         {
@@ -683,9 +596,10 @@ namespace WindowsFormsApplication1
             else
                 customerFullNameD = fullName;
         }
+
         private void ownerPadeg()
         {
-            Declension padeg = new Declension();
+            var padeg = new Declension();
             int sex = padeg.GetSex(ownerInit.Text);
             string cSex;
             if (sex == 1)
@@ -702,20 +616,18 @@ namespace WindowsFormsApplication1
             ownerFullNameV = padeg.GetFIOPadeg(ownerSurname.Text, ownerName.Text, ownerInit.Text, cSex, 4);
             ownerFullNameT = padeg.GetFIOPadeg(ownerSurname.Text, ownerName.Text, ownerInit.Text, cSex, 5);
             ownerFullNameP = padeg.GetFIOPadeg(ownerSurname.Text, ownerName.Text, ownerInit.Text, cSex, 6);
-
-            
-            
         }
+
         private void button10_Click(object sender, EventArgs e)
         {
             ownerPadeg();
 
-            new HouseCostCalculation.Padeg(ownerFullNameR, ownerFullNameD, ownerFullNameV, ownerFullNameT, ownerFullNameP, 1);
+            new HouseCostCalculation.Padeg(ownerFullNameR, ownerFullNameD, ownerFullNameV, ownerFullNameT,
+                                           ownerFullNameP, 1);
         }
 
         public void addHouseData()
         {
-
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             dataGridView1.AutoResizeRows();
             dataGridView1.AutoResizeColumns();
@@ -736,7 +648,8 @@ namespace WindowsFormsApplication1
 
             dataGridView1.Rows.Add("Наличие зеленых насаждений", "Имеются");
             dataGridView1.Rows.Add("Прочие особенности местоположения", "Нет");
-            dataGridView1.Rows.Add("Наличие расположенных рядом объектов, снижающих либо повышающих привлекательность", "Нет");
+            dataGridView1.Rows.Add("Наличие расположенных рядом объектов, снижающих либо повышающих привлекательность",
+                                   "Нет");
 
             dataGridView1.Rows.Add("2.1.2", "Описание оцениваемого домовладения");
             dataGridView1.Rows.Add("Год постройки", "Не установлен");
@@ -752,94 +665,120 @@ namespace WindowsFormsApplication1
             dataGridView1.Rows.Add("Горячее водоснабжение", "Автономное от газового котла (колонки) ");
             dataGridView1.Rows.Add("Отопление", "Автономное от газового котла ");
             dataGridView1.Rows.Add("Общее состояние дома", "Хорошее ");
-            dataGridView1.Rows.Add("Документ органа (организации), осуществившей технический учет и инвентаризацию Объекта оценки", "Кадастровый паспорт домовладения ГУП «Аланиятехинвентаризации РСО-Алания» по инв.№697 от 07/07/08г");
+            dataGridView1.Rows.Add(
+                "Документ органа (организации), осуществившей технический учет и инвентаризацию Объекта оценки",
+                "Кадастровый паспорт домовладения ГУП «Аланиятехинвентаризации РСО-Алания» по инв.№697 от 07/07/08г");
             dataGridView1.Rows.Add("Литер(а), согласно документа технического учета и инвентаризации", "Литер «А»");
             dataGridView1.Rows.Add("Тип планировки", "Фиксированный");
-            dataGridView1.Rows.Add("Количество жилых комнат, площадь ", "Пять  жилых комнат: 24,8м2; 12,9м2; 21,9м2; 15,4м2 и 12,0");
-            dataGridView1.Rows.Add("Общая площадь (с учетом лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.", "144,7");
-            dataGridView1.Rows.Add("Общая площадь (без учета лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.", "144,7");
+            dataGridView1.Rows.Add("Количество жилых комнат, площадь ",
+                                   "Пять  жилых комнат: 24,8м2; 12,9м2; 21,9м2; 15,4м2 и 12,0");
+            dataGridView1.Rows.Add(
+                "Общая площадь (с учетом лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.",
+                "144,7");
+            dataGridView1.Rows.Add(
+                "Общая площадь (без учета лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.",
+                "144,7");
             dataGridView1.Rows.Add("Жилая площадь, согласно документа технич.учета и инвентаризации, в кв.м.", "87,0");
-            dataGridView1.Rows.Add("Высота помещений по внутр. обмеру, согласно документа технического учета и инвентаризации, в м.", "2,9м, 2,4");
-            dataGridView1.Rows.Add("Общая площадь, согласно правоустанавливающим документам (Свидетельство о государственной регистрации права Управления Федеральной регистрационной службы по РСО-Алания серия 15 АЕ №706443 от 24/08/05г.), в кв.м.", "144,7");
+            dataGridView1.Rows.Add(
+                "Высота помещений по внутр. обмеру, согласно документа технического учета и инвентаризации, в м.",
+                "2,9м, 2,4");
+            dataGridView1.Rows.Add(
+                "Общая площадь, согласно правоустанавливающим документам (Свидетельство о государственной регистрации права Управления Федеральной регистрационной службы по РСО-Алания серия 15 АЕ №706443 от 24/08/05г.), в кв.м.",
+                "144,7");
             dataGridView1.Rows.Add("Санузел, количество санузлов", "Один совмещенный, общей площадью 9,9");
             dataGridView1.Rows.Add("Смежные комнаты", "Нет  ");
             dataGridView1.Rows.Add("Телефон", "Есть   ");
-            dataGridView1.Rows.Add("Отделка: Полы", "В жилых комнатах деревянные, на кухне и в сан. узле плиточные. Состояние хорошее");
-            dataGridView1.Rows.Add("Отделка: Стены", "В жилых комнатах оштукатурено, побелено, в рабочей части кухни и в сан. узле плиточные. Состояние хорошее ");
+            dataGridView1.Rows.Add("Отделка: Полы",
+                                   "В жилых комнатах деревянные, на кухне и в сан. узле плиточные. Состояние хорошее");
+            dataGridView1.Rows.Add("Отделка: Стены",
+                                   "В жилых комнатах оштукатурено, побелено, в рабочей части кухни и в сан. узле плиточные. Состояние хорошее ");
             dataGridView1.Rows.Add("Отделка: Потолки", "Оштукатурено, побелено. Состояние хорошее ");
             dataGridView1.Rows.Add("Межкомнатные двери", "Деревянные полотна и филенчатые. Состояние хорошее ");
             dataGridView1.Rows.Add("Окна", "Деревянные рамы, двустворчатые, двойное остекление. Состояние хорошее");
             dataGridView1.Rows.Add("Сантехника", "Полностью установлены ");
             dataGridView1.Rows.Add("Подключение к электричеству", "Есть ");
-            dataGridView1.Rows.Add("Подключение к холодному/горячему  водоснабжению", "Холодное водоснабжение от сельских сетей, горячее водоснабжение автономное от газовой колонки. Трубы и запорная арматура металлич., состояние удовлетворит.");
+            dataGridView1.Rows.Add("Подключение к холодному/горячему  водоснабжению",
+                                   "Холодное водоснабжение от сельских сетей, горячее водоснабжение автономное от газовой колонки. Трубы и запорная арматура металлич., состояние удовлетворит.");
             dataGridView1.Rows.Add("Подключение к канализации", "Канализация ");
-            dataGridView1.Rows.Add("Отопительные приборы", "Простые металлические радиаторы отопления. Состояние хорошее  ");
+            dataGridView1.Rows.Add("Отопительные приборы",
+                                   "Простые металлические радиаторы отопления. Состояние хорошее  ");
             dataGridView1.Rows.Add("Кухонная плита", "Отечественная, газовая четырехкомфорочная ");
             dataGridView1.Rows.Add("Наличие следов протечек на потолке", "Нет ");
             dataGridView1.Rows.Add("Наличие перепланировки", "Не выявлено");
             dataGridView1.Rows.Add("Дополнительные удобства", "Нет ");
             dataGridView1.Rows.Add("Состояние отделки", "Хорошее  ");
             dataGridView1.Rows.Add("Необходимые ремонтные работы", "Необходимо проведение косметических работ ");
-            dataGridView1.Rows.Add("Текущее использование Объекта оценки", "Некоммерческое использование, жилое домовладение, проживание. ");
-            
+            dataGridView1.Rows.Add("Текущее использование Объекта оценки",
+                                   "Некоммерческое использование, жилое домовладение, проживание. ");
         }
 
         public void addGridData()
         {
             dirtCalcGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             dirtCalcGrid.AutoResizeRows();
-            dirtCalcGrid.AutoResizeColumns();           
-            dirtCalcGrid.Rows.Add("Адрес объекта", "г.Владикавказ, «Иристон»", "г.Владикавказ, «Иристон»", "г.Владикавказ, «Иристон»");//1
-            dirtCalcGrid.Rows.Add("Цена предложения за участок, руб.", "350 000", "350 000", "350 000");//2
-            dirtCalcGrid.Rows.Add("Площадь участка, сот.", "6", "6", "6");//3
-            dirtCalcGrid.Rows.Add("Цена предложения за 1 сот., руб./сот.", "", "", "");//4
-            dirtCalcGrid.Rows.Add("Перевод предложения в цену сделки (поправка на торг)", "0,95", "0,95", "0,95");//5
-            dirtCalcGrid.Rows.Add("Вид права собственности", "Полное право", "Полное право", "Полное право");//6
-            dirtCalcGrid.Rows.Add("Поправка на право собственности", "1", "1", "1");//7
-            dirtCalcGrid.Rows.Add("Условия финансовых расчетов", "За собственные средства в момент оформления", "За собственные средства в момент оформления", "За собственные средства в момент оформления");//8
-            dirtCalcGrid.Rows.Add("Поправка на условия финансовых расчетов", "1", "1", "1");//9
-            dirtCalcGrid.Rows.Add("Условия продажи", "Свободная продажа", "Свободная продажа", "Свободная продажа");//10
-            dirtCalcGrid.Rows.Add("Поправка на условия продажи", "1", "1", "1");//11
-            dirtCalcGrid.Rows.Add("Дата предложения", "Август 2011г.", "Август 2011г.", "Август 2011г.");//12
-            dirtCalcGrid.Rows.Add("Поправка на дату предложения", "1", "1", "1");//13
-            dirtCalcGrid.Rows.Add("Район расположение", "Окраина села", "Окраина села", "Окраина села");//14
-            dirtCalcGrid.Rows.Add("Поправка на район расположение", "1", "1", "1");//15
-            dirtCalcGrid.Rows.Add("Целевое назначение", "Для эксплуатации жилого дома", "Для эксплуатации жилого дома", "Для эксплуатации жилого дома");//16
-            dirtCalcGrid.Rows.Add("Поправка на целевое назначение", "1", "1", "1");//17
-            dirtCalcGrid.Rows.Add("Размер участка (масштаб участка), в сот.", "6,00", "6,00", "6,00");//18
-            dirtCalcGrid.Rows.Add("Поправка на размер участка (масштаб участка)", "1", "1", "1");//19
-            dirtCalcGrid.Rows.Add("Наличие коммуникаций", "Все коммуникации", "Все коммуникации", "Все коммуникации");//20
-            dirtCalcGrid.Rows.Add("Поправка на наличие коммуникаций", "1", "1", "1");//21
-            dirtCalcGrid.Rows.Add("Наличие и состояние подъездных путей (дороги)", "Хорошо", "Хорошо", "Хорошо");//22
-            dirtCalcGrid.Rows.Add("Поправка на наличие и состояние подъездных путей", "1", "1", "1");//23
-            dirtCalcGrid.Rows.Add("Рельеф и форма участка", "Рельеф ровный, форма прямоуг.", "Рельеф ровный, форма прямоуг.", "Рельеф ровный, форма прямоуг.");//24
-            dirtCalcGrid.Rows.Add("Поправка на рельеф и форму участка", "1", "1", "1");//25
-            dirtCalcGrid.Rows.Add("Итоговая скорректированная стоимость аналога, руб./сот.", "1", "1", "1");//26
-            dirtCalcGrid.Rows.Add("Количество произведенных корректировок, коррект.", "1", "1", "1");//27
-            dirtCalcGrid.Rows.Add("Весовой коэффициент, в зависимости от кол-ва произв. корректировок, доля един. ", "1", "1", "1");//28
-            dirtCalcGrid.Rows.Add("Скорректированная стоимость, доля в итоговой  стоимости, руб./сот.", "1", "1", "1");//29
-            dirtCalcGrid.Rows.Add("Итоговая стоимость 1 сотки оценив. зем. участка, руб./сот.", "1", "", "");//30
-            dirtCalcGrid.Rows.Add("Общая площадь оцениваемого земельного участка, сот.", "1", "", "");//31
-            dirtCalcGrid.Rows.Add(" Итоговая стоимость оцениваемого зем. участка, руб.", "1", "", "");//32
-            dirtCalcGrid.Rows.Add(" Итоговая стоимость оцениваемого зем. участка с учетом округления, тыс. руб.", "1", "", "");//33
-            dirtCalcGrid.Rows.Add("Ликвидационная стоимость оцениваемого зем. участка с учетом округления, тыс. руб.", "1", "", "");//34
+            dirtCalcGrid.AutoResizeColumns();
+            dirtCalcGrid.Rows.Add("Адрес объекта", "г.Владикавказ, «Иристон»", "г.Владикавказ, «Иристон»",
+                                  "г.Владикавказ, «Иристон»"); //1
+            dirtCalcGrid.Rows.Add("Цена предложения за участок, руб.", "350 000", "350 000", "350 000"); //2
+            dirtCalcGrid.Rows.Add("Площадь участка, сот.", "6", "6", "6"); //3
+            dirtCalcGrid.Rows.Add("Цена предложения за 1 сот., руб./сот.", "", "", ""); //4
+            dirtCalcGrid.Rows.Add("Перевод предложения в цену сделки (поправка на торг)", "0,95", "0,95", "0,95"); //5
+            dirtCalcGrid.Rows.Add("Вид права собственности", "Полное право", "Полное право", "Полное право"); //6
+            dirtCalcGrid.Rows.Add("Поправка на право собственности", "1", "1", "1"); //7
+            dirtCalcGrid.Rows.Add("Условия финансовых расчетов", "За собственные средства в момент оформления",
+                                  "За собственные средства в момент оформления",
+                                  "За собственные средства в момент оформления"); //8
+            dirtCalcGrid.Rows.Add("Поправка на условия финансовых расчетов", "1", "1", "1"); //9
+            dirtCalcGrid.Rows.Add("Условия продажи", "Свободная продажа", "Свободная продажа", "Свободная продажа");
+            //10
+            dirtCalcGrid.Rows.Add("Поправка на условия продажи", "1", "1", "1"); //11
+            dirtCalcGrid.Rows.Add("Дата предложения", "Август 2011г.", "Август 2011г.", "Август 2011г."); //12
+            dirtCalcGrid.Rows.Add("Поправка на дату предложения", "1", "1", "1"); //13
+            dirtCalcGrid.Rows.Add("Район расположение", "Окраина села", "Окраина села", "Окраина села"); //14
+            dirtCalcGrid.Rows.Add("Поправка на район расположение", "1", "1", "1"); //15
+            dirtCalcGrid.Rows.Add("Целевое назначение", "Для эксплуатации жилого дома", "Для эксплуатации жилого дома",
+                                  "Для эксплуатации жилого дома"); //16
+            dirtCalcGrid.Rows.Add("Поправка на целевое назначение", "1", "1", "1"); //17
+            dirtCalcGrid.Rows.Add("Размер участка (масштаб участка), в сот.", "6,00", "6,00", "6,00"); //18
+            dirtCalcGrid.Rows.Add("Поправка на размер участка (масштаб участка)", "1", "1", "1"); //19
+            dirtCalcGrid.Rows.Add("Наличие коммуникаций", "Все коммуникации", "Все коммуникации", "Все коммуникации");
+            //20
+            dirtCalcGrid.Rows.Add("Поправка на наличие коммуникаций", "1", "1", "1"); //21
+            dirtCalcGrid.Rows.Add("Наличие и состояние подъездных путей (дороги)", "Хорошо", "Хорошо", "Хорошо"); //22
+            dirtCalcGrid.Rows.Add("Поправка на наличие и состояние подъездных путей", "1", "1", "1"); //23
+            dirtCalcGrid.Rows.Add("Рельеф и форма участка", "Рельеф ровный, форма прямоуг.",
+                                  "Рельеф ровный, форма прямоуг.", "Рельеф ровный, форма прямоуг."); //24
+            dirtCalcGrid.Rows.Add("Поправка на рельеф и форму участка", "1", "1", "1"); //25
+            dirtCalcGrid.Rows.Add("Итоговая скорректированная стоимость аналога, руб./сот.", "1", "1", "1"); //26
+            dirtCalcGrid.Rows.Add("Количество произведенных корректировок, коррект.", "1", "1", "1"); //27
+            dirtCalcGrid.Rows.Add("Весовой коэффициент, в зависимости от кол-ва произв. корректировок, доля един. ", "1",
+                                  "1", "1"); //28
+            dirtCalcGrid.Rows.Add("Скорректированная стоимость, доля в итоговой  стоимости, руб./сот.", "1", "1", "1");
+            //29
+            dirtCalcGrid.Rows.Add("Итоговая стоимость 1 сотки оценив. зем. участка, руб./сот.", "1", "", ""); //30
+            dirtCalcGrid.Rows.Add("Общая площадь оцениваемого земельного участка, сот.", "1", "", ""); //31
+            dirtCalcGrid.Rows.Add(" Итоговая стоимость оцениваемого зем. участка, руб.", "1", "", ""); //32
+            dirtCalcGrid.Rows.Add(" Итоговая стоимость оцениваемого зем. участка с учетом округления, тыс. руб.", "1",
+                                  "", ""); //33
+            dirtCalcGrid.Rows.Add("Ликвидационная стоимость оцениваемого зем. участка с учетом округления, тыс. руб.",
+                                  "1", "", ""); //34
         }
 
 
-
-        private System.Data.DataTable getDataFromXLS(string strFilePath)
+        private DataTable getDataFromXLS(string strFilePath)
         {
             try
             {
                 string strConnectionString = "";
                 strConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;" +
-                                                 "Data Source=" + strFilePath + "; Jet OLEDB:Engine Type=5;" +
-                                                 "Extended Properties=Excel 8.0;";
-                OleDbConnection cnCSV = new OleDbConnection(strConnectionString);
+                                      "Data Source=" + strFilePath + "; Jet OLEDB:Engine Type=5;" +
+                                      "Extended Properties=Excel 8.0;";
+                var cnCSV = new OleDbConnection(strConnectionString);
                 cnCSV.Open();
-                OleDbCommand cmdSelect = new OleDbCommand(@"SELECT * FROM [Лист1$]", cnCSV);
-                OleDbDataAdapter daCSV = new OleDbDataAdapter(); daCSV.SelectCommand = cmdSelect;
-                System.Data.DataTable dtCSV = new System.Data.DataTable();
+                var cmdSelect = new OleDbCommand(@"SELECT * FROM [Лист1$]", cnCSV);
+                var daCSV = new OleDbDataAdapter();
+                daCSV.SelectCommand = cmdSelect;
+                var dtCSV = new DataTable();
                 daCSV.Fill(dtCSV);
                 cnCSV.Close();
                 daCSV = null;
@@ -849,7 +788,9 @@ namespace WindowsFormsApplication1
             {
                 return null;
             }
-            finally { }
+            finally
+            {
+            }
         }
 
         public void calculateCost()
@@ -870,7 +811,7 @@ namespace WindowsFormsApplication1
                 //Final costs
                 double koef_count, t2;
                 koef_count = cost_count1 + cost_count2 + cost_count3;
-                t2 = 1 / koef_count;
+                t2 = 1/koef_count;
                 cellValue = calculationAppartaments.Rows[33].Cells[2].Value.ToString();
                 if (cellValue != "")
                 {
@@ -903,13 +844,12 @@ namespace WindowsFormsApplication1
                     cor_cost313 = double.Parse(cellValue);
                 }
 
-                cor_cost_final1 = Math.Round(cor_cost113 * cost_cor_koef1);
+                cor_cost_final1 = Math.Round(cor_cost113*cost_cor_koef1);
                 calculationAppartaments.Rows[34].Cells[2].Value = cor_cost_final1.ToString();
 
                 if (cost_cor_koef2 != 0)
                 {
-                    cor_cost_final2 = Math.Round(cor_cost213 * cost_cor_koef2);
-
+                    cor_cost_final2 = Math.Round(cor_cost213*cost_cor_koef2);
                 }
                 else
                 {
@@ -919,8 +859,7 @@ namespace WindowsFormsApplication1
                 calculationAppartaments.Rows[34].Cells[3].Value = cor_cost_final2.ToString();
                 if (cost_cor_koef3 != 0)
                 {
-                    cor_cost_final3 = Math.Round(cor_cost313 * cost_cor_koef3);
-
+                    cor_cost_final3 = Math.Round(cor_cost313*cost_cor_koef3);
                 }
                 else
                 {
@@ -932,15 +871,14 @@ namespace WindowsFormsApplication1
                 calculationAppartaments.Rows[35].Cells[2].Value = final_cost_m.ToString();
 
 
-
-                finalCost = Math.Round(final_cost_m * m_final);
+                finalCost = Math.Round(final_cost_m*m_final);
                 calculationAppartaments.Rows[37].Cells[2].Value = finalCost.ToString();
 
-                finalCostRounded = Math.Round(finalCost / 1000);
+                finalCostRounded = Math.Round(finalCost/1000);
                 calculationAppartaments.Rows[38].Cells[2].Value = finalCostRounded.ToString();
-                costStr = RSDN.RusCurrency.Str(finalCostRounded * 1000, "RUR");
+                costStr = RusCurrency.Str(finalCostRounded*1000, "RUR");
                 costStr = costStr.Replace("00 копеек", "");
-                likvidCost = Math.Round(finalCostRounded * 0.66);
+                likvidCost = Math.Round(finalCostRounded*0.66);
                 calculationAppartaments.Rows[39].Cells[2].Value = likvidCost.ToString();
                 //date1 = contractDate.Text;
                 //if (date1 != "")
@@ -950,7 +888,8 @@ namespace WindowsFormsApplication1
                 //}
             }
             catch (Exception exp)
-            { }
+            {
+            }
         }
 
         private int CalcCost(int i)
@@ -968,7 +907,6 @@ namespace WindowsFormsApplication1
                 if (cellValue != "")
                 {
                     m1 = double.Parse(cellValue);
-
                 }
                 cellValue = calculationAppartaments.Rows[3].Cells[i].Value.ToString();
                 if (cellValue != "")
@@ -978,7 +916,6 @@ namespace WindowsFormsApplication1
                     {
                         cost_count1++;
                     }
-
                 }
                 cellValue = calculationAppartaments.Rows[6].Cells[i].Value.ToString();
                 if (cellValue != "")
@@ -988,7 +925,6 @@ namespace WindowsFormsApplication1
                     {
                         cost_count1++;
                     }
-
                 }
                 cellValue = calculationAppartaments.Rows[8].Cells[i].Value.ToString();
                 if (cellValue != "")
@@ -1102,57 +1038,56 @@ namespace WindowsFormsApplication1
                 if (cellValue != "")
                 {
                     m_final = double.Parse(cellValue);
-
                 }
 
 
-                cost_m1 = Math.Round(cost1 / m1);
+                cost_m1 = Math.Round(cost1/m1);
                 calculationAppartaments.Rows[2].Cells[i].Value = cost_m1.ToString();
-                cor_cost1 = Math.Round(cost_m1 * cor_torg);
+                cor_cost1 = Math.Round(cost_m1*cor_torg);
                 calculationAppartaments.Rows[4].Cells[i].Value = cor_cost1.ToString();
 
-                cor_cost11 = Math.Round(cor1 * cor_cost1);
+                cor_cost11 = Math.Round(cor1*cor_cost1);
                 calculationAppartaments.Rows[7].Cells[i].Value = cor_cost11.ToString();
 
-                cor_cost12 = Math.Round(cor_cost11 * cor_place1);
+                cor_cost12 = Math.Round(cor_cost11*cor_place1);
                 calculationAppartaments.Rows[9].Cells[i].Value = cor_cost12.ToString();
 
-                cor_cost13 = Math.Round(cor_cost12 * cor_type1);
+                cor_cost13 = Math.Round(cor_cost12*cor_type1);
                 calculationAppartaments.Rows[11].Cells[i].Value = cor_cost13.ToString();
 
-                cor_cost14 = Math.Round(cor_cost13 * cor_date1);
+                cor_cost14 = Math.Round(cor_cost13*cor_date1);
                 calculationAppartaments.Rows[13].Cells[i].Value = cor_cost14.ToString();
 
-                cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
+                cor_cost15 = Math.Round(cor_cost14*cor_floor1);
                 calculationAppartaments.Rows[15].Cells[i].Value = cor_cost15.ToString();
 
-                cor_cost16 = Math.Round(cor_cost15 * cor_m1);
+                cor_cost16 = Math.Round(cor_cost15*cor_m1);
                 calculationAppartaments.Rows[17].Cells[i].Value = cor_cost16.ToString();
 
-                cor_cost17 = Math.Round(cor_cost16 * cor_b1);
+                cor_cost17 = Math.Round(cor_cost16*cor_b1);
                 calculationAppartaments.Rows[19].Cells[i].Value = cor_cost17.ToString();
 
-                cor_cost18 = Math.Round(cor_cost17 * cor_height1);
+                cor_cost18 = Math.Round(cor_cost17*cor_height1);
                 calculationAppartaments.Rows[21].Cells[i].Value = cor_cost18.ToString();
 
-                cor_cost19 = Math.Round(cor_cost18 * cor_class1);
+                cor_cost19 = Math.Round(cor_cost18*cor_class1);
                 calculationAppartaments.Rows[23].Cells[i].Value = cor_cost19.ToString();
 
-                cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
+                cor_cost110 = Math.Round(cor_cost19*cor_phone1);
                 calculationAppartaments.Rows[25].Cells[i].Value = cor_cost110.ToString();
 
-                cor_cost111 = Math.Round(cor_cost110 * cor_com1);
+                cor_cost111 = Math.Round(cor_cost110*cor_com1);
                 calculationAppartaments.Rows[27].Cells[i].Value = cor_cost111.ToString();
 
-                cor_cost112 = Math.Round(cor_cost111 * cor_t1);
+                cor_cost112 = Math.Round(cor_cost111*cor_t1);
                 calculationAppartaments.Rows[29].Cells[i].Value = cor_cost112.ToString();
 
-                cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
+                cor_cost113 = Math.Round(cor_cost112*cor_lift1);
                 calculationAppartaments.Rows[31].Cells[i].Value = cor_cost113.ToString();
 
                 calculationAppartaments.Rows[32].Cells[i].Value = cost_count1.ToString();
                 return cost_count1;
-            } 
+            }
             catch (Exception exp)
             {
                 return 0;
@@ -1171,7 +1106,6 @@ namespace WindowsFormsApplication1
                 if (cellValue != "")
                 {
                     m_final = double.Parse(cellValue);
-
                 }
                 cellValue = houseCalcGrid.Rows[32].Cells[2].Value.ToString();
                 if (cellValue != "")
@@ -1209,31 +1143,30 @@ namespace WindowsFormsApplication1
 
                 double koef_count, t2;
                 koef_count = cost_count1 + cost_count2 + cost_count3;
-                t2 = 1 / koef_count;
+                t2 = 1/koef_count;
 
 
-                cor_cost_final1 = Math.Round(cor_cost113 * cost_cor_koef1);
+                cor_cost_final1 = Math.Round(cor_cost113*cost_cor_koef1);
                 houseCalcGrid.Rows[35].Cells[2].Value = cor_cost_final1.ToString();
 
-                cor_cost_final2 = Math.Round(cor_cost213 * cost_cor_koef2);
+                cor_cost_final2 = Math.Round(cor_cost213*cost_cor_koef2);
                 houseCalcGrid.Rows[35].Cells[3].Value = cor_cost_final2.ToString();
 
-                cor_cost_final3 = Math.Round(cor_cost313 * cost_cor_koef3);
+                cor_cost_final3 = Math.Round(cor_cost313*cost_cor_koef3);
                 houseCalcGrid.Rows[35].Cells[4].Value = cor_cost_final3.ToString();
 
                 final_cost_m = Math.Round(cor_cost_final1 + cor_cost_final2 + cor_cost_final3);
                 houseCalcGrid.Rows[36].Cells[2].Value = final_cost_m.ToString();
 
 
-
-                finalCost = Math.Round(final_cost_m * m_final);
+                finalCost = Math.Round(final_cost_m*m_final);
                 houseCalcGrid.Rows[38].Cells[2].Value = finalCost.ToString();
 
-                finalCostRounded = Math.Round(finalCost / 1000);
+                finalCostRounded = Math.Round(finalCost/1000);
                 houseCalcGrid.Rows[39].Cells[2].Value = finalCostRounded.ToString();
-                costStr = RSDN.RusCurrency.Str((finalCostRounded + finalDirtCost / 1000) * 1000);
+                costStr = RusCurrency.Str((finalCostRounded + finalDirtCost/1000)*1000);
                 costStr = costStr.Replace("00 копеек", "");
-                likvidCost = Math.Round(finalCostRounded * 0.66);
+                likvidCost = Math.Round(finalCostRounded*0.66);
                 houseCalcGrid.Rows[40].Cells[2].Value = likvidCost.ToString();
                 //date1 = contractDate.Text;
                 //if (date1 != "")
@@ -1263,7 +1196,6 @@ namespace WindowsFormsApplication1
                 if (cellValue != "")
                 {
                     m1 = double.Parse(cellValue);
-
                 }
                 cellValue = houseCalcGrid.Rows[3].Cells[i].Value.ToString();
                 if (cellValue != "")
@@ -1273,7 +1205,6 @@ namespace WindowsFormsApplication1
                     {
                         costCount++;
                     }
-
                 }
                 cellValue = houseCalcGrid.Rows[6].Cells[i].Value.ToString();
                 if (cellValue != "")
@@ -1283,7 +1214,6 @@ namespace WindowsFormsApplication1
                     {
                         costCount++;
                     }
-
                 }
                 cellValue = houseCalcGrid.Rows[9].Cells[i].Value.ToString();
                 if (cellValue != "")
@@ -1393,52 +1323,54 @@ namespace WindowsFormsApplication1
                         costCount++;
                     }
                 }
-                
+
                 //cost_m1 = Math.Round(cost1 / m1);
                 //houseCalcGrid.Rows[2].Cells[i].Value = cost_m1.ToString();
-                cor_cost1 = Math.Round(double.Parse(houseCalcGrid.Rows[0].Cells[i].Value.ToString()) - double.Parse(houseCalcGrid.Rows[2].Cells[i].Value.ToString()));
+                cor_cost1 =
+                    Math.Round(double.Parse(houseCalcGrid.Rows[0].Cells[i].Value.ToString()) -
+                               double.Parse(houseCalcGrid.Rows[2].Cells[i].Value.ToString()));
                 houseCalcGrid.Rows[3].Cells[i].Value = cor_cost1.ToString();
 
-                cost_m1 = Math.Round(cor_cost1 / double.Parse(houseCalcGrid.Rows[4].Cells[i].Value.ToString()));
+                cost_m1 = Math.Round(cor_cost1/double.Parse(houseCalcGrid.Rows[4].Cells[i].Value.ToString()));
                 houseCalcGrid.Rows[5].Cells[i].Value = cost_m1;
 
-                cor_cost11 = Math.Round(cor1 * cost_m1);
+                cor_cost11 = Math.Round(cor1*cost_m1);
                 houseCalcGrid.Rows[7].Cells[i].Value = cor_cost11.ToString();
 
-                cor_cost12 = Math.Round(cor_cost11 * cor_place1);
+                cor_cost12 = Math.Round(cor_cost11*cor_place1);
                 houseCalcGrid.Rows[10].Cells[i].Value = cor_cost12.ToString();
 
-                cor_cost13 = Math.Round(cor_cost12 * cor_type1);
+                cor_cost13 = Math.Round(cor_cost12*cor_type1);
                 houseCalcGrid.Rows[12].Cells[i].Value = cor_cost13.ToString();
 
-                cor_cost14 = Math.Round(cor_cost13 * cor_date1);
+                cor_cost14 = Math.Round(cor_cost13*cor_date1);
                 houseCalcGrid.Rows[14].Cells[i].Value = cor_cost14.ToString();
 
-                cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
+                cor_cost15 = Math.Round(cor_cost14*cor_floor1);
                 houseCalcGrid.Rows[16].Cells[i].Value = cor_cost15.ToString();
 
-                cor_cost16 = Math.Round(cor_cost15 * cor_m1);
+                cor_cost16 = Math.Round(cor_cost15*cor_m1);
                 houseCalcGrid.Rows[18].Cells[i].Value = cor_cost16.ToString();
 
-                cor_cost17 = Math.Round(cor_cost16 * cor_b1);
+                cor_cost17 = Math.Round(cor_cost16*cor_b1);
                 houseCalcGrid.Rows[20].Cells[i].Value = cor_cost17.ToString();
 
-                cor_cost18 = Math.Round(cor_cost17 * cor_height1);
+                cor_cost18 = Math.Round(cor_cost17*cor_height1);
                 houseCalcGrid.Rows[22].Cells[i].Value = cor_cost18.ToString();
 
-                cor_cost19 = Math.Round(cor_cost18 * cor_class1);
+                cor_cost19 = Math.Round(cor_cost18*cor_class1);
                 houseCalcGrid.Rows[24].Cells[i].Value = cor_cost19.ToString();
 
-                cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
+                cor_cost110 = Math.Round(cor_cost19*cor_phone1);
                 houseCalcGrid.Rows[26].Cells[i].Value = cor_cost110.ToString();
 
-                cor_cost111 = Math.Round(cor_cost110 * cor_com1);
+                cor_cost111 = Math.Round(cor_cost110*cor_com1);
                 houseCalcGrid.Rows[28].Cells[i].Value = cor_cost111.ToString();
 
-                cor_cost112 = Math.Round(cor_cost111 * cor_t1);
+                cor_cost112 = Math.Round(cor_cost111*cor_t1);
                 houseCalcGrid.Rows[30].Cells[i].Value = cor_cost112.ToString();
 
-                cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
+                cor_cost113 = Math.Round(cor_cost112*cor_lift1);
                 houseCalcGrid.Rows[32].Cells[i].Value = cor_cost113.ToString();
 
                 houseCalcGrid.Rows[33].Cells[i].Value = costCount.ToString();
@@ -1452,10 +1384,8 @@ namespace WindowsFormsApplication1
         }
 
 
-
         private void calculationAppartaments_CellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
         {
-
         }
 
 
@@ -1463,80 +1393,80 @@ namespace WindowsFormsApplication1
         {
             try
             {
-            string str;
-            
-            if (floors.Value == 1)
-            {
-                str = "-но";
-            }
-            else if (floors.Value == 2)
-            {
-                str = "-ух";
-            }
-            else if (floors.Value == 3)
-            {
-                str = "-ех";
-            }
-            else if (floors.Value == 4)
-            {
-                str = "-ех";
-            }
-            else if (floors.Value == 7)
-            {
-                str = "-и";
-            }
-            else if (floors.Value == 8)
-            {
-                str = "-и";
-            }
-            else
-            {
-                str = "-ти";
-            }
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[20].Cells[1].Value = floors.Value.ToString() + str;
-                        analogsGrid.Rows[5].Cells[1].Value = floors.Value.ToString().ToLower();
-                        //analogsGrid.Rows[5].Cells[2].Value = floors.Value.ToString().ToLower();
-                        //analogsGrid.Rows[5].Cells[3].Value = floors.Value.ToString().ToLower();
-                        //analogsGrid.Rows[5].Cells[4].Value = floors.Value.ToString().ToLower();
+                string str;
 
-                    } break;
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
+                if (floors.Value == 1)
+                {
+                    str = "-но";
+                }
+                else if (floors.Value == 2)
+                {
+                    str = "-ух";
+                }
+                else if (floors.Value == 3)
+                {
+                    str = "-ех";
+                }
+                else if (floors.Value == 4)
+                {
+                    str = "-ех";
+                }
+                else if (floors.Value == 7)
+                {
+                    str = "-и";
+                }
+                else if (floors.Value == 8)
+                {
+                    str = "-и";
+                }
+                else
+                {
+                    str = "-ти";
+                }
+                switch (docTypeT)
+                {
+                    case "Квартира":
+                        {
+                            objectDataGrid.Rows[20].Cells[1].Value = floors.Value.ToString() + str;
+                            analogsGrid.Rows[5].Cells[1].Value = floors.Value.ToString().ToLower();
+                            //analogsGrid.Rows[5].Cells[2].Value = floors.Value.ToString().ToLower();
+                            //analogsGrid.Rows[5].Cells[3].Value = floors.Value.ToString().ToLower();
+                            //analogsGrid.Rows[5].Cells[4].Value = floors.Value.ToString().ToLower();
+                        }
+                        break;
+                    case "Домовладение":
+                        {
+                            dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
+                        }
+                        break;
+                    case "Земельный участок":
+                        {
+                            //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
+                        }
+                        break;
+                    case "Домовладение с земельным участком":
+                        {
+                            dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
+                        }
+                        break;
 
-                    }
-                    break;
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
-                    }
-                    break;
 
+                    default:
+                        break;
+                }
 
-                default: break;
-            }
-
-            if (floors.Value < 6)
-            {
-                lift.SelectedIndex = 1;
-            }
-            else if (floors.Value > 6)
-            {
-                lift.SelectedIndex = 0;
-            }
-
+                if (floors.Value < 6)
+                {
+                    lift.SelectedIndex = 1;
+                }
+                else if (floors.Value > 6)
+                {
+                    lift.SelectedIndex = 0;
+                }
             }
             catch (Exception exp)
-            { }
+            {
+            }
         }
 
         private void button11_Click(object sender, EventArgs e)
@@ -1544,42 +1474,47 @@ namespace WindowsFormsApplication1
             addObjectData();
         }
 
-        private void saveHouse(object sender, EventArgs e)
+        private void SaveHouse(object sender, EventArgs e)
         {
             try
             {
-            //HouseCostCalculation.House h = new HouseCostCalculation.House();
-            //h.saveHouse(this);
-            string townName = " " + town.Text + ", ";
+                //HouseCostCalculation.House h = new HouseCostCalculation.House();
+                //h.saveHouse(this);
+                string townName = " " + town.Text + ", ";
 
-            if ((town.Text == "г. Владикавказ") || (town.Text == "г.Владикавказ"))
-            {
-                townName = " ";
-            }
+                if ((town.Text == "г. Владикавказ") || (town.Text == "г.Владикавказ"))
+                {
+                    townName = " ";
+                }
 
-            string buildNum = null;
+                string buildNum = null;
 
-            if (buildingNum.Text != "")
-            {
-                buildNum = "корп. " + buildingNum.Text;
-            }
-            roomsAsString();
-            string fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + " договор от" + contractDate.Text + " " + fullAddressHouse() + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " " + bankName.Text;
-            saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
-            saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
-            saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
-            saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("№", " ").ToLower();
-            saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(".", " ").ToLower();
-            saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("-", " ").ToLower();
-            saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
+                if (buildingNum.Text != "")
+                {
+                    buildNum = "корп. " + buildingNum.Text;
+                }
+
+                roomsAsString();
+                string fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + " договор от" +
+                                  contractDate.Text + " " + fullAddressHouse() + " " + ownerSurname.Text + " " +
+                                  ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " " +
+                                  bankName.Text;
+                saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("№", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(".", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("-", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
 
                 if (DialogResult.OK == saveFileDialog1.ShowDialog())
                 {
-                    wdApp = new Microsoft.Office.Interop.Word.Application();
-                    Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
+                    wdApp = new Application();
+                    var wdDoc = new Document();
 
-                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\шаблоны\\Дом.doc", Missing, true);
-                    object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
+                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\шаблоны\\Дом.doc",
+                                                 Missing, true);
+                    object replaceAll = WdReplace.wdReplaceAll;
 
                     // Gets a NumberFormatInfo associated with the en-US culture.
                     NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
@@ -1590,10 +1525,9 @@ namespace WindowsFormsApplication1
                     nfi.PositiveSign = "";
 
 
-
                     string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
                     string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
-
+                    double dirtCost = double.Parse(dirtCalcGrid.Rows[31].Cells[1].Value.ToString());
                     calculationDate.CustomFormat = "dd MMMM yyyy";
                     string calculationDateStr = calculationDate.Text;
                     int lenght = calculationDateStr.Length;
@@ -1624,7 +1558,7 @@ namespace WindowsFormsApplication1
 
                     int count = houseAnalogs.RowCount - 1;
                     //Объект оценки
-                    
+
                     AddHouseAnalog(count, 0);
                     //Аналог 1
                     AddHouseAnalog(count, 1);
@@ -1635,271 +1569,45 @@ namespace WindowsFormsApplication1
 
 
                     int dirtAnalogsCount = dirtCalcGrid.RowCount - 1;
-                    //Аналог 1                    
+                    //Аналог 1
                     AddGridCost(dirtAnalogsCount, 1);
-                    //Аналог 2                    
+                    //Аналог 2
                     AddGridCost(dirtAnalogsCount, 2);
-                    //Аналог 3                    
+                    //Аналог 3
                     AddGridCost(dirtAnalogsCount, 3);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@MO@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = MO.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@dirtCost@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dirtCalcGrid.Rows[31].Cells[1].Value.ToString();
-                    double dirtCost = double.Parse(dirtCalcGrid.Rows[31].Cells[1].Value.ToString());
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@dirtm2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dirtm2.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@dirtCostR@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dirtCalcGrid.Rows[32].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@MO@@", MO.Text);
+                    ReplaceTextWord(ref wdApp, "@@dirtCost@@", dirtCalcGrid.Rows[31].Cells[1].Value.ToString());
+                    ReplaceTextWord(ref wdApp, "@@dirtm2@@", dirtm2.Text);
+                    ReplaceTextWord(ref wdApp, "@@dirtCostR@@", dirtCalcGrid.Rows[32].Cells[1].Value.ToString());
 
                     ReplaceTextWord(ref wdApp, "@@kadastrNum@@", dirtKadastr.Text);
                     ReplaceTextWord(ref wdApp, "@@dirtDoc@@", gridDoc.Text);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@calculationDateStr@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = calculationDateStr;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@houseType@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseType.Text.ToLower();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@roomsT@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
+                    ReplaceTextWord(ref wdApp, "@@calculationDateStr@@", calculationDateStr ) ;
 
 
-                    wdApp.Selection.Find.Replacement.Text = roomsT;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@roomsX@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = roomsX;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@lm2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = lm2text.Text;
-
-                    wdApp.Selection.Find.Execute(
-                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@m2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = m2text.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerNameInits@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerFamiliyR + " " + getInits();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@calculationDate@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = calculationDate.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerFullname@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerFullName;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerFullname@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerFullName;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@rooms1@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    roomsAsString();
-                    wdApp.Selection.Find.Replacement.Text = rooms1;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerFullnameR@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerFullNameR;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@houseType@@", houseType.Text.ToLower() ) ;
 
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerFullnameR@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerFullNameR;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@roomsT@@", roomsT ) ;
 
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerFullnameT@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerFullNameT;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerFullnameD@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerFullNameD;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@roomsX@@" , roomsX ) ;
 
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerFullnameT@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerFullNameT;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerFullnameD@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerFullNameD;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@rooms@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = roomsAsString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@appartmentNum@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = "№" + appartmentNum.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@lm2@@" , lm2text.Text ) ;
 
 
-                    ReplaceTextWord(ref wdApp, "@@street@@", street.Text);
-                   
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@houseNum@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseNum.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@m2@@", m2text.Text ) ;   
+                    ReplaceTextWord(ref wdApp, "@@customerNameInits@@", customerFamiliyR + " " + getInits() ) ;   
+                    ReplaceTextWord(ref wdApp, "@@calculationDate@@", calculationDate.Text ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullname@@", ownerFullName ) ;   ReplaceTextWord(ref wdApp, "@@customerFullname@@", customerFullName ) ;  roomsAsString(); ReplaceTextWord(ref wdApp, "@@rooms1@@", rooms1 ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullnameR@@", ownerFullNameR ) ;   ReplaceTextWord(ref wdApp, "@@customerFullnameR@@", customerFullNameR ) ;   ReplaceTextWord(ref wdApp, "@@customerFullnameT@@", customerFullNameT ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullnameD@@", ownerFullNameD ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullnameT@@", ownerFullNameT ) ;   ReplaceTextWord(ref wdApp, "@@customerFullnameD@@", customerFullNameD ) ;   ReplaceTextWord(ref wdApp, "@@rooms@@", roomsAsString() ) ;   ReplaceTextWord(ref wdApp, "@@appartmentNum@@", "№" + appartmentNum.Text ) ;   ReplaceTextWord(ref wdApp, "@@street@@", street.Text);   ReplaceTextWord(ref wdApp, "@@houseNum@@", houseNum.Text ) ;
 
                     buildNum = null;
                     if (buildingNum.Text != "")
                     {
                         buildNum = " корп." + buildingNum.Text;
-
                     }
                     else
                     {
@@ -1907,245 +1615,138 @@ namespace WindowsFormsApplication1
                     }
 
 
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@buildingNum@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = buildNum;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerAddress@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@buildingNum@@",
+                                    buildNum
+                        )
+                        ;
 
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@floor@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = floor.Value.ToString();
+                    ReplaceTextWord(ref wdApp, "@@customerAddress@@",
+                                    customerAddres.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@floors@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = floors.Text;
+                    ReplaceTextWord(ref wdApp, "@@floor@@",
+                                    floor.Value.ToString()
+                        )
+                        ;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@town@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = town.Text;
+                    ReplaceTextWord(ref wdApp, "@@floors@@", floors.Text);
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@cost@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = finalCostRounded.ToString("N", nfi);
+                    ReplaceTextWord(ref wdApp, "@@town@@",
+                                    town.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@costFull@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = (finalCostRounded+dirtCost/1000).ToString("N", nfi);
+                    ReplaceTextWord(ref wdApp, "@@cost@@",
+                                    finalCostRounded.ToString("N", nfi)
+                        )
+                        ;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                    ReplaceTextWord(ref wdApp, "@@costFull@@",
+                                    (finalCostRounded + dirtCost/1000).ToString("N", nfi)
+                        )
+                        ;
                     ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", dirtCalcGrid.Rows[33].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@likvidCostFull@@", (likvidCostDirt + likvidCost).ToString());
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@contractNum@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = contractNum.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@contractNum@@",
+                                    contractNum.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@contractDate@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = contractDate.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@contractDate@@", contractDate.Text);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerName@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerName.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@customerName@@",
+                                    customerName.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerInit@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerInit.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@customerInit@@",
+                                    customerInit.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@likvidCost@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = likvidCost.ToString("N", nfi);
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@likvidCost@@",
+                                    likvidCost.ToString("N", nfi)
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@stringCost@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = costStr.ToLower();
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@stringCost@@",
+                                    costStr.ToLower()
+                        )
+                        ;
 
                     getUvaj();
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@uvaj@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = uvaj;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    
+                    ReplaceTextWord(ref wdApp, "@@uvaj@@",
+                                    uvaj
+                        )
+                        ;
+
                     //Customer Passport
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerPassport@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerPassport.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@customerPassport@@",
+                                    customerPassport.Text)
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerPassNum@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerPassNum.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@customerPassNum@@",
+                                    customerPassNum.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerPassOVD@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerPassOVD.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@customerPassOVD@@",
+                                    customerPassOVD.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerPassDate@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerPassDate.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@customerPassDate@@",
+                                    customerPassDate.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@customerFullAddress@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@customerFullAddress@@",
+                                    customerAddres.Text
+                        )
+                        ;
                     //owner Passport
 
                     ReplaceTextWord(ref wdApp, "@@ownerPassport@@", ownerPassport.Text);
+                    ReplaceTextWord(ref wdApp, "@@ownerPassNum@@",
+                                    ownerPassNum.Text
+                        )
+                        ;
 
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerPassNum@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerPassNum.Text;
+                    ReplaceTextWord(ref wdApp, "@@ownerPassOVD@@",
+                                    ownerPassOVD.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerPassOVD@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerPassOVD.Text;
+                    ReplaceTextWord(ref wdApp, "@@ownerPassDate@@",
+                                    ownerPassDate.Text
+                        )
+                        ;
 
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerPassDate@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerPassDate.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@ownerFullAddress@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ownerAddress.Text;
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
+                    ReplaceTextWord(ref wdApp, "@@ownerFullAddress@@",
+                                    ownerAddress.Text)
+                        ;
 
 
                     ReplaceTextWord(ref wdApp, "@@ownerDoc@@", ownerDocs.Text);
@@ -2156,571 +1757,369 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@tehPass@@", dataGridView1.Rows[41].Cells[1].Value.ToString());
 
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[2].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.3@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[3].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.4@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[4].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.5@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[5].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.6@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[6].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.7@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[7].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.8@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[8].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.9@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[9].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.10@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[10].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.11@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[11].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.12@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[12].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.13@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[13].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.14@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[14].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.1.15@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[15].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
- 
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.1@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[17].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[18].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.3@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[19].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.4@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[20].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.5@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[21].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.6@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[22].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.7@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[23].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.8@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[24].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.9@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[25].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.10@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[26].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.11@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[27].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.12@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[28].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.13@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[29].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.14@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[30].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.15@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[31].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.16@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[32].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.17@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[33].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.18@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[34].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.19@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[35].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.20@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[36].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.21@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[37].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.22@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[38].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.23@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[39].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.24@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[40].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.25@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[41].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.26@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[42].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.27@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[43].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.28@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[44].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.29@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[45].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.30@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[46].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.31@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[47].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.32@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[48].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.33@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[49].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.34@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[50].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.35@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[51].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.36@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[52].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.37@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[53].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.38@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[54].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.39@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[55].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.40@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[56].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@2.1.2.41@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = dataGridView1.Rows[57].Cells[1].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.2@@",
+                                    dataGridView1.Rows[2].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.3@@",
+                                    dataGridView1.Rows[3].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.4@@",
+                                    dataGridView1.Rows[4].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.5@@",
+                                    dataGridView1.Rows[5].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.6@@",
+                                    dataGridView1.Rows[6].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.7@@",
+                                    dataGridView1.Rows[7].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.8@@",
+                                    dataGridView1.Rows[8].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.9@@",
+                                    dataGridView1.Rows[9].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.10@@",
+                                    dataGridView1.Rows[10].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.11@@",
+                                    dataGridView1.Rows[11].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.12@@",
+                                    dataGridView1.Rows[12].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.13@@",
+                                    dataGridView1.Rows[13].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.14@@",
+                                    dataGridView1.Rows[14].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.1.15@@",
+                                    dataGridView1.Rows[15].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.1@@",
+                                    dataGridView1.Rows[17].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.2@@",
+                                    dataGridView1.Rows[18].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.3@@"
+                                    ,
+                                    dataGridView1.Rows[19].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.4@@"
+                                    ,
+                                    dataGridView1.Rows[20].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.5@@"
+                                    ,
+                                    dataGridView1.Rows[21].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.6@@"
+                                    ,
+                                    dataGridView1.Rows[22].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.7@@"
+                                    ,
+                                    dataGridView1.Rows[23].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.8@@"
+                                    ,
+                                    dataGridView1.Rows[24].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.9@@"
+                                    ,
+                                    dataGridView1.Rows[25].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.10@@"
+                                    ,
+                                    dataGridView1.Rows[26].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.11@@"
+                                    ,
+                                    dataGridView1.Rows[27].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.12@@"
+                                    ,
+                                    dataGridView1.Rows[28].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.13@@"
+                                    ,
+                                    dataGridView1.Rows[29].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.14@@"
+                                    ,
+                                    dataGridView1.Rows[30].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.15@@"
+                                    ,
+                                    dataGridView1.Rows[31].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.16@@"
+                                    ,
+                                    dataGridView1.Rows[32].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.17@@"
+                                    ,
+                                    dataGridView1.Rows[33].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.18@@"
+                                    ,
+                                    dataGridView1.Rows[34].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.19@@"
+                                    ,
+                                    dataGridView1.Rows[35].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.20@@"
+                                    ,
+                                    dataGridView1.Rows[36].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.21@@"
+                                    ,
+                                    dataGridView1.Rows[37].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.22@@"
+                                    ,
+                                    dataGridView1.Rows[38].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.23@@"
+                                    ,
+                                    dataGridView1.Rows[39].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.24@@"
+                                    ,
+                                    dataGridView1.Rows[40].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.25@@"
+                                    ,
+                                    dataGridView1.Rows[41].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.26@@"
+                                    ,
+                                    dataGridView1.Rows[42].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.27@@"
+                                    ,
+                                    dataGridView1.Rows[43].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.28@@"
+                                    ,
+                                    dataGridView1.Rows[44].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.29@@"
+                                    ,
+                                    dataGridView1.Rows[45].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.30@@"
+                                    ,
+                                    dataGridView1.Rows[46].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.31@@"
+                                    ,
+                                    dataGridView1.Rows[47].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.32@@"
+                                    ,
+                                    dataGridView1.Rows[48].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.33@@"
+                                    ,
+                                    dataGridView1.Rows[49].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.34@@"
+                                    ,
+                                    dataGridView1.Rows[50].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.35@@",
+                                    dataGridView1.Rows[51].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.36@@",
+                                    dataGridView1.Rows[52].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.37@@",
+                                    dataGridView1.Rows[53].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.38@@",
+                                    dataGridView1.Rows[54].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.39@@",
+                                    dataGridView1.Rows[55].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.40@@",
+                                    dataGridView1.Rows[56].Cells[1].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@2.1.2.41@@",
+                                    dataGridView1.Rows[57].Cells[1].Value.ToString()
+                        )
+                        ;
 
 
                     ReplaceTextWord(ref wdApp, "@@a1.1@@", dirtGridAnalogs.Rows[0].Cells[1].Value.ToString());
-                    ReplaceTextWord(ref wdApp, "@@a1.2@@", dirtGridAnalogs.Rows[1].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.3@@", dirtGridAnalogs.Rows[2].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.4@@", dirtGridAnalogs.Rows[3].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.5@@", dirtGridAnalogs.Rows[4].Cells[1].Value.ToString());
@@ -2755,1127 +2154,671 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@a3.10@@", dirtGridAnalogs.Rows[9].Cells[3].Value.ToString());
 
 
+                    ReplaceTextWord(ref wdApp, "@@b1.1@@",
+                                    ((double) (houseCalcGrid.Rows[0].Cells[2].Value)).ToString("N", nfi)
+                        )
+                        ;
 
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.1@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[0].Cells[2].Value)).ToString("N", nfi);
-                   
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[1].Cells[2].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.3@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[2].Cells[2].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.4@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[3].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.5@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[4].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.6@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[5].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.7@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[6].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.8@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[7].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.9@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[8].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.10@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[9].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.11@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[10].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.12@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[11].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.13@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[12].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.14@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[13].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.15@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[14].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.16@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[15].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.17@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[16].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.18@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[17].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.19@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[18].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.20@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.21@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[20].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.22@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.23@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[22].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.24@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[23].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.25@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[24].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.26@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[25].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.27@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[26].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.28@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[27].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.29@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[28].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.30@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[29].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.31@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[30].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.32@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[31].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.33@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[32].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.34@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[33].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.35@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[34].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.1@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[0].Cells[3].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[1].Cells[3].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.3@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[2].Cells[3].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.4@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[3].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.5@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[4].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.6@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[5].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.7@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[6].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.8@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[7].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.9@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[8].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.10@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[9].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.11@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[10].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.12@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[11].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.13@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[12].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.14@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[13].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.15@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[14].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.16@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[15].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.17@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[16].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.18@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[17].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.19@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[18].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.20@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing); wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.21@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[20].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.22@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.23@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[22].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.24@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[23].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.25@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[24].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.26@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[25].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.27@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[26].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.28@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[27].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.29@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[28].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.30@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[29].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.31@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[30].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.32@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[31].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.33@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[32].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.34@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[33].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.35@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[34].Cells[3].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.1@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[0].Cells[4].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[1].Cells[4].Value)).ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.3@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[2].Cells[4].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.4@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[3].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.5@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[4].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.6@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[5].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.7@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[6].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.8@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[7].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.9@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[8].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.10@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[9].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.11@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[10].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.12@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[11].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.13@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[12].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.14@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[13].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.15@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[14].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.16@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[15].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.17@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[16].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.18@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[17].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.19@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[18].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.20@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing); wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.21@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[20].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.22@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[21].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.23@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[22].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.24@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[23].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.25@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[24].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.26@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[25].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.27@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[26].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.28@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[27].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.29@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[28].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.30@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[29].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.31@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[30].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.32@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[31].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.33@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[32].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.34@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[33].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.35@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[34].Cells[4].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b1.36@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[35].Cells[2].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b2.36@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[35].Cells[3].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b3.36@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[35].Cells[4].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b4.1@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = houseCalcGrid.Rows[36].Cells[2].Value.ToString();
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b4.2@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[37].Cells[2].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = "@@b4.3@@";
-                    wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(houseCalcGrid.Rows[38].Cells[2].Value)).ToString("N", nfi);
-
-                    wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);                     
+
+                    ReplaceTextWord(ref wdApp, "@@b1.2@@",
+                                    ((double) (houseCalcGrid.Rows[1].Cells[2].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.3@@",
+                                    ((double) (houseCalcGrid.Rows[2].Cells[2].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.4@@",
+                                    houseCalcGrid.Rows[3].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.5@@",
+                                    houseCalcGrid.Rows[4].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.6@@",
+                                    houseCalcGrid.Rows[5].Cells[2].Value.ToString()
+                        )
+                        ;
+
+                    ReplaceTextWord(ref wdApp, "@@b1.7@@",
+                                    houseCalcGrid.Rows[6].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.8@@",
+                                    houseCalcGrid.Rows[7].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.9@@",
+                                    houseCalcGrid.Rows[8].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.10@@",
+                                    houseCalcGrid.Rows[9].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.11@@",
+                                    houseCalcGrid.Rows[10].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.12@@",
+                                    houseCalcGrid.Rows[11].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.13@@",
+                                    houseCalcGrid.Rows[12].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.14@@",
+                                    houseCalcGrid.Rows[13].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.15@@",
+                                    houseCalcGrid.Rows[14].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.16@@",
+                                    houseCalcGrid.Rows[15].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.17@@",
+                                    houseCalcGrid.Rows[16].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.18@@",
+                                    houseCalcGrid.Rows[17].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.19@@",
+                                    houseCalcGrid.Rows[18].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.20@@",
+                                    houseCalcGrid.Rows[21].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.21@@",
+                                    houseCalcGrid.Rows[20].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.22@@",
+                                    houseCalcGrid.Rows[21].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.23@@",
+                                    houseCalcGrid.Rows[22].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.24@@",
+                                    houseCalcGrid.Rows[23].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.25@@",
+                                    houseCalcGrid.Rows[24].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.26@@",
+                                    houseCalcGrid.Rows[25].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.27@@",
+                                    houseCalcGrid.Rows[26].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.28@@",
+                                    houseCalcGrid.Rows[27].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.29@@",
+                                    houseCalcGrid.Rows[28].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.30@@",
+                                    houseCalcGrid.Rows[29].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.31@@",
+                                    houseCalcGrid.Rows[30].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.32@@",
+                                    houseCalcGrid.Rows[31].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.33@@",
+                                    houseCalcGrid.Rows[32].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.34@@",
+                                    houseCalcGrid.Rows[33].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.35@@",
+                                    houseCalcGrid.Rows[34].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.1@@",
+                                    ((double) (houseCalcGrid.Rows[0].Cells[3].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.2@@",
+                                    ((double) (houseCalcGrid.Rows[1].Cells[3].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.3@@",
+                                    ((double) (houseCalcGrid.Rows[2].Cells[3].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.4@@",
+                                    houseCalcGrid.Rows[3].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.5@@",
+                                    houseCalcGrid.Rows[4].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.6@@",
+                                    houseCalcGrid.Rows[5].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.7@@",
+                                    houseCalcGrid.Rows[6].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.8@@",
+                                    houseCalcGrid.Rows[7].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.9@@",
+                                    houseCalcGrid.Rows[8].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.10@@",
+                                    houseCalcGrid.Rows[9].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.11@@",
+                                    houseCalcGrid.Rows[10].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.12@@",
+                                    houseCalcGrid.Rows[11].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.13@@",
+                                    houseCalcGrid.Rows[12].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.14@@",
+                                    houseCalcGrid.Rows[13].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.15@@",
+                                    houseCalcGrid.Rows[14].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.16@@",
+                                    houseCalcGrid.Rows[15].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.17@@",
+                                    houseCalcGrid.Rows[16].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.18@@",
+                                    houseCalcGrid.Rows[17].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.19@@",
+                                    houseCalcGrid.Rows[18].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.20@@",
+                                    houseCalcGrid.Rows[21].Cells[3].Value.ToString()
+                        )
+                        ;
+
+                    ReplaceTextWord(ref wdApp, "@@b2.21@@",
+                                    houseCalcGrid.Rows[20].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.22@@",
+                                    houseCalcGrid.Rows[21].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.23@@",
+                                    houseCalcGrid.Rows[22].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.24@@",
+                                    houseCalcGrid.Rows[23].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.25@@",
+                                    houseCalcGrid.Rows[24].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.26@@",
+                                    houseCalcGrid.Rows[25].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.27@@",
+                                    houseCalcGrid.Rows[26].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.28@@",
+                                    houseCalcGrid.Rows[27].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.29@@",
+                                    houseCalcGrid.Rows[28].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.30@@",
+                                    houseCalcGrid.Rows[29].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.31@@",
+                                    houseCalcGrid.Rows[30].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.32@@",
+                                    houseCalcGrid.Rows[31].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.33@@",
+                                    houseCalcGrid.Rows[32].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.34@@",
+                                    houseCalcGrid.Rows[33].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b2.35@@",
+                                    houseCalcGrid.Rows[34].Cells[3].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.1@@",
+                                    ((double) (houseCalcGrid.Rows[0].Cells[4].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.2@@",
+                                    ((double) (houseCalcGrid.Rows[1].Cells[4].Value)).ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.3@@",
+                                    ((double) (houseCalcGrid.Rows[2].Cells[4].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.4@@",
+                                    houseCalcGrid.Rows[3].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.5@@",
+                                    houseCalcGrid.Rows[4].Cells[4].Value.ToString()
+                        )
+                        ;
+
+                    ReplaceTextWord(ref wdApp, "@@b3.6@@",
+                                    houseCalcGrid.Rows[5].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.7@@",
+                                    houseCalcGrid.Rows[6].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.8@@",
+                                    houseCalcGrid.Rows[7].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.9@@",
+                                    houseCalcGrid.Rows[8].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.10@@",
+                                    houseCalcGrid.Rows[9].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.11@@",
+                                    houseCalcGrid.Rows[10].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.12@@",
+                                    houseCalcGrid.Rows[11].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.13@@",
+                                    houseCalcGrid.Rows[12].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.14@@",
+                                    houseCalcGrid.Rows[13].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.15@@",
+                                    houseCalcGrid.Rows[14].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.16@@",
+                                    houseCalcGrid.Rows[15].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.17@@",
+                                    houseCalcGrid.Rows[16].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.18@@",
+                                    houseCalcGrid.Rows[17].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.19@@",
+                                    houseCalcGrid.Rows[18].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.20@@",
+                                    houseCalcGrid.Rows[21].Cells[4].Value.ToString()
+                        )
+                        ;
+
+                    ReplaceTextWord(ref wdApp, "@@b3.21@@",
+                                    houseCalcGrid.Rows[20].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.22@@",
+                                    houseCalcGrid.Rows[21].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.23@@",
+                                    houseCalcGrid.Rows[22].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.24@@",
+                                    houseCalcGrid.Rows[23].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.25@@",
+                                    houseCalcGrid.Rows[24].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.26@@",
+                                    houseCalcGrid.Rows[25].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.27@@",
+                                    houseCalcGrid.Rows[26].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.28@@",
+                                    houseCalcGrid.Rows[27].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.29@@",
+                                    houseCalcGrid.Rows[28].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.30@@",
+                                    houseCalcGrid.Rows[29].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.31@@",
+                                    houseCalcGrid.Rows[30].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.32@@",
+                                    houseCalcGrid.Rows[31].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.33@@",
+                                    houseCalcGrid.Rows[32].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.34@@",
+                                    houseCalcGrid.Rows[33].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b3.35@@",
+                                    houseCalcGrid.Rows[34].Cells[4].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b1.36@@",
+                                    ((double) (houseCalcGrid.Rows[35].Cells[2].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+                    ReplaceTextWord(ref wdApp, "@@b2.36@@",
+                                    ((double) (houseCalcGrid.Rows[35].Cells[3].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+                    ReplaceTextWord(ref wdApp, "@@b3.36@@",
+                                    ((double) (houseCalcGrid.Rows[35].Cells[4].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b4.1@@",
+                                    houseCalcGrid.Rows[36].Cells[2].Value.ToString()
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b4.2@@",
+                                    ((double) (houseCalcGrid.Rows[37].Cells[2].Value)).ToString("N", nfi)
+                        )
+                        ;
+
+
+                    ReplaceTextWord(ref wdApp, "@@b4.3@@",
+                                    ((double) (houseCalcGrid.Rows[38].Cells[2].Value)).ToString("N", nfi)
+                        )
+                        ;
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "м2";
                     while (wdApp.Selection.Find.Execute(
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                     {
                         wdApp.Selection.Characters[2].Font.Superscript = 1;
                     }
@@ -3887,19 +2830,17 @@ namespace WindowsFormsApplication1
                         x = wdDoc.Shapes.Count;
                         for (int k = 1; k < x; k++)
                         {
-                            Microsoft.Office.Interop.Word.Shape shape = wdDoc.Shapes[k];
-                                                        
+                            Shape shape = wdDoc.Shapes[k];
+
                             if (shape.AlternativeText.Contains("cont"))
                             {
-                                wdDoc.Shapes[k].TextEffect.Text = "№ " + contractNum.Text + " от " + calculationDate.Text + "г.";
+                                wdDoc.Shapes[k].TextEffect.Text = "№ " + contractNum.Text + " от " +
+                                                                  calculationDate.Text + "г.";
                             }
                         }
-                        
-                       
                     }
                     catch (Exception exp)
-                    { 
-                    
+                    {
                     }
 
 
@@ -3914,7 +2855,6 @@ namespace WindowsFormsApplication1
                 MessageBox.Show(except.Message);
                 wdApp.Quit();
             }
-
         }
 
         private void AddGridCost(int dirtAnalogsCount, int columnNumber)
@@ -3935,25 +2875,22 @@ namespace WindowsFormsApplication1
             string analog0 = "@@d" + columnNumber.ToString() + ".";
             for (int i = 0; i < count; i++)
             {
-                ReplaceTextWord(ref wdApp, analog0 + (i + 1).ToString() + "@@", houseAnalogs.Rows[i].Cells[columnNumber+1].Value.ToString());
+                ReplaceTextWord(ref wdApp, analog0 + (i + 1).ToString() + "@@",
+                                houseAnalogs.Rows[i].Cells[columnNumber + 1].Value.ToString());
             }
         }
 
 
-
-
-
-
-
         private void saveAppartmentsCalc_Click(object sender, EventArgs e)
         {
-            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
+            var excelApp = new Microsoft.Office.Interop.Excel.Application();
             //Microsoft.Office.Interop.Excel.Workbook excelDoc = new Microsoft.Office.Interop.Excel.Workbook();
             string v = excelApp.Version;
-                //excelApp.;
+            //excelApp.;
             string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
             string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
-            string fileName = "отчет " + contractNum.Text + " расчет стоимости квартиры " + appartmentNum.Text + " " + street.Text + " " + houseNum.Text + " для " + bankName.Text;
+            string fileName = "отчет " + contractNum.Text + " расчет стоимости квартиры " + appartmentNum.Text + " " +
+                              street.Text + " " + houseNum.Text + " для " + bankName.Text;
             saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
@@ -3964,21 +2901,21 @@ namespace WindowsFormsApplication1
 
             if (DialogResult.OK == saveFileDialog1.ShowDialog())
             {
+                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\calc.xls", Missing, Missing,
+                                        Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
+                                        Missing, Missing, Missing);
 
-                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\calc.xls", Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing);
 
-               
-  
                 //первый аналог
                 excelApp.Workbooks[1].Sheets[1].Cells[2, 3] = calculationAppartaments[2, 0].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[2, 4] = calculationAppartaments[3, 0].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[2, 5] = calculationAppartaments[4, 0].Value;
-               
+
                 //                excelApp.Workbooks[1].Sheets[1].Cells[2, 6] = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToLongDateString();
                 excelApp.Workbooks[1].Sheets[1].Cells[3, 3] = calculationAppartaments[2, 1].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[3, 4] = calculationAppartaments[3, 1].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[3, 5] = calculationAppartaments[4, 1].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[5, 3] = calculationAppartaments[2, 3].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[5, 4] = calculationAppartaments[3, 3].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[5, 5] = calculationAppartaments[4, 3].Value;
@@ -3987,62 +2924,62 @@ namespace WindowsFormsApplication1
                 string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
                 string d3 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[4].Value.ToString()).ToString(pattern);
                 excelApp.Workbooks[1].Sheets[1].Cells[7, 3] = d1;
-                excelApp.Workbooks[1].Sheets[1].Cells[7, 4] =d2;
+                excelApp.Workbooks[1].Sheets[1].Cells[7, 4] = d2;
                 excelApp.Workbooks[1].Sheets[1].Cells[7, 5] = d3;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[8, 3] = calculationAppartaments[2, 6].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[8, 4] = calculationAppartaments[3, 6].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[8, 5] = calculationAppartaments[4, 6].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[10, 3] = calculationAppartaments[2, 8].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[10, 4] = calculationAppartaments[3, 8].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[10, 5] = calculationAppartaments[4, 8].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[12, 3] = calculationAppartaments[2, 10].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[12, 4] = calculationAppartaments[3, 10].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[12, 5] = calculationAppartaments[4, 10].Value;
 
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[14, 3] = calculationAppartaments[2, 12].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[14, 4] = calculationAppartaments[3, 12].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[14, 5] = calculationAppartaments[4, 12].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[16, 3] = calculationAppartaments[2, 14].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[16, 4] = calculationAppartaments[3, 14].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[16, 5] = calculationAppartaments[4, 14].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[18, 3] = calculationAppartaments[2, 16].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[18, 4] = calculationAppartaments[3, 16].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[18, 5] = calculationAppartaments[4, 16].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[20, 3] = calculationAppartaments[2, 18].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[20, 4] = calculationAppartaments[3, 18].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[20, 5] = calculationAppartaments[4, 18].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[22, 3] = calculationAppartaments[2, 20].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[22, 4] = calculationAppartaments[3, 20].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[22, 5] = calculationAppartaments[4, 20].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[24, 3] = calculationAppartaments[2, 22].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[24, 4] = calculationAppartaments[3, 22].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[24, 5] = calculationAppartaments[4, 22].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[26, 3] = calculationAppartaments[2, 24].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[26, 4] = calculationAppartaments[3, 24].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[26, 5] = calculationAppartaments[4, 24].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[28, 3] = calculationAppartaments[2, 26].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[28, 4] = calculationAppartaments[3, 26].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[28, 5] = calculationAppartaments[4, 26].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[30, 3] = calculationAppartaments[2, 28].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[30, 4] = calculationAppartaments[3, 28].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[30, 5] = calculationAppartaments[4, 28].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[32, 3] = calculationAppartaments[2, 30].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[32, 4] = calculationAppartaments[3, 30].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[32, 5] = calculationAppartaments[4, 30].Value;
-                
+
                 excelApp.Workbooks[1].Sheets[1].Cells[34, 3] = calculationAppartaments[2, 32].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[34, 4] = calculationAppartaments[3, 32].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[34, 5] = calculationAppartaments[4, 32].Value;
@@ -4051,7 +2988,10 @@ namespace WindowsFormsApplication1
                 excelApp.Workbooks[1].Sheets[1].Cells[35, 5] = calculationAppartaments[4, 33].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[38, 3] = calculationAppartaments[2, 36].Value;
 
-                excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing,
+                                               Type.Missing, Type.Missing,
+                                               XlSaveAsAccessMode.xlNoChange,
+                                               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 excelApp.Quit();
             }
         }
@@ -4094,9 +3034,8 @@ namespace WindowsFormsApplication1
                 if (cellValue != "")
                 {
                     m1 = double.Parse(cellValue);
-
                 }
-                cost_m1 = Math.Round(cost1 / m1);
+                cost_m1 = Math.Round(cost1/m1);
                 dirtCalcGrid.Rows[3].Cells[1].Value = cost_m1;
 
                 cellValue = dirtCalcGrid.Rows[4].Cells[1].Value.ToString();
@@ -4177,10 +3116,9 @@ namespace WindowsFormsApplication1
                 }
 
 
-
-
-
-                cor_cost_final1 = Math.Round(cost_m1 * cor_cost11 * cor_cost12 * cor_cost13 * cor_cost14 * cor_cost15 * cor_cost16 * cor_cost17 * cor_cost18 * cor_cost19 * cor_cost110 * cor_cost111);
+                cor_cost_final1 =
+                    Math.Round(cost_m1*cor_cost11*cor_cost12*cor_cost13*cor_cost14*cor_cost15*cor_cost16*cor_cost17*
+                               cor_cost18*cor_cost19*cor_cost110*cor_cost111);
                 //второй аналог
 
                 cellValue = dirtCalcGrid.Rows[1].Cells[2].Value.ToString();
@@ -4193,9 +3131,8 @@ namespace WindowsFormsApplication1
                 if (cellValue != "")
                 {
                     m2 = double.Parse(cellValue);
-
                 }
-                cost_m2 = Math.Round(cost2 / m2);
+                cost_m2 = Math.Round(cost2/m2);
                 dirtCalcGrid.Rows[3].Cells[2].Value = cost_m2;
 
                 cellValue = dirtCalcGrid.Rows[4].Cells[2].Value.ToString();
@@ -4276,9 +3213,9 @@ namespace WindowsFormsApplication1
                 }
 
 
-
-
-                cor_cost_final2 = Math.Round(cost_m2 * cor_cost21 * cor_cost22 * cor_cost23 * cor_cost24 * cor_cost25 * cor_cost26 * cor_cost27 * cor_cost28 * cor_cost29 * cor_cost210 * cor_cost211);
+                cor_cost_final2 =
+                    Math.Round(cost_m2*cor_cost21*cor_cost22*cor_cost23*cor_cost24*cor_cost25*cor_cost26*cor_cost27*
+                               cor_cost28*cor_cost29*cor_cost210*cor_cost211);
 
                 //третий аналог
 
@@ -4292,9 +3229,8 @@ namespace WindowsFormsApplication1
                 if (cellValue != "")
                 {
                     m3 = double.Parse(cellValue);
-
                 }
-                cost_m3 = Math.Round(cost3 / m3);
+                cost_m3 = Math.Round(cost3/m3);
                 dirtCalcGrid.Rows[3].Cells[3].Value = cost_m3;
 
                 cellValue = dirtCalcGrid.Rows[4].Cells[3].Value.ToString();
@@ -4375,12 +3311,9 @@ namespace WindowsFormsApplication1
                 }
 
 
-
-
-
-
-                cor_cost_final3 = Math.Round(cost_m3 * cor_cost31 * cor_cost32 * cor_cost33 * cor_cost34 * cor_cost35 * cor_cost36 * cor_cost37 * cor_cost38 * cor_cost39 * cor_cost310 * cor_cost311);
-
+                cor_cost_final3 =
+                    Math.Round(cost_m3*cor_cost31*cor_cost32*cor_cost33*cor_cost34*cor_cost35*cor_cost36*cor_cost37*
+                               cor_cost38*cor_cost39*cor_cost310*cor_cost311);
 
 
                 dirtCalcGrid.Rows[26].Cells[1].Value = cost_count1;
@@ -4389,30 +3322,42 @@ namespace WindowsFormsApplication1
                 dirtCalcGrid.Rows[25].Cells[2].Value = cor_cost_final2;
                 dirtCalcGrid.Rows[26].Cells[3].Value = cost_count3;
                 dirtCalcGrid.Rows[25].Cells[3].Value = cor_cost_final3;
-                cor_cost_final1 = Math.Round(cor_cost_final1 * Double.Parse(dirtCalcGrid.Rows[27].Cells[1].Value.ToString()));
-                cor_cost_final2 = Math.Round(cor_cost_final2 * Double.Parse(dirtCalcGrid.Rows[27].Cells[2].Value.ToString()));
-                cor_cost_final3 = Math.Round(cor_cost_final3 * Double.Parse(dirtCalcGrid.Rows[27].Cells[3].Value.ToString()));
+                cor_cost_final1 =
+                    Math.Round(cor_cost_final1*Double.Parse(dirtCalcGrid.Rows[27].Cells[1].Value.ToString()));
+                cor_cost_final2 =
+                    Math.Round(cor_cost_final2*Double.Parse(dirtCalcGrid.Rows[27].Cells[2].Value.ToString()));
+                cor_cost_final3 =
+                    Math.Round(cor_cost_final3*Double.Parse(dirtCalcGrid.Rows[27].Cells[3].Value.ToString()));
                 dirtCalcGrid.Rows[28].Cells[1].Value = cor_cost_final1;
                 dirtCalcGrid.Rows[28].Cells[2].Value = cor_cost_final2;
                 dirtCalcGrid.Rows[28].Cells[3].Value = cor_cost_final3;
                 dirtCalcGrid.Rows[29].Cells[1].Value = Math.Round(cor_cost_final1 + cor_cost_final2 + cor_cost_final3);
                 if (houseCalcGrid.Rows.Count > 0)
                 {
-                    houseCalcGrid.Rows[2].Cells[2].Value = Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()) * Double.Parse(houseCalcGrid.Rows[1].Cells[2].Value.ToString()) / 1000) * 1000;
-                    houseCalcGrid.Rows[2].Cells[3].Value = Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()) * Double.Parse(houseCalcGrid.Rows[1].Cells[3].Value.ToString()) / 1000) * 1000;
-                    houseCalcGrid.Rows[2].Cells[4].Value = Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()) * Double.Parse(houseCalcGrid.Rows[1].Cells[4].Value.ToString()) / 1000) * 1000;
+                    houseCalcGrid.Rows[2].Cells[2].Value =
+                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString())*
+                                   Double.Parse(houseCalcGrid.Rows[1].Cells[2].Value.ToString())/1000)*1000;
+                    houseCalcGrid.Rows[2].Cells[3].Value =
+                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString())*
+                                   Double.Parse(houseCalcGrid.Rows[1].Cells[3].Value.ToString())/1000)*1000;
+                    houseCalcGrid.Rows[2].Cells[4].Value =
+                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString())*
+                                   Double.Parse(houseCalcGrid.Rows[1].Cells[4].Value.ToString())/1000)*1000;
                 }
                 dirtCalcGrid.Rows[29].Cells[2].Value = "";
                 dirtCalcGrid.Rows[29].Cells[3].Value = "";
-                final_cost_m = Math.Round(Double.Parse(dirtCalcGrid.Rows[30].Cells[1].Value.ToString()) * Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()));
+                final_cost_m =
+                    Math.Round(Double.Parse(dirtCalcGrid.Rows[30].Cells[1].Value.ToString())*
+                               Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()));
                 dirtCalcGrid.Rows[31].Cells[1].Value = final_cost_m.ToString();
-                dirtCalcGrid.Rows[32].Cells[1].Value = Math.Round(final_cost_m / 1000).ToString();
-                dirtCalcGrid.Rows[33].Cells[1].Value = Math.Round(Double.Parse(dirtCalcGrid.Rows[32].Cells[1].Value.ToString()) * 0.66).ToString();
+                dirtCalcGrid.Rows[32].Cells[1].Value = Math.Round(final_cost_m/1000).ToString();
+                dirtCalcGrid.Rows[33].Cells[1].Value =
+                    Math.Round(Double.Parse(dirtCalcGrid.Rows[32].Cells[1].Value.ToString())*0.66).ToString();
                 finalDirtCost = final_cost_m;
-                likvidCostDirt = Math.Round(final_cost_m * 0.66);
+                likvidCostDirt = Math.Round(final_cost_m*0.66);
             }
             catch (Exception e)
-            { 
+            {
                 MessageBox.Show(e.Message);
             }
         }
@@ -4440,12 +3385,11 @@ namespace WindowsFormsApplication1
                 case "Квартира":
                     {
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-
                     }
                     break;
                 case "Земельный участок":
@@ -4460,27 +3404,23 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
-
-
-
         }
 
         private void street_TextChanged(object sender, EventArgs e)
         {
-
             switch (docTypeT)
             {
                 case "Квартира":
                     {
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-
                     }
                     break;
                 case "Земельный участок":
@@ -4495,7 +3435,8 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
         }
 
@@ -4506,12 +3447,11 @@ namespace WindowsFormsApplication1
                 case "Квартира":
                     {
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-
                     }
                     break;
                 case "Земельный участок":
@@ -4526,7 +3466,8 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
         }
 
@@ -4537,12 +3478,11 @@ namespace WindowsFormsApplication1
                 case "Квартира":
                     {
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-
                     }
                     break;
                 case "Земельный участок":
@@ -4557,7 +3497,8 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
         }
 
@@ -4568,12 +3509,11 @@ namespace WindowsFormsApplication1
                 case "Квартира":
                     {
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-
                     }
                     break;
                 case "Земельный участок":
@@ -4588,7 +3528,8 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
         }
 
@@ -4599,12 +3540,11 @@ namespace WindowsFormsApplication1
                 case "Квартира":
                     {
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-
                     }
                     break;
                 case "Земельный участок":
@@ -4619,7 +3559,8 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
         }
 
@@ -4630,12 +3571,11 @@ namespace WindowsFormsApplication1
                 case "Квартира":
                     {
                         objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[18].Cells[1].Value = houseType.Text;
-
                     }
                     break;
                 case "Земельный участок":
@@ -4650,12 +3590,9 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
-                   
+                default:
+                    break;
             }
-
-            
-
         }
 
         private void registrationDoc_TextChanged(object sender, EventArgs e)
@@ -4664,7 +3601,9 @@ namespace WindowsFormsApplication1
             {
                 case "Квартира":
                     {
-                        objectDataGrid.Rows[54].Cells[0].Value = "Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text + "), в кв.м.";
+                        objectDataGrid.Rows[54].Cells[0].Value =
+                            "Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text +
+                            "), в кв.м.";
                         objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
                         objectDataGrid.Rows[21].Cells[1].Value = houseType.Text;
                         objectDataGrid.Rows[22].Cells[1].Value = houseType.Text;
@@ -4672,13 +3611,13 @@ namespace WindowsFormsApplication1
                         analogsGrid.Rows[3].Cells[2].Value = houseType.Text.ToLower();
                         analogsGrid.Rows[3].Cells[3].Value = houseType.Text.ToLower();
                         analogsGrid.Rows[3].Cells[4].Value = houseType.Text.ToLower();
-            
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
-                        dataGridView1.Rows[38].Cells[0].Value = "Общая площадь домовладения, согласно правоустанавливающим документам (" + registrationDoc.Text + "), в кв.м.";
-
+                        dataGridView1.Rows[38].Cells[0].Value =
+                            "Общая площадь домовладения, согласно правоустанавливающим документам (" +
+                            registrationDoc.Text + "), в кв.м.";
                     }
                     break;
                 case "Земельный участок":
@@ -4688,14 +3627,16 @@ namespace WindowsFormsApplication1
                     break;
                 case "Домовладение с земельным участком":
                     {
-                        dataGridView1.Rows[38].Cells[0].Value = "Общая площадь домовладения, согласно правоустанавливающим документам (" + registrationDoc.Text + "), в кв.м.";
+                        dataGridView1.Rows[38].Cells[0].Value =
+                            "Общая площадь домовладения, согласно правоустанавливающим документам (" +
+                            registrationDoc.Text + "), в кв.м.";
                     }
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
-
         }
 
         private void lift_SelectedIndexChanged(object sender, EventArgs e)
@@ -4709,12 +3650,11 @@ namespace WindowsFormsApplication1
                         analogsGrid.Rows[14].Cells[2].Value = lift.Text.ToLower();
                         analogsGrid.Rows[14].Cells[3].Value = lift.Text.ToLower();
                         analogsGrid.Rows[14].Cells[4].Value = lift.Text.ToLower();
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[30].Cells[1].Value = lift.Text;
-
                     }
                     break;
                 case "Земельный участок":
@@ -4729,9 +3669,9 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
-
         }
 
         public void addAtributeToXml(XmlTextWriter t, string name, string text)
@@ -4746,15 +3686,12 @@ namespace WindowsFormsApplication1
         }
 
         /// <summary>
-        /// Save current state
+        ///     Save current state
         /// </summary>
-        /// 
-
         public void saveState()
         {
-
             string fileName = System.Windows.Forms.Application.StartupPath + "\\" + contractNum.Text + ".xml";
-            
+
             saveXML(fileName);
             fileName = System.Windows.Forms.Application.StartupPath + "\\calcState.xml";
             File.Delete(fileName);
@@ -4762,21 +3699,20 @@ namespace WindowsFormsApplication1
         }
 
         /// <summary>
-        /// Load state from ini file
+        ///     Load state from ini file
         /// </summary>
         public void loadState(string fileName)
         {
-            FileStream f = new FileStream(fileName, FileMode.OpenOrCreate);
+            var f = new FileStream(fileName, FileMode.OpenOrCreate);
             try
             {
-                XmlTextReader settings = new XmlTextReader(f);
+                var settings = new XmlTextReader(f);
                 while (settings.Read())
                 {
                     if (settings.NodeType == XmlNodeType.Element)
                     {
                         if (settings.Name.Equals("test"))
                         {
-
                             customerName.Text = settings.GetAttribute(customerName.Name);
                             ownerName.Text = settings.GetAttribute(ownerName.Name);
                             customerInit.Text = settings.GetAttribute(customerInit.Name);
@@ -4811,120 +3747,133 @@ namespace WindowsFormsApplication1
                             houseType.Text = settings.GetAttribute(houseType.Name);
                             registrationDoc.Text = settings.GetAttribute(registrationDoc.Name);
                             MO.Text = settings.GetAttribute(MO.Name);
+                            string fname = fileName.Substring(0, fileName.LastIndexOf("."));
+                            DataTable test = getDataFromXLS(fname + "Calc.xls");
+                            calculationAppartaments.DataSource = test;
+                            calculationAppartaments.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            calculationAppartaments.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            calculationAppartaments.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            calculationAppartaments.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            calculationAppartaments.Columns[4].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            //calculateCost();
+                            test = null;
+                            test = getDataFromXLS(fname + "Analogs.xls");
+                            analogsGrid.DataSource = test;
+                            analogsGrid.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            analogsGrid.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            analogsGrid.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            analogsGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+
                             if (docTypeT == "Квартира")
                             {
-                                objectDataGrid.Rows[2].Cells[1].Value = settings.GetAttribute("data2.1.1.2");
-                                objectDataGrid.Rows[3].Cells[1].Value = settings.GetAttribute("data2.1.1.3");
-                                objectDataGrid.Rows[4].Cells[1].Value = settings.GetAttribute("data2.1.1.4");
-                                objectDataGrid.Rows[5].Cells[1].Value = settings.GetAttribute("data2.1.1.5");
-                                objectDataGrid.Rows[6].Cells[1].Value = settings.GetAttribute("data2.1.1.6");
-                                objectDataGrid.Rows[7].Cells[1].Value = settings.GetAttribute("data2.1.1.7");
-                                objectDataGrid.Rows[8].Cells[1].Value = settings.GetAttribute("data2.1.1.8");
-                                objectDataGrid.Rows[9].Cells[1].Value = settings.GetAttribute("data2.1.1.9");
-                                objectDataGrid.Rows[10].Cells[1].Value = settings.GetAttribute("data2.1.1.10");
-                                objectDataGrid.Rows[11].Cells[1].Value = settings.GetAttribute("data2.1.1.11");
-                                objectDataGrid.Rows[12].Cells[1].Value = settings.GetAttribute("data2.1.1.12");
-                                objectDataGrid.Rows[13].Cells[1].Value = settings.GetAttribute("data2.1.1.13");
-                                objectDataGrid.Rows[14].Cells[1].Value = settings.GetAttribute("data2.1.1.14");
-                                objectDataGrid.Rows[15].Cells[1].Value = settings.GetAttribute("data2.1.1.15");
-                                objectDataGrid.Rows[16].Cells[1].Value = settings.GetAttribute("data2.1.1.16");
+                                //objectDataGrid.Rows[2].Cells[1].Value = settings.GetAttribute("data2.1.1.2");
+                                //objectDataGrid.Rows[3].Cells[1].Value = settings.GetAttribute("data2.1.1.3");
+                                //objectDataGrid.Rows[4].Cells[1].Value = settings.GetAttribute("data2.1.1.4");
+                                //objectDataGrid.Rows[5].Cells[1].Value = settings.GetAttribute("data2.1.1.5");
+                                //objectDataGrid.Rows[6].Cells[1].Value = settings.GetAttribute("data2.1.1.6");
+                                //objectDataGrid.Rows[7].Cells[1].Value = settings.GetAttribute("data2.1.1.7");
+                                //objectDataGrid.Rows[8].Cells[1].Value = settings.GetAttribute("data2.1.1.8");
+                                //objectDataGrid.Rows[9].Cells[1].Value = settings.GetAttribute("data2.1.1.9");
+                                //objectDataGrid.Rows[10].Cells[1].Value = settings.GetAttribute("data2.1.1.10");
+                                //objectDataGrid.Rows[11].Cells[1].Value = settings.GetAttribute("data2.1.1.11");
+                                //objectDataGrid.Rows[12].Cells[1].Value = settings.GetAttribute("data2.1.1.12");
+                                //objectDataGrid.Rows[13].Cells[1].Value = settings.GetAttribute("data2.1.1.13");
+                                //objectDataGrid.Rows[14].Cells[1].Value = settings.GetAttribute("data2.1.1.14");
+                                //objectDataGrid.Rows[15].Cells[1].Value = settings.GetAttribute("data2.1.1.15");
+                                //objectDataGrid.Rows[16].Cells[1].Value = settings.GetAttribute("data2.1.1.16");
 
-                                objectDataGrid.Rows[18].Cells[1].Value = settings.GetAttribute("data2.1.2.1");
-                                objectDataGrid.Rows[19].Cells[1].Value = settings.GetAttribute("data2.1.2.2");
-                                objectDataGrid.Rows[20].Cells[1].Value = settings.GetAttribute("data2.1.2.3");
-                                objectDataGrid.Rows[21].Cells[1].Value = settings.GetAttribute("data2.1.2.4");
-                                objectDataGrid.Rows[22].Cells[1].Value = settings.GetAttribute("data2.1.2.5");
-                                objectDataGrid.Rows[23].Cells[1].Value = settings.GetAttribute("data2.1.2.6");
-                                objectDataGrid.Rows[24].Cells[1].Value = settings.GetAttribute("data2.1.2.7");
-                                objectDataGrid.Rows[25].Cells[1].Value = settings.GetAttribute("data2.1.2.8");
-                                objectDataGrid.Rows[26].Cells[1].Value = settings.GetAttribute("data2.1.2.9");
-                                objectDataGrid.Rows[27].Cells[1].Value = settings.GetAttribute("data2.1.2.10");
-                                objectDataGrid.Rows[28].Cells[1].Value = settings.GetAttribute("data2.1.2.11");
-                                objectDataGrid.Rows[29].Cells[1].Value = settings.GetAttribute("data2.1.2.12");
-                                objectDataGrid.Rows[30].Cells[1].Value = settings.GetAttribute("data2.1.2.13");
-                                objectDataGrid.Rows[31].Cells[1].Value = settings.GetAttribute("data2.1.2.14");
-                                objectDataGrid.Rows[32].Cells[1].Value = settings.GetAttribute("data2.1.2.15");
-                                objectDataGrid.Rows[33].Cells[1].Value = settings.GetAttribute("data2.1.2.16");
-                                objectDataGrid.Rows[34].Cells[1].Value = settings.GetAttribute("data2.1.2.17");
-                                objectDataGrid.Rows[35].Cells[1].Value = settings.GetAttribute("data2.1.2.18");
-                                objectDataGrid.Rows[36].Cells[1].Value = settings.GetAttribute("data2.1.2.19");
-                                objectDataGrid.Rows[37].Cells[1].Value = settings.GetAttribute("data2.1.2.20");
-                                objectDataGrid.Rows[38].Cells[1].Value = settings.GetAttribute("data2.1.2.21");
-                                objectDataGrid.Rows[39].Cells[1].Value = settings.GetAttribute("data2.1.2.22");
+                                //objectDataGrid.Rows[18].Cells[1].Value = settings.GetAttribute("data2.1.2.1");
+                                //objectDataGrid.Rows[19].Cells[1].Value = settings.GetAttribute("data2.1.2.2");
+                                //objectDataGrid.Rows[20].Cells[1].Value = settings.GetAttribute("data2.1.2.3");
+                                //objectDataGrid.Rows[21].Cells[1].Value = settings.GetAttribute("data2.1.2.4");
+                                //objectDataGrid.Rows[22].Cells[1].Value = settings.GetAttribute("data2.1.2.5");
+                                //objectDataGrid.Rows[23].Cells[1].Value = settings.GetAttribute("data2.1.2.6");
+                                //objectDataGrid.Rows[24].Cells[1].Value = settings.GetAttribute("data2.1.2.7");
+                                //objectDataGrid.Rows[25].Cells[1].Value = settings.GetAttribute("data2.1.2.8");
+                                //objectDataGrid.Rows[26].Cells[1].Value = settings.GetAttribute("data2.1.2.9");
+                                //objectDataGrid.Rows[27].Cells[1].Value = settings.GetAttribute("data2.1.2.10");
+                                //objectDataGrid.Rows[28].Cells[1].Value = settings.GetAttribute("data2.1.2.11");
+                                //objectDataGrid.Rows[29].Cells[1].Value = settings.GetAttribute("data2.1.2.12");
+                                //objectDataGrid.Rows[30].Cells[1].Value = settings.GetAttribute("data2.1.2.13");
+                                //objectDataGrid.Rows[31].Cells[1].Value = settings.GetAttribute("data2.1.2.14");
+                                //objectDataGrid.Rows[32].Cells[1].Value = settings.GetAttribute("data2.1.2.15");
+                                //objectDataGrid.Rows[33].Cells[1].Value = settings.GetAttribute("data2.1.2.16");
+                                //objectDataGrid.Rows[34].Cells[1].Value = settings.GetAttribute("data2.1.2.17");
+                                //objectDataGrid.Rows[35].Cells[1].Value = settings.GetAttribute("data2.1.2.18");
+                                //objectDataGrid.Rows[36].Cells[1].Value = settings.GetAttribute("data2.1.2.19");
+                                //objectDataGrid.Rows[37].Cells[1].Value = settings.GetAttribute("data2.1.2.20");
+                                //objectDataGrid.Rows[38].Cells[1].Value = settings.GetAttribute("data2.1.2.21");
+                                //objectDataGrid.Rows[39].Cells[1].Value = settings.GetAttribute("data2.1.2.22");
 
-                                objectDataGrid.Rows[41].Cells[1].Value = settings.GetAttribute("data2.1.3.1");
-                                objectDataGrid.Rows[42].Cells[1].Value = settings.GetAttribute("data2.1.3.2");
-                                objectDataGrid.Rows[43].Cells[1].Value = settings.GetAttribute("data2.1.3.3");
-                                objectDataGrid.Rows[44].Cells[1].Value = settings.GetAttribute("data2.1.3.4");
-                                objectDataGrid.Rows[45].Cells[1].Value = settings.GetAttribute("data2.1.3.5");
-                                objectDataGrid.Rows[46].Cells[1].Value = settings.GetAttribute("data2.1.3.6");
-                                objectDataGrid.Rows[47].Cells[1].Value = settings.GetAttribute("data2.1.3.7");
-                                objectDataGrid.Rows[48].Cells[1].Value = settings.GetAttribute("data2.1.3.8");
-                                objectDataGrid.Rows[49].Cells[1].Value = settings.GetAttribute("data2.1.3.9");
-                                objectDataGrid.Rows[50].Cells[1].Value = settings.GetAttribute("data2.1.3.10");
-                                objectDataGrid.Rows[51].Cells[1].Value = settings.GetAttribute("data2.1.3.11");
-                                objectDataGrid.Rows[52].Cells[1].Value = settings.GetAttribute("data2.1.3.12");
-                                objectDataGrid.Rows[53].Cells[1].Value = settings.GetAttribute("data2.1.3.13");
-                                objectDataGrid.Rows[54].Cells[1].Value = settings.GetAttribute("data2.1.3.14");
-                                objectDataGrid.Rows[55].Cells[1].Value = settings.GetAttribute("data2.1.3.15");
-                                objectDataGrid.Rows[56].Cells[1].Value = settings.GetAttribute("data2.1.3.16");
-                                objectDataGrid.Rows[57].Cells[1].Value = settings.GetAttribute("data2.1.3.17");
-                                objectDataGrid.Rows[58].Cells[1].Value = settings.GetAttribute("data2.1.3.18");
-                                objectDataGrid.Rows[59].Cells[1].Value = settings.GetAttribute("data2.1.3.19");
-                                objectDataGrid.Rows[60].Cells[1].Value = settings.GetAttribute("data2.1.3.20");
-                                objectDataGrid.Rows[61].Cells[1].Value = settings.GetAttribute("data2.1.3.21");
-                                objectDataGrid.Rows[62].Cells[1].Value = settings.GetAttribute("data2.1.3.22");
-                                objectDataGrid.Rows[63].Cells[1].Value = settings.GetAttribute("data2.1.3.23");
-                                objectDataGrid.Rows[64].Cells[1].Value = settings.GetAttribute("data2.1.3.24");
-                                objectDataGrid.Rows[65].Cells[1].Value = settings.GetAttribute("data2.1.3.25");
-                                objectDataGrid.Rows[66].Cells[1].Value = settings.GetAttribute("data2.1.3.26");
-                                objectDataGrid.Rows[67].Cells[1].Value = settings.GetAttribute("data2.1.3.27");
-                                objectDataGrid.Rows[68].Cells[1].Value = settings.GetAttribute("data2.1.3.28");
-                                objectDataGrid.Rows[69].Cells[1].Value = settings.GetAttribute("data2.1.3.29");
-                                objectDataGrid.Rows[70].Cells[1].Value = settings.GetAttribute("data2.1.3.30");
-                                objectDataGrid.Rows[71].Cells[1].Value = settings.GetAttribute("data2.1.3.31");
-                                objectDataGrid.Rows[72].Cells[1].Value = settings.GetAttribute("data2.1.3.32");
-                                objectDataGrid.Rows[73].Cells[1].Value = settings.GetAttribute("data2.1.3.33");
-                                objectDataGrid.Rows[74].Cells[1].Value = settings.GetAttribute("data2.1.3.34");
-                                objectDataGrid.Rows[75].Cells[1].Value = settings.GetAttribute("data2.1.3.35");
-                                objectDataGrid.Rows[76].Cells[1].Value = settings.GetAttribute("data2.1.3.36");
-                                objectDataGrid.Rows[77].Cells[1].Value = settings.GetAttribute("data2.1.3.37");
-                                objectDataGrid.Rows[78].Cells[1].Value = settings.GetAttribute("data2.1.3.38");
-                                objectDataGrid.Rows[79].Cells[1].Value = settings.GetAttribute("data2.1.3.39");
-                                int colsCount = int.Parse(settings.GetAttribute("analogsColsCount"));
-                                for (int i = 0; i <  19; i++)
-                                {
-                                    for (int j = 0; j <colsCount ; j++)
-                                    {
-                                        analogsGrid.Rows[i].Cells[j].Value=settings.GetAttribute("analog"+i.ToString()+"."+j.ToString());
-                                    }
-                                }
-                                colsCount = int.Parse(settings.GetAttribute("calcColsCount"));
-                                
-                                for (int i = 0; i < 39; i++)
-                                {
-                                    for (int j = 0; j < colsCount; j++)
-                                    {
-                                        calculationAppartaments.Rows[i].Cells[j].Value = settings.GetAttribute("calc" + i.ToString() + "." + j.ToString());                                        
-                                    }
-                                }
+                                //objectDataGrid.Rows[41].Cells[1].Value = settings.GetAttribute("data2.1.3.1");
+                                //objectDataGrid.Rows[42].Cells[1].Value = settings.GetAttribute("data2.1.3.2");
+                                //objectDataGrid.Rows[43].Cells[1].Value = settings.GetAttribute("data2.1.3.3");
+                                //objectDataGrid.Rows[44].Cells[1].Value = settings.GetAttribute("data2.1.3.4");
+                                //objectDataGrid.Rows[45].Cells[1].Value = settings.GetAttribute("data2.1.3.5");
+                                //objectDataGrid.Rows[46].Cells[1].Value = settings.GetAttribute("data2.1.3.6");
+                                //objectDataGrid.Rows[47].Cells[1].Value = settings.GetAttribute("data2.1.3.7");
+                                //objectDataGrid.Rows[48].Cells[1].Value = settings.GetAttribute("data2.1.3.8");
+                                //objectDataGrid.Rows[49].Cells[1].Value = settings.GetAttribute("data2.1.3.9");
+                                //objectDataGrid.Rows[50].Cells[1].Value = settings.GetAttribute("data2.1.3.10");
+                                //objectDataGrid.Rows[51].Cells[1].Value = settings.GetAttribute("data2.1.3.11");
+                                //objectDataGrid.Rows[52].Cells[1].Value = settings.GetAttribute("data2.1.3.12");
+                                //objectDataGrid.Rows[53].Cells[1].Value = settings.GetAttribute("data2.1.3.13");
+                                //objectDataGrid.Rows[54].Cells[1].Value = settings.GetAttribute("data2.1.3.14");
+                                //objectDataGrid.Rows[55].Cells[1].Value = settings.GetAttribute("data2.1.3.15");
+                                //objectDataGrid.Rows[56].Cells[1].Value = settings.GetAttribute("data2.1.3.16");
+                                //objectDataGrid.Rows[57].Cells[1].Value = settings.GetAttribute("data2.1.3.17");
+                                //objectDataGrid.Rows[58].Cells[1].Value = settings.GetAttribute("data2.1.3.18");
+                                //objectDataGrid.Rows[59].Cells[1].Value = settings.GetAttribute("data2.1.3.19");
+                                //objectDataGrid.Rows[60].Cells[1].Value = settings.GetAttribute("data2.1.3.20");
+                                //objectDataGrid.Rows[61].Cells[1].Value = settings.GetAttribute("data2.1.3.21");
+                                //objectDataGrid.Rows[62].Cells[1].Value = settings.GetAttribute("data2.1.3.22");
+                                //objectDataGrid.Rows[63].Cells[1].Value = settings.GetAttribute("data2.1.3.23");
+                                //objectDataGrid.Rows[64].Cells[1].Value = settings.GetAttribute("data2.1.3.24");
+                                //objectDataGrid.Rows[65].Cells[1].Value = settings.GetAttribute("data2.1.3.25");
+                                //objectDataGrid.Rows[66].Cells[1].Value = settings.GetAttribute("data2.1.3.26");
+                                //objectDataGrid.Rows[67].Cells[1].Value = settings.GetAttribute("data2.1.3.27");
+                                //objectDataGrid.Rows[68].Cells[1].Value = settings.GetAttribute("data2.1.3.28");
+                                //objectDataGrid.Rows[69].Cells[1].Value = settings.GetAttribute("data2.1.3.29");
+                                //objectDataGrid.Rows[70].Cells[1].Value = settings.GetAttribute("data2.1.3.30");
+                                //objectDataGrid.Rows[71].Cells[1].Value = settings.GetAttribute("data2.1.3.31");
+                                //objectDataGrid.Rows[72].Cells[1].Value = settings.GetAttribute("data2.1.3.32");
+                                //objectDataGrid.Rows[73].Cells[1].Value = settings.GetAttribute("data2.1.3.33");
+                                //objectDataGrid.Rows[74].Cells[1].Value = settings.GetAttribute("data2.1.3.34");
+                                //objectDataGrid.Rows[75].Cells[1].Value = settings.GetAttribute("data2.1.3.35");
+                                //objectDataGrid.Rows[76].Cells[1].Value = settings.GetAttribute("data2.1.3.36");
+                                //objectDataGrid.Rows[77].Cells[1].Value = settings.GetAttribute("data2.1.3.37");
+                                //objectDataGrid.Rows[78].Cells[1].Value = settings.GetAttribute("data2.1.3.38");
+                                //objectDataGrid.Rows[79].Cells[1].Value = settings.GetAttribute("data2.1.3.39");
+                                ////int colsCount = int.Parse(settings.GetAttribute("analogsColsCount"));
+                                ////for (int i = 0; i <  19; i++)
+                                ////{
+                                ////    for (int j = 0; j <colsCount ; j++)
+                                ////    {
+                                ////        analogsGrid.Rows[i].Cells[j].Value=settings.GetAttribute("analog"+i.ToString()+"."+j.ToString());
+                                ////    }
+                                ////}
+                                ////colsCount = int.Parse(settings.GetAttribute("calcColsCount"));
+
+                                ////for (int i = 0; i < 39; i++)
+                                ////{
+                                ////    for (int j = 0; j < colsCount; j++)
+                                ////    {
+                                ////        calculationAppartaments.Rows[i].Cells[j].Value = settings.GetAttribute("calc" + i.ToString() + "." + j.ToString());                                        
+                                ////    }
+                                ////}
                             }
                             ownerDocs.Text = settings.GetAttribute(ownerDocs.Name);
-
-
                         }
                     }
-
                 }
                 settings.Close();
             }
             catch (Exception e)
             {
-                 MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message);
             }
             f.Close();
         }
-
 
 
         private void customerSurname_TextChanged(object sender, EventArgs e)
@@ -4939,7 +3888,6 @@ namespace WindowsFormsApplication1
 
         private void m2text_TextChanged(object sender, EventArgs e)
         {
-
             switch (docTypeT)
             {
                 case "Квартира":
@@ -4948,8 +3896,8 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[54].Cells[1].Value = m2text.Text;
                         calculationAppartaments.Rows[36].Cells[2].Value = m2text.Text;
                         analogsGrid.Rows[7].Cells[1].Value = m2text.Text;
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[35].Cells[1].Value = m2text.Text;
@@ -4973,10 +3921,9 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
-
-
         }
 
         private void lm2text_TextChanged(object sender, EventArgs e)
@@ -4986,12 +3933,11 @@ namespace WindowsFormsApplication1
                 case "Квартира":
                     {
                         objectDataGrid.Rows[49].Cells[1].Value = lm2text.Text;
-
-                    } break;
+                    }
+                    break;
                 case "Домовладение":
                     {
                         dataGridView1.Rows[36].Cells[1].Value = lm2text.Text;
-
                     }
                     break;
                 case "Земельный участок":
@@ -5006,9 +3952,9 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
-
         }
 
         private string CreateFileName()
@@ -5030,28 +3976,47 @@ namespace WindowsFormsApplication1
             string fileName = "";
             if (bankName.Text == "втб 24")
             {
-                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " + appartmentNum.Text + " " + townName + " " + street.Text + " " + houseNum.Text + " " + buildNum + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " 24 втб";
+                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " +
+                           appartmentNum.Text + " " + townName + " " + street.Text + " " + houseNum.Text + " " +
+                           buildNum + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text +
+                           " " + customerName.Text + " 24 втб";
             }
 
             else if (bankName.Text == "сбербанк")
             {
-                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " + appartmentNum.Text + townName + street.Text + ", " + houseNum.Text + buildNum + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " ипотека " + bankName.Text;
+                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " +
+                           appartmentNum.Text + townName + street.Text + ", " + houseNum.Text + buildNum + " " +
+                           ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " +
+                           customerName.Text + " ипотека " + bankName.Text;
             }
 
             else if (bankName.Text == "брр")
             {
-                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " + appartmentNum.Text + townName + street.Text + ", " + houseNum.Text + buildNum + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + bankName.Text;
+                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " +
+                           appartmentNum.Text + townName + street.Text + ", " + houseNum.Text + buildNum + " " +
+                           ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " +
+                           customerName.Text + bankName.Text;
             }
             else if (bankName.Text == "аижк")
             {
-                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " + appartmentNum.Text + townName + street.Text + ", " + houseNum.Text + buildNum + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " ипотека для" + bankName.Text;
+                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " +
+                           appartmentNum.Text + townName + street.Text + ", " + houseNum.Text + buildNum + " " +
+                           ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " +
+                           customerName.Text + " ипотека для" + bankName.Text;
             }
             else if (bankName.Text == "банк москвы")
             {
-                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " + appartmentNum.Text + " " + townName + " " + street.Text + ", " + houseNum.Text + buildNum + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " " + bankName.Text;
+                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " +
+                           appartmentNum.Text + " " + townName + " " + street.Text + ", " + houseNum.Text + buildNum +
+                           " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " +
+                           customerName.Text + " " + bankName.Text;
             }
-            else {
-                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " + appartmentNum.Text + " " + townName + " " + street.Text + ", " + houseNum.Text + buildNum + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " " + bankName.Text;
+            else
+            {
+                fileName = "отчет  " + contractNum.Text + " от " + calculationDate.Text + "г " + roomsN + " квартира " +
+                           appartmentNum.Text + " " + townName + " " + street.Text + ", " + houseNum.Text + buildNum +
+                           " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " +
+                           customerName.Text + " " + bankName.Text;
             }
 
             fileName = fileName.Replace("\"", " ").ToLower();
@@ -5067,15 +4032,14 @@ namespace WindowsFormsApplication1
 
         private void saveResultButton_Click(object sender, EventArgs e)
         {
-
             saveFileDialog1.FileName = CreateFileName();
             switch (houseType.Text)
             {
                 case "Кирпичный":
                     {
                         houseType1 = "кирпичного";
-
-                    } break;
+                    }
+                    break;
                 case "Панельный":
                     {
                         houseType1 = "панельного";
@@ -5083,31 +4047,31 @@ namespace WindowsFormsApplication1
                     break;
 
 
-                default: break;
-
+                default:
+                    break;
             }
-            
+
             try
             {
                 if (DialogResult.OK == saveFileDialog1.ShowDialog())
                 {
-                    wdApp = new Microsoft.Office.Interop.Word.Application();
-                    Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
+                    wdApp = new Application();
+                    var wdDoc = new Document();
 
-                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\m2.doc", Missing, true);
+                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\m2.doc", Missing,
+                                                 true);
                     wdApp.ActiveDocument.Words[1].Select();
                     wdApp.Selection.Copy();
-                    wdDoc.Close();                  
+                    wdDoc.Close();
                     string template = "\\шаблоны\\ОсновнойШаблон.doc";
 
 
                     if (bankName.Text == "втб 24")
                     {
                         template = "\\шаблоны\\ВТБ24.doc";
-
                     }
                     wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + template, Missing, true);
-                    object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
+                    object replaceAll = WdReplace.wdReplaceAll;
 
                     // Gets a NumberFormatInfo associated with the en-US culture.
                     NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
@@ -5151,20 +4115,19 @@ namespace WindowsFormsApplication1
                     wdDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Text = topColontitul;
 
                     ReplaceTextWord(ref wdApp, "@@MO@@", MO.Text);
-                   
+
                     if (ownerOrg.Checked)
                     {
                         if (bankName.Text == "втб 24")
                         {
-
-                            ReplaceTextWord(ref wdApp, "@@ownerOrgname@@", "Операционный офис «Владикавказский» филиала №2351 ВТБ 24 (ЗАО)");
+                            ReplaceTextWord(ref wdApp, "@@ownerOrgname@@",
+                                            "Операционный офис «Владикавказский» филиала №2351 ВТБ 24 (ЗАО)");
                             ReplaceTextWord(ref wdApp, "@@INN@@", "7710353606");
-                            ReplaceTextWord(ref wdApp, "@@OGRN@@", "1027739207462");                            
+                            ReplaceTextWord(ref wdApp, "@@OGRN@@", "1027739207462");
                             ReplaceTextWord(ref wdApp, "@@KPP@@", "231002001");
                             ReplaceTextWord(ref wdApp, "@@orgAddress@@", "РСО-Алания, г. Владикавказ, ул. Коцоева, д.13");
                         }
-
-                }
+                    }
                     ReplaceTextWord(ref wdApp, "@@houseType1@@", houseType1);
                     ReplaceTextWord(ref wdApp, "@@calculationDateStr@@", calculationDateStr);
                     ReplaceTextWord(ref wdApp, "@@houseType@@", houseType.Text.ToLower());
@@ -5176,10 +4139,10 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@calculationDate@@", calculationDate.Text);
                     if (newBuildingCheck.Checked)
                     {
+                        var wdNew = new Document();
 
-                        Microsoft.Office.Interop.Word.Document wdNew = new Microsoft.Office.Interop.Word.Document();
-
-                        wdNew = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\новостройка.doc", Missing, true);
+                        wdNew = wdApp.Documents.Open(
+                            System.Windows.Forms.Application.StartupPath + "\\новостройка.doc", Missing, true);
                         wdNew.Sections[1].Range.Select();
                         wdNew.Sections[1].Range.Copy();
                         wdNew.Close();
@@ -5187,20 +4150,16 @@ namespace WindowsFormsApplication1
                         wdApp.Selection.Find.ClearFormatting();
                         wdApp.Selection.Find.Text = "@@новостройка@@";
                         while (wdApp.Selection.Find.Execute(
-                                          ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                          ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                          ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                            ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                            ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                            ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                         {
-
-
                             //wdNew = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "новостройка.doc", Missing, true);
 
                             //wdApp.Selection.Text = "";
                             wdApp.Selection.Paste();
 
                             wdApp.ActiveDocument.Sections[1].Range.Select();
-
-
                         }
                     }
                     else
@@ -5210,7 +4169,7 @@ namespace WindowsFormsApplication1
 
                     ReplaceTextWord(ref wdApp, "@@customerFullname@@", customerFullName);
 
-                    roomsAsString(); 
+                    roomsAsString();
                     ReplaceTextWord(ref wdApp, "@@rooms1@@", rooms1);
 
                     ReplaceTextWord(ref wdApp, "@@customerFullnameR@@", customerFullNameR);
@@ -5226,7 +4185,6 @@ namespace WindowsFormsApplication1
                     if (buildingNum.Text != "")
                     {
                         buildNum = ", корп." + buildingNum.Text;
-
                     }
                     else
                     {
@@ -5244,11 +4202,11 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@customerInit@@", customerInit.Text);
                     ReplaceTextWord(ref wdApp, "@@likvidCost@@", likvidCost.ToString("N", nfi));
                     ReplaceTextWord(ref wdApp, "@@stringCost@@", costStr.ToLower());
-                                      
+
                     getUvaj();
                     ReplaceTextWord(ref wdApp, "@@uvaj@@", uvaj);
 
-                    
+
                     //Customer Passport
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassport@@";
@@ -5256,9 +4214,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = customerPassport.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassNum@@";
@@ -5266,9 +4224,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = customerPassNum.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassOVD@@";
@@ -5276,9 +4234,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = customerPassOVD.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassDate@@";
@@ -5286,9 +4244,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = customerPassDate.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerFullAddress@@";
@@ -5296,14 +4254,14 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     //owner Passport
                     if (owners.Count > 1)
                     {
                         int ownerIndex = 0;
-                        foreach (HouseCostCalculation.Owner owner in owners)
+                        foreach (Owner owner in owners)
                         {
                             ownerIndex++;
                             wdApp.Selection.Find.ClearFormatting();
@@ -5312,10 +4270,10 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.ownerFullNameD + "; @@ownerFullnameD@@";
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                            
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
                             //ReplaceTextWord(ref wdApp, "@@ownerFullnameD@@",owner.ownerFullNameD + "; @@ownerFullnameD@@");
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5324,9 +4282,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.ownerFullNameT + "; @@ownerFullnameT@@";
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerFullnameT@@", owner.ownerFullNameT + "; @@ownerFullnameT@@");
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5335,9 +4293,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.ownerFullNameR + "; @@ownerFullnameR@@";
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerFullnameR@@", owner.ownerFullNameR + "; @@ownerFullnameR@@");
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5346,9 +4304,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.ownerFullName + ";/rn@@ownerFullname1@@";
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerFullname1@@", owner.ownerFullName + ";/rn@@ownerFullname1@@");
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5357,9 +4315,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = ownerIndex + "." + owner.ownerFullName + "/rn";
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerFullname@@", ownerIndex + "." + owner.ownerFullName + "/rn");
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5368,9 +4326,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.passportSerial;
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@passportSerial@@", owner.passportSerial);
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5379,9 +4337,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = ownerPassport.Text;
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerPassport@@", ownerPassport.Text);
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5390,9 +4348,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.passNum;
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerPassNum@@", owner.passNum);
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5401,9 +4359,9 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.OVD;
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerPassOVD@@", owner.OVD);
 
                             wdApp.Selection.Find.ClearFormatting();
@@ -5412,21 +4370,22 @@ namespace WindowsFormsApplication1
                             wdApp.Selection.Find.Replacement.Text = owner.passDate;
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                             //ReplaceTextWord(ref wdApp, "@@ownerPassDate@@", owner.passDate);
 
                             wdApp.Selection.Find.ClearFormatting();
                             wdApp.Selection.Find.Text = "@@ownerFullAddress@@";
                             wdApp.Selection.Find.Replacement.ClearFormatting();
-                            wdApp.Selection.Find.Replacement.Text = owner.address + ";/rn" + "@@ownerFullname@@ Паспорт гражданина РФ серии @@ownerPassport@@ №@@ownerPassNum@@, выдан @@ownerPassDate@@ @@ownerPassOVD@@. Проживает по адресу: @@ownerFullAddress@@";
+                            wdApp.Selection.Find.Replacement.Text = owner.address + ";/rn" +
+                                                                    "@@ownerFullname@@ Паспорт гражданина РФ серии @@ownerPassport@@ №@@ownerPassNum@@, выдан @@ownerPassDate@@ @@ownerPassOVD@@. Проживает по адресу: @@ownerFullAddress@@";
 
                             wdApp.Selection.Find.Execute(
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                            
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
                             //ReplaceTextWord(ref wdApp, "@@ownerFullAddress@@", owner.address + ";/rn" + "@@ownerFullname@@ Паспорт гражданина РФ серии @@ownerPassport@@ №@@ownerPassNum@@, выдан @@ownerPassDate@@ @@ownerPassOVD@@. Проживает по адресу: @@ownerFullAddress@@");
                         }
 
@@ -5440,7 +4399,9 @@ namespace WindowsFormsApplication1
                         ReplaceTextWord(ref wdApp, "; @@ownerPassOVD@@", "");
                         ReplaceTextWord(ref wdApp, "; @@ownerPassDate@@", "");
                         ReplaceTextWord(ref wdApp, "; @@ownerFullAddress@@", "");
-                        ReplaceTextWord(ref wdApp, ";/rn@@ownerFullname@@ Паспорт гражданина РФ серии @@ownerPassport@@ №@@ownerPassNum@@, выдан @@ownerPassDate@@ @@ownerPassOVD@@. Проживает по адресу: @@ownerFullAddress@@", "");
+                        ReplaceTextWord(ref wdApp,
+                                        ";/rn@@ownerFullname@@ Паспорт гражданина РФ серии @@ownerPassport@@ №@@ownerPassNum@@, выдан @@ownerPassDate@@ @@ownerPassOVD@@. Проживает по адресу: @@ownerFullAddress@@",
+                                        "");
                         InsertParagraphs(ref wdApp);
                     }
                     else
@@ -5470,7 +4431,7 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@ownerPassDate@@", ownerPassDate.Text);
                     ReplaceTextWord(ref wdApp, "@@ownerFullAddress@@", ownerAddress.Text);
 
-                    Declension padeg = new Declension();
+                    var padeg = new Declension();
 
                     string test = objectDataGrid.Rows[41].Cells[1].Value.ToString();
                     kadastr = padeg.GetAppointmentPadeg(test, 2);
@@ -5480,9 +4441,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = kadastr;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.2@@";
@@ -5490,9 +4451,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[2].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.3@@";
@@ -5500,9 +4461,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[3].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.4@@";
@@ -5510,9 +4471,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[4].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.5@@";
@@ -5520,9 +4481,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[5].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.6@@";
@@ -5530,9 +4491,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[6].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.7@@";
@@ -5540,9 +4501,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[7].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.8@@";
@@ -5550,9 +4511,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[8].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5561,9 +4522,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[9].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.10@@";
@@ -5571,9 +4532,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[10].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.11@@";
@@ -5581,9 +4542,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[11].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.12@@";
@@ -5591,9 +4552,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[12].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.13@@";
@@ -5601,9 +4562,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[13].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.14@@";
@@ -5611,9 +4572,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[14].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.15@@";
@@ -5621,9 +4582,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[15].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.16@@";
@@ -5631,9 +4592,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[16].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.1@@";
@@ -5641,9 +4602,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[18].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.2@@";
@@ -5651,9 +4612,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[19].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.3@@";
@@ -5661,9 +4622,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[20].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.4@@";
@@ -5671,9 +4632,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[21].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.5@@";
@@ -5681,9 +4642,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[22].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5692,9 +4653,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[23].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.7@@";
@@ -5702,9 +4663,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[24].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.8@@";
@@ -5712,9 +4673,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[25].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5723,9 +4684,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[26].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.10@@";
@@ -5733,9 +4694,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[27].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5744,9 +4705,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[28].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5755,9 +4716,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[29].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5766,9 +4727,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[30].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5777,9 +4738,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[31].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5788,9 +4749,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[32].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5799,9 +4760,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[33].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -5810,9 +4771,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[34].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.18@@";
@@ -5820,9 +4781,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[35].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.19@@";
@@ -5830,9 +4791,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[36].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.20@@";
@@ -5840,9 +4801,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[37].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.21@@";
@@ -5850,9 +4811,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[38].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.22@@";
@@ -5860,19 +4821,19 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[39].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                    
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[41].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.2@@";
@@ -5880,9 +4841,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[42].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.3@@";
@@ -5890,9 +4851,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[43].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.4@@";
@@ -5900,9 +4861,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[44].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.5@@";
@@ -5910,9 +4871,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[45].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.6@@";
@@ -5920,9 +4881,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[46].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.7@@";
@@ -5930,9 +4891,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[47].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.8@@";
@@ -5940,9 +4901,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[48].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.9@@";
@@ -5950,9 +4911,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[49].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.10@@";
@@ -5960,9 +4921,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[50].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.11@@";
@@ -5970,9 +4931,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[51].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.12@@";
@@ -5980,9 +4941,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[52].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.13@@";
@@ -5990,9 +4951,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[53].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.14@@";
@@ -6000,9 +4961,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[54].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.15@@";
@@ -6010,9 +4971,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[55].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.16@@";
@@ -6020,9 +4981,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[56].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.17@@";
@@ -6030,9 +4991,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[57].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.18@@";
@@ -6040,9 +5001,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[58].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.19@@";
@@ -6050,9 +5011,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[59].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.20@@";
@@ -6060,9 +5021,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[60].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.21@@";
@@ -6070,9 +5031,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[61].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.22@@";
@@ -6080,9 +5041,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[62].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     /*wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.23@@";
@@ -6096,30 +5057,27 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.23@@";
                     while (wdApp.Selection.Find.Execute(
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                     {
+                        //Microsoft.Office.Interop.Word.Range r1;
 
-                       //Microsoft.Office.Interop.Word.Range r1;
-                        
                         //r1.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
                         wdApp.Selection.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
                         //wdApp.Selection.Font.Superscript = 1;
                         //                        wdApp.Selection.PasteAndFormat(Microsoft.Office.Interop.Word.WdRecoveryType.wdPasteDefault);
                         wdApp.ActiveDocument.Sections[1].Range.Select();
-
                     }
 
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.24@@";
                     while (wdApp.Selection.Find.Execute(
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                     {
-
                         //Microsoft.Office.Interop.Word.Range r1;
 
                         //r1.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
@@ -6127,7 +5085,6 @@ namespace WindowsFormsApplication1
                         //wdApp.Selection.Font.Superscript = 1;
                         //                        wdApp.Selection.PasteAndFormat(Microsoft.Office.Interop.Word.WdRecoveryType.wdPasteDefault);
                         wdApp.ActiveDocument.Sections[1].Range.Select();
-
                     }
                     //wdApp.Selection.Find.ClearFormatting();
                     //wdApp.Selection.Find.Text = "@@2.1.3.24@@";
@@ -6142,16 +5099,13 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.25@@";
                     while (wdApp.Selection.Find.Execute(
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                     {
-
                         wdApp.Selection.Text = objectDataGrid.Rows[65].Cells[1].Value.ToString();
 
                         wdApp.ActiveDocument.Sections[1].Range.Select();
-                        
-
                     }
                     //wdApp.Selection.Find.ClearFormatting();
                     //wdApp.Selection.Find.Text = "@@2.1.3.25@@";
@@ -6169,9 +5123,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[66].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.27@@";
@@ -6179,9 +5133,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[67].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.28@@";
@@ -6189,9 +5143,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[68].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.29@@";
@@ -6199,9 +5153,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[69].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.30@@";
@@ -6209,9 +5163,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[70].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.31@@";
@@ -6219,9 +5173,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[71].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.32@@";
@@ -6229,9 +5183,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[72].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.33@@";
@@ -6239,9 +5193,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[73].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.34@@";
@@ -6249,9 +5203,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[74].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.35@@";
@@ -6259,9 +5213,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[75].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.36@@";
@@ -6269,9 +5223,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[76].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.37@@";
@@ -6279,9 +5233,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[77].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.38@@";
@@ -6289,19 +5243,19 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[78].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.39@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[79].Cells[1].Value.ToString();
-                    
+
                     wdApp.Selection.Find.Execute(
-                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -6310,9 +5264,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[0].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.2@@";
@@ -6320,9 +5274,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[1].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.3@@";
@@ -6330,9 +5284,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[2].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.4@@";
@@ -6340,9 +5294,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[3].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.5@@";
@@ -6350,9 +5304,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[4].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.6@@";
@@ -6360,9 +5314,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[5].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.7@@";
@@ -6370,9 +5324,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[6].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.8@@";
@@ -6380,9 +5334,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[7].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.9@@";
@@ -6390,9 +5344,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[8].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.10@@";
@@ -6400,9 +5354,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[9].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.11@@";
@@ -6410,9 +5364,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[10].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.12@@";
@@ -6420,9 +5374,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[11].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.13@@";
@@ -6430,9 +5384,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[12].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.14@@";
@@ -6440,9 +5394,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[13].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.15@@";
@@ -6450,9 +5404,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[14].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -6461,9 +5415,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[0].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.2@@";
@@ -6471,9 +5425,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[1].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.3@@";
@@ -6481,9 +5435,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[2].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.4@@";
@@ -6491,9 +5445,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[3].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.5@@";
@@ -6501,9 +5455,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[4].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.6@@";
@@ -6511,9 +5465,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[5].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.7@@";
@@ -6521,9 +5475,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[6].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.8@@";
@@ -6531,9 +5485,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[7].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.9@@";
@@ -6541,9 +5495,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[8].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.10@@";
@@ -6551,9 +5505,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[9].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.11@@";
@@ -6561,9 +5515,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[10].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.12@@";
@@ -6571,9 +5525,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[11].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.13@@";
@@ -6581,9 +5535,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[12].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.14@@";
@@ -6591,9 +5545,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[13].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.15@@";
@@ -6601,9 +5555,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[14].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.16@@";
@@ -6611,9 +5565,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[15].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.17@@";
@@ -6621,9 +5575,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[16].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.18@@";
@@ -6631,9 +5585,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[17].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.19@@";
@@ -6641,9 +5595,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[18].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -6652,9 +5606,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[19].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.1@@";
@@ -6662,9 +5616,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[0].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.2@@";
@@ -6672,9 +5626,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[1].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.3@@";
@@ -6682,9 +5636,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[2].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.4@@";
@@ -6692,9 +5646,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[3].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.5@@";
@@ -6702,9 +5656,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[4].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.6@@";
@@ -6712,9 +5666,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[5].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.7@@";
@@ -6722,9 +5676,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[6].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.8@@";
@@ -6732,9 +5686,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[7].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.9@@";
@@ -6742,9 +5696,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[8].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.10@@";
@@ -6752,9 +5706,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[9].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.11@@";
@@ -6762,9 +5716,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[10].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.12@@";
@@ -6772,9 +5726,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[11].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.13@@";
@@ -6782,9 +5736,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[12].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.14@@";
@@ -6792,9 +5746,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[13].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.15@@";
@@ -6802,9 +5756,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[14].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.16@@";
@@ -6812,9 +5766,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[15].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.17@@";
@@ -6822,9 +5776,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[16].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.18@@";
@@ -6832,9 +5786,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[17].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.19@@";
@@ -6842,9 +5796,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[18].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -6853,9 +5807,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[19].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.1@@";
@@ -6863,9 +5817,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[0].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.2@@";
@@ -6873,9 +5827,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[1].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.3@@";
@@ -6883,9 +5837,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[2].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.4@@";
@@ -6893,9 +5847,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[3].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.5@@";
@@ -6903,9 +5857,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[4].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.6@@";
@@ -6913,9 +5867,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[5].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.7@@";
@@ -6923,9 +5877,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[6].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.8@@";
@@ -6933,9 +5887,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[7].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.9@@";
@@ -6943,9 +5897,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[8].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.10@@";
@@ -6953,9 +5907,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[9].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.11@@";
@@ -6963,9 +5917,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[10].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.12@@";
@@ -6973,9 +5927,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[11].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.13@@";
@@ -6983,9 +5937,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[12].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.14@@";
@@ -6993,9 +5947,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[13].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.15@@";
@@ -7003,9 +5957,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[14].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.16@@";
@@ -7013,9 +5967,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[15].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.17@@";
@@ -7023,9 +5977,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[16].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -7034,9 +5988,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[17].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.19@@";
@@ -7044,9 +5998,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[18].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -7055,40 +6009,43 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = analogsGrid.Rows[19].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[0].Cells[2].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[0].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.2@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[1].Cells[2].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[1].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[2].Cells[2].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[2].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.4@@";
@@ -7096,9 +6053,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[3].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.5@@";
@@ -7109,9 +6066,9 @@ namespace WindowsFormsApplication1
                     string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
                     string d3 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[4].Value.ToString()).ToString(pattern);
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.6@@";
@@ -7121,9 +6078,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = d1;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.7@@";
@@ -7131,9 +6088,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[6].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.8@@";
@@ -7141,9 +6098,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[7].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.9@@";
@@ -7151,9 +6108,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[8].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.10@@";
@@ -7161,9 +6118,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[9].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.11@@";
@@ -7171,9 +6128,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[10].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.12@@";
@@ -7181,9 +6138,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[11].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.13@@";
@@ -7191,9 +6148,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[12].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.14@@";
@@ -7201,9 +6158,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[13].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.15@@";
@@ -7211,9 +6168,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[14].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.16@@";
@@ -7221,9 +6178,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[15].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.17@@";
@@ -7231,9 +6188,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[16].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -7242,9 +6199,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[17].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.19@@";
@@ -7252,9 +6209,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[18].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.20@@";
@@ -7262,19 +6219,19 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[21].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing); 
-                    
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.21@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[20].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.22@@";
@@ -7282,9 +6239,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[21].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.23@@";
@@ -7292,9 +6249,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[22].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.24@@";
@@ -7302,9 +6259,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[23].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.25@@";
@@ -7312,9 +6269,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[24].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.26@@";
@@ -7322,9 +6279,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[25].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.27@@";
@@ -7332,9 +6289,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[26].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.28@@";
@@ -7342,9 +6299,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[27].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.29@@";
@@ -7352,9 +6309,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[28].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.30@@";
@@ -7362,9 +6319,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[29].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.31@@";
@@ -7372,9 +6329,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[30].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.32@@";
@@ -7382,9 +6339,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[31].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.33@@";
@@ -7392,9 +6349,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[32].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -7403,9 +6360,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[33].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.35@@";
@@ -7413,41 +6370,43 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[34].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[0].Cells[3].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[0].Cells[3].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.2@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[1].Cells[3].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[1].Cells[3].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[2].Cells[3].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[2].Cells[3].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.4@@";
@@ -7455,9 +6414,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[3].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.5@@";
@@ -7465,9 +6424,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[4].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.6@@";
@@ -7477,9 +6436,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = d2;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.7@@";
@@ -7487,9 +6446,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[6].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.8@@";
@@ -7497,9 +6456,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[7].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.9@@";
@@ -7507,9 +6466,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[8].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.10@@";
@@ -7517,9 +6476,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[9].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.11@@";
@@ -7527,9 +6486,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[10].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.12@@";
@@ -7537,9 +6496,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[11].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.13@@";
@@ -7547,9 +6506,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[12].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.14@@";
@@ -7557,9 +6516,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[13].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.15@@";
@@ -7567,9 +6526,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[14].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.16@@";
@@ -7577,9 +6536,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[15].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.17@@";
@@ -7587,9 +6546,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[16].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -7598,9 +6557,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[17].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.19@@";
@@ -7608,9 +6567,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[18].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.20@@";
@@ -7618,17 +6577,18 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[21].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing); wdApp.Selection.Find.ClearFormatting();
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.21@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[20].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.22@@";
@@ -7636,9 +6596,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[21].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.23@@";
@@ -7646,9 +6606,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[22].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.24@@";
@@ -7656,9 +6616,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[23].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.25@@";
@@ -7666,9 +6626,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[24].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.26@@";
@@ -7676,9 +6636,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[25].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.27@@";
@@ -7686,9 +6646,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[26].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.28@@";
@@ -7696,9 +6656,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[27].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.29@@";
@@ -7706,9 +6666,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[28].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.30@@";
@@ -7716,9 +6676,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[29].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.31@@";
@@ -7726,9 +6686,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[30].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.32@@";
@@ -7736,9 +6696,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[31].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.33@@";
@@ -7746,9 +6706,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[32].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -7757,9 +6717,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[33].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.35@@";
@@ -7767,39 +6727,42 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[34].Cells[3].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[0].Cells[4].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[0].Cells[4].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.2@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[1].Cells[4].Value)).ToString();
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[1].Cells[4].Value)).ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[2].Cells[4].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[2].Cells[4].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.4@@";
@@ -7807,9 +6770,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[3].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.5@@";
@@ -7817,9 +6780,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[4].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.6@@";
@@ -7828,9 +6791,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = d3;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.7@@";
@@ -7838,9 +6801,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[6].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.8@@";
@@ -7848,9 +6811,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[7].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.9@@";
@@ -7858,9 +6821,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[8].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.10@@";
@@ -7868,9 +6831,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[9].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.11@@";
@@ -7878,9 +6841,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[10].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.12@@";
@@ -7888,9 +6851,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[11].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.13@@";
@@ -7898,9 +6861,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[12].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.14@@";
@@ -7908,9 +6871,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[13].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.15@@";
@@ -7918,9 +6881,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[14].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.16@@";
@@ -7928,9 +6891,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[15].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.17@@";
@@ -7938,9 +6901,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[16].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -7949,9 +6912,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[17].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.19@@";
@@ -7959,9 +6922,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[18].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.20@@";
@@ -7969,17 +6932,18 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[21].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing); wdApp.Selection.Find.ClearFormatting();
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.21@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[20].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.22@@";
@@ -7987,9 +6951,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[21].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.23@@";
@@ -7997,9 +6961,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[22].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.24@@";
@@ -8007,9 +6971,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[23].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.25@@";
@@ -8017,9 +6981,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[24].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.26@@";
@@ -8027,9 +6991,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[25].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.27@@";
@@ -8037,9 +7001,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[26].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.28@@";
@@ -8047,9 +7011,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[27].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.29@@";
@@ -8057,9 +7021,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[28].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.30@@";
@@ -8067,9 +7031,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[29].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.31@@";
@@ -8077,9 +7041,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[30].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.32@@";
@@ -8087,9 +7051,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[31].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.33@@";
@@ -8097,9 +7061,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[32].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -8108,9 +7072,9 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[33].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.35@@";
@@ -8118,21 +7082,21 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[34].Cells[4].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b4.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[35].Cells[2].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[35].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b4.2@@";
@@ -8140,47 +7104,44 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[36].Cells[2].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b4.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[37].Cells[2].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[37].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b4.4@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-                    wdApp.Selection.Find.Replacement.Text = ((double)(calculationAppartaments.Rows[38].Cells[2].Value)).ToString("N", nfi);
+                    wdApp.Selection.Find.Replacement.Text =
+                        ((double) (calculationAppartaments.Rows[38].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);                     
-                   
-                    
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "м2";
                     while (wdApp.Selection.Find.Execute(
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                     {
                         wdApp.Selection.Characters[2].Font.Superscript = 1;
                     }
-                   
 
 
- 
-
-                    
-                    
                     //saving
                     try
                     {
@@ -8188,15 +7149,16 @@ namespace WindowsFormsApplication1
                         x = wdDoc.Shapes.Count;
                         for (int k = 1; k < x; k++)
                         {
-                            Microsoft.Office.Interop.Word.Shape shape = wdDoc.Shapes[k];
+                            Shape shape = wdDoc.Shapes[k];
 
                             //string l = shape.AlternativeText;
                             if (shape.AlternativeText.Contains("cont"))
                             {
-                                wdDoc.Shapes[k].TextEffect.Text = "№ " + contractNum.Text + " от " + calculationDate.Text + "г.";
+                                wdDoc.Shapes[k].TextEffect.Text = "№ " + contractNum.Text + " от " +
+                                                                  calculationDate.Text + "г.";
                             }
                         }
-                      /*  
+                        /*  
                        for (int k = 1; k < x; k++)
                         {
                             Microsoft.Office.Interop.Word.Shape shape = wdDoc.Shapes[k];
@@ -8219,8 +7181,7 @@ namespace WindowsFormsApplication1
                         }*/
                     }
                     catch (Exception exp)
-                    { 
-                    
+                    {
                     }
 
                     /*foreach (Microsoft.Office.Interop.Word.Table table in wdApp.ActiveDocument.Tables)
@@ -8447,10 +7408,6 @@ namespace WindowsFormsApplication1
                     }*/
 
 
-
-
-
-
                     // 
 
                     wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
@@ -8467,7 +7424,6 @@ namespace WindowsFormsApplication1
                 //wdApp.Documents.Close();
                 wdApp.Quit();
             }
-
         }
 
         private void saveAddsAppartaments_Click(object sender, EventArgs e)
@@ -8475,623 +7431,8 @@ namespace WindowsFormsApplication1
             string fileName;
             if (bankName.Text == "брр")
             {
-                fileName = "приложение отчет номер" + contractNum.Text + "квартира " + appartmentNum.Text + " " + street.Text + " " + houseNum.Text + " для " + bankName.Text;
-                saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("№", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(".", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("-", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
-            }
-            else {
-                fileName = "приложение отчет " + contractNum.Text + "квартира " + appartmentNum.Text + " " + street.Text + " " + houseNum.Text + " для " + bankName.Text;
-                saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("№", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(".", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("-", " ").ToLower();
-                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
-            }
-
-            if (DialogResult.OK == saveFileDialog1.ShowDialog())
-            {
-                wdApp = new Microsoft.Office.Interop.Word.Application();
-                Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
-                string template = "\\шаблоны\\Приложение.doc";
-                if (bankName.Text == "втб 24")
-                {
-                    template = "\\шаблоны\\ПриложениеВТБ24.doc";
-
-                }
-                wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + template);
-
-                //button4.Text = System.Windows.Forms.Application.StartupPath + "\\template.doc";
-
-                object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
-
-                // Gets a NumberFormatInfo associated with the en-US culture.
-                NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
-                 nfi.NumberDecimalDigits = 0;
-                    nfi.NumberGroupSeparator = " ";
-
-                    nfi.PositiveSign = "";
-
-
-                string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
-                string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
-                string calculationDateStr = calculationDate.Text;
-                int sentencesCount = wdDoc.Sentences.Count;
-               
-
-
-
-            
-
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@MO@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = MO.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@2.1.2.2@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[19].Cells[1].Value.ToString();
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@houseType@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                if (houseType.Text == "Панельный")
-                {
-                    wdApp.Selection.Find.Replacement.Text = "жб плиты";
-                }
-                else { wdApp.Selection.Find.Replacement.Text = houseType.Text.ToLower(); }
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-              
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@lm2@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = lm2text.Text;
-
-                wdApp.Selection.Find.Execute(
-             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@m2@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = m2text.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-              
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@calculationDate@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = calculationDateStr;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-               
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@ownerFullname@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerFullName;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*      if (newSentence.Contains("@@customerFullname@@"))
-                      {
-                          newSentence = newSentence.Replace("@@customerFullname@@", customerFullName);
-                          changed = true;
-                      }
-               */
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerFullname@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerFullName;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-              
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@rooms@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = roomsAsString();
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@appartmentNum@@"))
-                {
-                    newSentence = newSentence.Replace("@@appartmentNum@@", "№" + appartmentNum.Text);
-                    changed = true;
-                }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@appartmentNum@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = appartmentNum.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /* if (newSentence.Contains("@@town@@"))
-                 {
-                     newSentence = newSentence.Replace("@@town@@", town.Text);
-                     changed = true;
-                 }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@street@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = street.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@houseNum@@"))
-                {
-                    newSentence = newSentence.Replace("@@houseNum@@", houseNum.Text);
-                    changed = true;
-                }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@houseNum@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = houseNum.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@buildingNum@@"))
-                {
-            
-           
-
-                }*/
-                string buildNum = null;
-                if (buildingNum.Text != "")
-                {
-                    buildNum = "корп." + buildingNum.Text + ".";
-                    //newSentence = newSentence.Replace("@@buildingNum@@", houseNum.Text);
-                    //changed = true;
-                }
-                else
-                {
-                    buildNum = buildingNum.Text;
-                    //changed = true;
-                }
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@buildingNum@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = buildNum;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /* if (newSentence.Contains("@@customerAddress@@"))
-                 {
-                     newSentence = newSentence.Replace("@@customerAddress@@", customerAddres.Text);
-                     changed = true;
-                 }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerAddress@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@floor@@"))
-                {
-                    newSentence = newSentence.Replace("@@floor@@", floor.Value.ToString());
-                    changed = true;
-                }*/
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@floor@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = floor.Value.ToString().ToLower();
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@floors@@"))
-                {
-                    newSentence = newSentence.Replace("@@floors@@", floors.Text);
-                    changed = true;
-                }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@floors@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = floors.Text.ToLower();
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@town@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = town.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@cost@@"))
-                {
-                    newSentence = newSentence.Replace("@@cost@@", finalCostRounded.ToString());
-                    changed = true;
-                }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@cost@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = finalCostRounded.ToString("N", nfi);
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@contractNum@@"))
-                {
-                    newSentence = newSentence.Replace("@@contractNum@@", contractNum.Text);
-                    changed = true;
-                }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@contractNum@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = contractNum.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@contractDate@@"))
-                {
-                    newSentence = newSentence.Replace("@@contractDate@@", contractDate.Text);
-                    changed = true;
-                }
-              */
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@contractDate@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = contractDate.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@customerName@@"))
-                {
-                    newSentence = newSentence.Replace("@@customerName@@", customerName.Text);
-                    changed = true;
-                }
-                             */
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerName@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerName.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (newSentence.Contains("@@customerInit@@"))
-                {
-                    newSentence = newSentence.Replace("@@customerInit@@", customerInit.Text);
-                    changed = true;
-                }
-                 */
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerInit@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerInit.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                /* if (newSentence.Contains("@@likvidCost@@"))
-        {
-            newSentence = newSentence.Replace("@@likvidCost@@", likvidCost.ToString());
-            changed = true;
-        }*/
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@likvidCost@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = likvidCost.ToString("N", nfi);
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                
-                /* if (newSentence.Contains("@@stringCost@@"))
-       {
-           newSentence = newSentence.Replace("@@stringCost@@", costStr);
-           changed = true;
-       }
-                */
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@stringCost@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = costStr;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*
-if (newSentence.Contains("@@uvaj@@"))
-{
-    newSentence = newSentence.Replace("@@uvaj@@", uvaj);
-    changed = true;
-}*/
-                getUvaj();
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@uvaj@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = uvaj;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                /*if (changed)
-                {
-                    wdDoc.Sentences[i].Text = newSentence;
-                }
-                                 */
-                /*
-                }
-
-                /*int shapesCount = wdDoc.Shapes.Count;
-                for (int i = 1; i <= shapesCount; i++)
-                {
-                //if (wdDoc.Shapes[i].
-                if (wdDoc.Shapes[i].TextEffect.Text !=null)
-                {
-                    if (wdDoc.Shapes[i].TextEffect.Text.Contains("@@contractDate@@"))
-                    {
-                        wdDoc.Shapes[i].TextEffect.Text.Replace("@@contractDate@@", contractDate.Text);
-
-                    }
-                }
-
-               
-                }*/
-                //Customer Passport
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerPassport@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerPassport.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerPassNum@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerPassNum.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerPassOVD@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerPassOVD.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerPassDate@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerPassDate.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@customerFullAddress@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                //owner Passport
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@passportSerial@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerPassport.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@ownerPassNum@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerPassNum.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@ownerPassOVD@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerPassOVD.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@ownerPassDate@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerPassDate.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@ownerFullAddress@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerAddress.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
-
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@ownerDoc@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerDocs.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@registrationDoc@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = registrationDoc.Text;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@tehPass@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[41].Cells[1].Value.ToString(); ;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-              
-
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@b4.4@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[38].Cells[2].Value.ToString();
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@docType@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = docType.ToLower() ;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@2.1.2.20@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[37].Cells[1].Value.ToString();
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@2.1.3.15@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[55].Cells[1].Value.ToString().ToLower() ;
-
-                wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                string te = wdApp.Selection.Text;
-                //saving
-
-
-                wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
-
-
-                wdApp.Quit();
-            }
-
-        }
-
-        private void saveAddsHouse_Click(object sender, EventArgs e)
-        {
-            string fileName;
-            if (bankName.Text == "брр")
-            {
-                fileName = "приложение отчет номер" + contractNum.Text + "домовладение " + appartmentNum.Text + " " + street.Text + " " + houseNum.Text + " для " + bankName.Text;
+                fileName = "приложение отчет номер" + contractNum.Text + "квартира " + appartmentNum.Text + " " +
+                           street.Text + " " + houseNum.Text + " для " + bankName.Text;
                 saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
                 saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
                 saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
@@ -9102,7 +7443,8 @@ if (newSentence.Contains("@@uvaj@@"))
             }
             else
             {
-                fileName = "приложение отчет " + contractNum.Text + "домовладение " + appartmentNum.Text + " " + street.Text + " " + houseNum.Text + " для " + bankName.Text;
+                fileName = "приложение отчет " + contractNum.Text + "квартира " + appartmentNum.Text + " " + street.Text +
+                           " " + houseNum.Text + " для " + bankName.Text;
                 saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
                 saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
                 saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
@@ -9114,14 +7456,18 @@ if (newSentence.Contains("@@uvaj@@"))
 
             if (DialogResult.OK == saveFileDialog1.ShowDialog())
             {
-                wdApp = new Microsoft.Office.Interop.Word.Application();
-                Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
-
-                wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\шаблоны\\ДомПриложение.doc");
+                wdApp = new Application();
+                var wdDoc = new Document();
+                string template = "\\шаблоны\\Приложение.doc";
+                if (bankName.Text == "втб 24")
+                {
+                    template = "\\шаблоны\\ПриложениеВТБ24.doc";
+                }
+                wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + template);
 
                 //button4.Text = System.Windows.Forms.Application.StartupPath + "\\template.doc";
 
-                object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
+                object replaceAll = WdReplace.wdReplaceAll;
 
                 // Gets a NumberFormatInfo associated with the en-US culture.
                 NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
@@ -9137,22 +7483,24 @@ if (newSentence.Contains("@@uvaj@@"))
                 int sentencesCount = wdDoc.Sentences.Count;
 
 
-
-
-
-
-
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@MO@@";
                 wdApp.Selection.Find.Replacement.ClearFormatting();
                 wdApp.Selection.Find.Replacement.Text = MO.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@2.1.2.2@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[19].Cells[1].Value.ToString();
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@houseType@@";
@@ -9161,12 +7509,14 @@ if (newSentence.Contains("@@uvaj@@"))
                 {
                     wdApp.Selection.Find.Replacement.Text = "жб плиты";
                 }
-                else { wdApp.Selection.Find.Replacement.Text = houseType.Text.ToLower(); }
+                else
+                {
+                    wdApp.Selection.Find.Replacement.Text = houseType.Text.ToLower();
+                }
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                 wdApp.Selection.Find.ClearFormatting();
@@ -9175,9 +7525,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = lm2text.Text;
 
                 wdApp.Selection.Find.Execute(
-             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@m2@@";
@@ -9185,10 +7535,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = m2text.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                ReplaceTextWord(ref wdApp, "@@dirtm2@@", dirtm2.Text);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                 wdApp.Selection.Find.ClearFormatting();
@@ -9197,9 +7546,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = calculationDateStr;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@ownerFullname@@";
@@ -9207,9 +7556,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = ownerFullName;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*      if (newSentence.Contains("@@customerFullname@@"))
                       {
                           newSentence = newSentence.Replace("@@customerFullname@@", customerFullName);
@@ -9222,9 +7571,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerFullName;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                 wdApp.Selection.Find.ClearFormatting();
@@ -9233,9 +7582,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = roomsAsString();
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@appartmentNum@@"))
                 {
                     newSentence = newSentence.Replace("@@appartmentNum@@", "№" + appartmentNum.Text);
@@ -9247,9 +7596,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = appartmentNum.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /* if (newSentence.Contains("@@town@@"))
                  {
                      newSentence = newSentence.Replace("@@town@@", town.Text);
@@ -9261,9 +7610,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = street.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@houseNum@@"))
                 {
                     newSentence = newSentence.Replace("@@houseNum@@", houseNum.Text);
@@ -9275,9 +7624,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = houseNum.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@buildingNum@@"))
                 {
             
@@ -9303,9 +7652,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = buildNum;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /* if (newSentence.Contains("@@customerAddress@@"))
                  {
                      newSentence = newSentence.Replace("@@customerAddress@@", customerAddres.Text);
@@ -9317,9 +7666,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@floor@@"))
                 {
                     newSentence = newSentence.Replace("@@floor@@", floor.Value.ToString());
@@ -9332,9 +7681,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = floor.Value.ToString().ToLower();
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@floors@@"))
                 {
                     newSentence = newSentence.Replace("@@floors@@", floors.Text);
@@ -9346,9 +7695,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = floors.Text.ToLower();
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@town@@";
@@ -9356,9 +7705,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = town.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@cost@@"))
                 {
                     newSentence = newSentence.Replace("@@cost@@", finalCostRounded.ToString());
@@ -9370,22 +7719,23 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = finalCostRounded.ToString("N", nfi);
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-                ReplaceTextWord(ref wdApp, "@@dirtCostR@@", dirtCalcGrid.Rows[32].Cells[1].Value.ToString());
-                ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", dirtCalcGrid.Rows[33].Cells[1].Value.ToString());
-                ReplaceTextWord(ref wdApp, "@@likvidCostFulle@@", (likvidCostDirt+likvidCost).ToString());
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@contractNum@@"))
+                {
+                    newSentence = newSentence.Replace("@@contractNum@@", contractNum.Text);
+                    changed = true;
+                }*/
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@contractNum@@";
                 wdApp.Selection.Find.Replacement.ClearFormatting();
                 wdApp.Selection.Find.Replacement.Text = contractNum.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@contractDate@@"))
                 {
                     newSentence = newSentence.Replace("@@contractDate@@", contractDate.Text);
@@ -9398,9 +7748,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = contractDate.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@customerName@@"))
                 {
                     newSentence = newSentence.Replace("@@customerName@@", customerName.Text);
@@ -9413,9 +7763,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerName.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@customerInit@@"))
                 {
                     newSentence = newSentence.Replace("@@customerInit@@", customerInit.Text);
@@ -9428,9 +7778,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerInit.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 /* if (newSentence.Contains("@@likvidCost@@"))
         {
@@ -9443,20 +7793,25 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = likvidCost.ToString("N", nfi);
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                //ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", 
-                
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                /* if (newSentence.Contains("@@stringCost@@"))
+       {
+           newSentence = newSentence.Replace("@@stringCost@@", costStr);
+           changed = true;
+       }
+                */
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@stringCost@@";
                 wdApp.Selection.Find.Replacement.ClearFormatting();
                 wdApp.Selection.Find.Replacement.Text = costStr;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*
 if (newSentence.Contains("@@uvaj@@"))
 {
@@ -9470,9 +7825,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = uvaj;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (changed)
                 {
                     wdDoc.Sentences[i].Text = newSentence;
@@ -9503,9 +7858,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerPassport.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@customerPassNum@@";
@@ -9513,9 +7868,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerPassNum.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@customerPassOVD@@";
@@ -9523,9 +7878,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerPassOVD.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@customerPassDate@@";
@@ -9533,9 +7888,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerPassDate.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@customerFullAddress@@";
@@ -9543,9 +7898,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 //owner Passport
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@passportSerial@@";
@@ -9553,9 +7908,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = ownerPassport.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@ownerPassNum@@";
@@ -9563,9 +7918,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = ownerPassNum.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@ownerPassOVD@@";
@@ -9573,9 +7928,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = ownerPassOVD.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@ownerPassDate@@";
@@ -9583,9 +7938,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = ownerPassDate.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@ownerFullAddress@@";
@@ -9593,11 +7948,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = ownerAddress.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                 wdApp.Selection.Find.ClearFormatting();
@@ -9606,9 +7959,9 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = ownerDocs.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@registrationDoc@@";
@@ -9616,11 +7969,62 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Replacement.Text = registrationDoc.Text;
 
                 wdApp.Selection.Find.Execute(
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                             ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-               
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@tehPass@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[41].Cells[1].Value.ToString();
+                ;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@b4.4@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = calculationAppartaments.Rows[38].Cells[2].Value.ToString();
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@docType@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = docType.ToLower();
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@2.1.2.20@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[37].Cells[1].Value.ToString();
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@2.1.3.15@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = objectDataGrid.Rows[55].Cells[1].Value.ToString().ToLower();
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
                 string te = wdApp.Selection.Text;
                 //saving
 
@@ -9630,7 +8034,549 @@ if (newSentence.Contains("@@uvaj@@"))
 
                 wdApp.Quit();
             }
+        }
 
+        private void saveAddsHouse_Click(object sender, EventArgs e)
+        {
+            string fileName;
+            if (bankName.Text == "брр")
+            {
+                fileName = "приложение отчет номер" + contractNum.Text + "домовладение " + appartmentNum.Text + " " +
+                           street.Text + " " + houseNum.Text + " для " + bankName.Text;
+                saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("№", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(".", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("-", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
+            }
+            else
+            {
+                fileName = "приложение отчет " + contractNum.Text + "домовладение " + appartmentNum.Text + " " +
+                           street.Text + " " + houseNum.Text + " для " + bankName.Text;
+                saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("№", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(".", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("-", " ").ToLower();
+                saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
+            }
+
+            if (DialogResult.OK == saveFileDialog1.ShowDialog())
+            {
+                wdApp = new Application();
+                var wdDoc = new Document();
+
+                wdDoc =
+                    wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\шаблоны\\ДомПриложение.doc");
+
+                //button4.Text = System.Windows.Forms.Application.StartupPath + "\\template.doc";
+
+                object replaceAll = WdReplace.wdReplaceAll;
+
+                // Gets a NumberFormatInfo associated with the en-US culture.
+                NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+                nfi.NumberDecimalDigits = 0;
+                nfi.NumberGroupSeparator = " ";
+
+                nfi.PositiveSign = "";
+
+
+                string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
+                string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
+                string calculationDateStr = calculationDate.Text;
+                int sentencesCount = wdDoc.Sentences.Count;
+
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@MO@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = MO.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@houseType@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                if (houseType.Text == "Панельный")
+                {
+                    wdApp.Selection.Find.Replacement.Text = "жб плиты";
+                }
+                else
+                {
+                    wdApp.Selection.Find.Replacement.Text = houseType.Text.ToLower();
+                }
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@lm2@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = lm2text.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@m2@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = m2text.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                ReplaceTextWord(ref wdApp, "@@dirtm2@@", dirtm2.Text);
+
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@calculationDate@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = calculationDateStr;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@ownerFullname@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = ownerFullName;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*      if (newSentence.Contains("@@customerFullname@@"))
+                      {
+                          newSentence = newSentence.Replace("@@customerFullname@@", customerFullName);
+                          changed = true;
+                      }
+               */
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerFullname@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerFullName;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@rooms@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = roomsAsString();
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@appartmentNum@@"))
+                {
+                    newSentence = newSentence.Replace("@@appartmentNum@@", "№" + appartmentNum.Text);
+                    changed = true;
+                }*/
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@appartmentNum@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = appartmentNum.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /* if (newSentence.Contains("@@town@@"))
+                 {
+                     newSentence = newSentence.Replace("@@town@@", town.Text);
+                     changed = true;
+                 }*/
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@street@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = street.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@houseNum@@"))
+                {
+                    newSentence = newSentence.Replace("@@houseNum@@", houseNum.Text);
+                    changed = true;
+                }*/
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@houseNum@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = houseNum.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@buildingNum@@"))
+                {
+            
+           
+
+                }*/
+                string buildNum = null;
+                if (buildingNum.Text != "")
+                {
+                    buildNum = "корп." + buildingNum.Text + ".";
+                    //newSentence = newSentence.Replace("@@buildingNum@@", houseNum.Text);
+                    //changed = true;
+                }
+                else
+                {
+                    buildNum = buildingNum.Text;
+                    //changed = true;
+                }
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@buildingNum@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = buildNum;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /* if (newSentence.Contains("@@customerAddress@@"))
+                 {
+                     newSentence = newSentence.Replace("@@customerAddress@@", customerAddres.Text);
+                     changed = true;
+                 }*/
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerAddress@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@floor@@"))
+                {
+                    newSentence = newSentence.Replace("@@floor@@", floor.Value.ToString());
+                    changed = true;
+                }*/
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@floor@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = floor.Value.ToString().ToLower();
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@floors@@"))
+                {
+                    newSentence = newSentence.Replace("@@floors@@", floors.Text);
+                    changed = true;
+                }*/
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@floors@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = floors.Text.ToLower();
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@town@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = town.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@cost@@"))
+                {
+                    newSentence = newSentence.Replace("@@cost@@", finalCostRounded.ToString());
+                    changed = true;
+                }*/
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@cost@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = finalCostRounded.ToString("N", nfi);
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                ReplaceTextWord(ref wdApp, "@@dirtCostR@@", dirtCalcGrid.Rows[32].Cells[1].Value.ToString());
+                ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", dirtCalcGrid.Rows[33].Cells[1].Value.ToString());
+                ReplaceTextWord(ref wdApp, "@@likvidCostFulle@@", (likvidCostDirt + likvidCost).ToString());
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@contractNum@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = contractNum.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@contractDate@@"))
+                {
+                    newSentence = newSentence.Replace("@@contractDate@@", contractDate.Text);
+                    changed = true;
+                }
+              */
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@contractDate@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = contractDate.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@customerName@@"))
+                {
+                    newSentence = newSentence.Replace("@@customerName@@", customerName.Text);
+                    changed = true;
+                }
+                             */
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerName@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerName.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (newSentence.Contains("@@customerInit@@"))
+                {
+                    newSentence = newSentence.Replace("@@customerInit@@", customerInit.Text);
+                    changed = true;
+                }
+                 */
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerInit@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerInit.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                /* if (newSentence.Contains("@@likvidCost@@"))
+        {
+            newSentence = newSentence.Replace("@@likvidCost@@", likvidCost.ToString());
+            changed = true;
+        }*/
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@likvidCost@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = likvidCost.ToString("N", nfi);
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                //ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", 
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@stringCost@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = costStr;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*
+if (newSentence.Contains("@@uvaj@@"))
+{
+    newSentence = newSentence.Replace("@@uvaj@@", uvaj);
+    changed = true;
+}*/
+                getUvaj();
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@uvaj@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = uvaj;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                /*if (changed)
+                {
+                    wdDoc.Sentences[i].Text = newSentence;
+                }
+                                 */
+                /*
+                }
+
+                /*int shapesCount = wdDoc.Shapes.Count;
+                for (int i = 1; i <= shapesCount; i++)
+                {
+                //if (wdDoc.Shapes[i].
+                if (wdDoc.Shapes[i].TextEffect.Text !=null)
+                {
+                    if (wdDoc.Shapes[i].TextEffect.Text.Contains("@@contractDate@@"))
+                    {
+                        wdDoc.Shapes[i].TextEffect.Text.Replace("@@contractDate@@", contractDate.Text);
+
+                    }
+                }
+
+               
+                }*/
+                //Customer Passport
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerPassport@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerPassport.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerPassNum@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerPassNum.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerPassOVD@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerPassOVD.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerPassDate@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerPassDate.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@customerFullAddress@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                //owner Passport
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@passportSerial@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = ownerPassport.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@ownerPassNum@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = ownerPassNum.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@ownerPassOVD@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = ownerPassOVD.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@ownerPassDate@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = ownerPassDate.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@ownerFullAddress@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = ownerAddress.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@ownerDoc@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = ownerDocs.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = "@@registrationDoc@@";
+                wdApp.Selection.Find.Replacement.ClearFormatting();
+                wdApp.Selection.Find.Replacement.Text = registrationDoc.Text;
+
+                wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+
+                string te = wdApp.Selection.Text;
+                //saving
+
+
+                wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
+
+
+                wdApp.Quit();
+            }
         }
 
         private void roomsNum_ValueChanged(object sender, EventArgs e)
@@ -9649,10 +8595,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     break;
 
 
-                default: break;
+                default:
+                    break;
             }
-            
-            
         }
 
         private void analogsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -9682,17 +8627,17 @@ if (newSentence.Contains("@@uvaj@@"))
                 calculationAppartaments.Rows[1].Cells[4].Value = t;
             }
             catch (Exception exp)
-            { }
+            {
+            }
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            new HouseCostCalculation.mapForm();
+            new mapForm();
         }
 
         private void street_KeyUp(object sender, KeyEventArgs e)
@@ -9707,14 +8652,14 @@ if (newSentence.Contains("@@uvaj@@"))
         }
 
         /// <summary>
-        /// Create xml file
+        ///     Create xml file
         /// </summary>
         public void saveXML(string fileName)
         {
             try
             {
-                FileStream f = new FileStream(fileName, FileMode.OpenOrCreate);
-                XmlTextWriter settings = new XmlTextWriter(f, Encoding.Default);
+                var f = new FileStream(fileName, FileMode.OpenOrCreate);
+                var settings = new XmlTextWriter(f, Encoding.Default);
                 settings.WriteStartDocument();
                 settings.WriteStartElement("test");
                 addAtributeToXml(settings, customerName.Name, customerName.Text);
@@ -9832,11 +8777,12 @@ if (newSentence.Contains("@@uvaj@@"))
                     addAtributeToXml(settings, "data2.1.3.38", objectDataGrid.Rows[78].Cells[1].Value.ToString());
                     addAtributeToXml(settings, "data2.1.3.39", objectDataGrid.Rows[79].Cells[1].Value.ToString());
                     addAtributeToXml(settings, "analogsColsCount", analogsGrid.Columns.Count.ToString());
-                    for (int i = 0; i < analogsGrid.Rows.Count-1;i++ )
+                    for (int i = 0; i < analogsGrid.Rows.Count - 1; i++)
                     {
-                        for (int j = 0; j < analogsGrid.Columns.Count;j++ )
+                        for (int j = 0; j < analogsGrid.Columns.Count; j++)
                         {
-                            addAtributeToXml(settings, "analog" + i.ToString() + "." + j.ToString(), analogsGrid.Rows[i].Cells[j].Value.ToString());
+                            addAtributeToXml(settings, "analog" + i.ToString() + "." + j.ToString(),
+                                             analogsGrid.Rows[i].Cells[j].Value.ToString());
                         }
                     }
 
@@ -9845,7 +8791,8 @@ if (newSentence.Contains("@@uvaj@@"))
                     {
                         for (int j = 0; j < calculationAppartaments.Columns.Count; j++)
                         {
-                            addAtributeToXml(settings, "calc" + i.ToString() + "." + j.ToString(), calculationAppartaments.Rows[i].Cells[j].Value.ToString());
+                            addAtributeToXml(settings, "calc" + i.ToString() + "." + j.ToString(),
+                                             calculationAppartaments.Rows[i].Cells[j].Value.ToString());
                         }
                     }
                 }
@@ -9860,7 +8807,6 @@ if (newSentence.Contains("@@uvaj@@"))
                 MessageBox.Show(e.Message);
                 //this.Close();
             }
-           
         }
 
         private void loadDataButton(object sender, EventArgs e)
@@ -9870,19 +8816,18 @@ if (newSentence.Contains("@@uvaj@@"))
         }
 
         /// <summary>
-        /// подсчет кол-ва коэффициентов
+        ///     подсчет кол-ва коэффициентов
         /// </summary>
         public int setCoefsCount(string coef, int counter)
         {
             if (coef != "")
             {
-            double cellValue = double.Parse(coef);
-               if (cellValue != 1.00)
-               {
-                   counter++;
-                   
-               }
-           }
+                double cellValue = double.Parse(coef);
+                if (cellValue != 1.00)
+                {
+                    counter++;
+                }
+            }
             return counter;
         }
 
@@ -9892,47 +8837,41 @@ if (newSentence.Contains("@@uvaj@@"))
             analogsGrid.Rows[9].Cells[2].Value = objectDataGrid.Rows[53].Cells[1].Value;
             analogsGrid.Rows[9].Cells[3].Value = objectDataGrid.Rows[53].Cells[1].Value;
             analogsGrid.Rows[9].Cells[4].Value = objectDataGrid.Rows[53].Cells[1].Value;
-
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            
-            analogsGrid.Rows[2].Cells[1].Value = street.Text +" "+ textBox1.Text;
+            analogsGrid.Rows[2].Cells[1].Value = street.Text + " " + textBox1.Text;
         }
 
         /// <summary>
-        /// Replace replaceText by text in word document
+        ///     Replace replaceText by text in word document
         /// </summary>
-        public bool ReplaceTextWord(ref Microsoft.Office.Interop.Word.Application wdApp, string replaceText, string text)
+        public bool ReplaceTextWord(ref Application wdApp, string replaceText, string text)
         {
             try
             {
                 if (text == null)
                 {
-                    text="";
+                    text = "";
                 }
-                
-                    object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
-                    wdApp.Selection.Find.ClearFormatting();
-                    wdApp.Selection.Find.Text = replaceText;
-                    while (wdApp.Selection.Find.Execute(
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
-                    {
 
+                object replaceAll = WdReplace.wdReplaceAll;
+                wdApp.Selection.Find.ClearFormatting();
+                wdApp.Selection.Find.Text = replaceText;
+                while (wdApp.Selection.Find.Execute(
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                {
+                    //wdNew = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "новостройка.doc", Missing, true);
 
-                        //wdNew = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "новостройка.doc", Missing, true);
+                    //wdApp.Selection.Text = "";
+                    wdApp.Selection.Text = text;
 
-                        //wdApp.Selection.Text = "";
-                        wdApp.Selection.Text = text;
-
-                        wdApp.ActiveDocument.Sections[1].Range.Select();
-                        
-
-                    }
-                    /*wdApp.Selection.Find.ClearFormatting();
+                    wdApp.ActiveDocument.Sections[1].Range.Select();
+                }
+                /*wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = replaceText;
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text = text;
@@ -9941,7 +8880,7 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);*/
-                    /*if (!result)
+                /*if (!result)
                     {
                         return result;
                     }
@@ -9950,9 +8889,9 @@ if (newSentence.Contains("@@uvaj@@"))
                         throw new Exception("1");
                         //return false;
                     }*/
-                    return true;
-                }
-            
+                return true;
+            }
+
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
@@ -9962,7 +8901,12 @@ if (newSentence.Contains("@@uvaj@@"))
 
         private void addOwner_Click(object sender, EventArgs e)
         {
-            HouseCostCalculation.Owner currentOwner = new HouseCostCalculation.Owner(ownerAddress.Text, ownerPassOVD.Text, ownerInit.Text, ownerName.Text, ownerSurname.Text, ownerPassDate.Text, ownerPassNum.Text, ownerPassport.Text, ownerPhone.Text);
+            var currentOwner = new Owner(ownerAddress.Text,
+                                         ownerPassOVD.Text, ownerInit.Text,
+                                         ownerName.Text, ownerSurname.Text,
+                                         ownerPassDate.Text,
+                                         ownerPassNum.Text,
+                                         ownerPassport.Text, ownerPhone.Text);
             owners.Add(currentOwner);
         }
 
@@ -9970,7 +8914,7 @@ if (newSentence.Contains("@@uvaj@@"))
         {
             try
             {
-               /* string dbname = "", server = "", dbuser = "", dbpass = "";
+                /* string dbname = "", server = "", dbuser = "", dbpass = "";
                 FileStream f = new FileStream("properties.xml", FileMode.OpenOrCreate);
 
                 XmlTextReader settings = new XmlTextReader(f);
@@ -10027,7 +8971,6 @@ if (newSentence.Contains("@@uvaj@@"))
             catch (Exception except)
             {
                 MessageBox.Show(except.Message);
-                
             }
         }
 
@@ -10037,9 +8980,9 @@ if (newSentence.Contains("@@uvaj@@"))
         }
 
         /// <summary>
-        /// Вставка переводов строк вместо \rn
+        ///     Вставка переводов строк вместо \rn
         /// </summary>
-        public bool InsertParagraphs(ref Microsoft.Office.Interop.Word.Application wdApp)
+        public bool InsertParagraphs(ref Application wdApp)
         {
             try
             {
@@ -10047,11 +8990,10 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Selection.Find.Text = "/rn";
 
                 while (wdApp.Selection.Find.Execute(
-                                       ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                       ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                       ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                 {
-
                     //Microsoft.Office.Interop.Word.Range r1;
 
                     //r1.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
@@ -10070,11 +9012,12 @@ if (newSentence.Contains("@@uvaj@@"))
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
+            var excelApp = new Microsoft.Office.Interop.Excel.Application();
             //Microsoft.Office.Interop.Excel.Workbook excelDoc = new Microsoft.Office.Interop.Excel.Workbook();
             string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
             string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
-            string fileName = "отчет " + contractNum.Text + " расчет стоимости домовладения " + street.Text + " " + houseNum.Text + " для " + bankName.Text;
+            string fileName = "отчет " + contractNum.Text + " расчет стоимости домовладения " + street.Text + " " +
+                              houseNum.Text + " для " + bankName.Text;
             saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
@@ -10085,22 +9028,24 @@ if (newSentence.Contains("@@uvaj@@"))
 
             if (DialogResult.OK == saveFileDialog1.ShowDialog())
             {
-
-                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\дом.xls", Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing);
-                int analogsCount= houseCalcGrid.ColumnCount;
+                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\дом.xls", Missing, Missing,
+                                        Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
+                                        Missing, Missing, Missing);
+                int analogsCount = houseCalcGrid.ColumnCount;
                 int rowCount = houseCalcGrid.RowCount;
                 for (int j = 1; j < analogsCount; j++)
                 {
-                for (int i = 1; i < rowCount; i++)
-                {
-                    if (houseCalcGrid.Rows[i-1].Cells[j].Value != null)
+                    for (int i = 1; i < rowCount; i++)
                     {
-                        excelApp.Workbooks[1].Sheets[1].Cells[i+1, j+1] = houseCalcGrid.Rows[i-1].Cells[j].Value.ToString();
+                        if (houseCalcGrid.Rows[i - 1].Cells[j].Value != null)
+                        {
+                            excelApp.Workbooks[1].Sheets[1].Cells[i + 1, j + 1] =
+                                houseCalcGrid.Rows[i - 1].Cells[j].Value.ToString();
+                        }
                     }
                 }
-                }
                 //первый аналог
-                
+
                 //string pattern = "MMMM yyyyг.";
                 //string d1 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[2].Value.ToString()).ToString(pattern);
                 //string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
@@ -10109,9 +9054,11 @@ if (newSentence.Contains("@@uvaj@@"))
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 4] = d2;
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 5] = d3;
 
-                
 
-                excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing,
+                                               Type.Missing, Type.Missing,
+                                               XlSaveAsAccessMode.xlNoChange,
+                                               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 excelApp.ActiveWorkbook.Close();
                 excelApp.Quit();
             }
@@ -10119,11 +9066,12 @@ if (newSentence.Contains("@@uvaj@@"))
 
         private void button8_Click(object sender, EventArgs e)
         {
-            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
+            var excelApp = new Microsoft.Office.Interop.Excel.Application();
             //Microsoft.Office.Interop.Excel.Workbook excelDoc = new Microsoft.Office.Interop.Excel.Workbook();
             string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
             string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
-            string fileName = "отчет " + contractNum.Text + " расчет стоимости земельного участка " + street.Text + " " + houseNum.Text + " для " + bankName.Text;
+            string fileName = "отчет " + contractNum.Text + " расчет стоимости земельного участка " + street.Text + " " +
+                              houseNum.Text + " для " + bankName.Text;
             saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
@@ -10134,8 +9082,9 @@ if (newSentence.Contains("@@uvaj@@"))
 
             if (DialogResult.OK == saveFileDialog1.ShowDialog())
             {
-
-                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\земля.xls", Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing);
+                excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\земля.xls", Missing, Missing,
+                                        Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
+                                        Missing, Missing, Missing);
                 int analogsCount = dirtCalcGrid.ColumnCount;
                 int rowCount = dirtCalcGrid.RowCount;
                 for (int j = 1; j < analogsCount; j++)
@@ -10144,7 +9093,8 @@ if (newSentence.Contains("@@uvaj@@"))
                     {
                         if (dirtCalcGrid.Rows[i - 1].Cells[j].Value != null)
                         {
-                            excelApp.Workbooks[1].Sheets[1].Cells[i+1, j+1] = dirtCalcGrid.Rows[i-1].Cells[j].Value.ToString();
+                            excelApp.Workbooks[1].Sheets[1].Cells[i + 1, j + 1] =
+                                dirtCalcGrid.Rows[i - 1].Cells[j].Value.ToString();
                         }
                     }
                 }
@@ -10156,17 +9106,19 @@ if (newSentence.Contains("@@uvaj@@"))
                 //string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
                 //string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
                 //string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
-               //string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
+                //string d2 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[3].Value.ToString()).ToString(pattern);
                 //string d3 = Convert.ToDateTime(analogsGrid.Rows[18].Cells[4].Value.ToString()).ToString(pattern);
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 3] = d1;
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 4] = d2;
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 5] = d3;
 
 
-
-                excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing,
+                                               Type.Missing, Type.Missing,
+                                               XlSaveAsAccessMode.xlNoChange,
+                                               Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 excelApp.ActiveWorkbook.Close();
-                    excelApp.Quit();
+                excelApp.Quit();
             }
         }
 
@@ -10192,7 +9144,6 @@ if (newSentence.Contains("@@uvaj@@"))
 
         private void saveGridToWordButton_Click(object sender, EventArgs e)
         {
-
             //HouseCostCalculation.House h = new HouseCostCalculation.House();
             //h.saveHouse(this);
             string townName = " " + town.Text + ", ";
@@ -10209,7 +9160,10 @@ if (newSentence.Contains("@@uvaj@@"))
                 buildNum = "корп. " + buildingNum.Text;
             }
             roomsAsString();
-            string fileName = "отчет номер " + contractNum.Text + " от " + calculationDate.Text + " договор от" + contractDate.Text + " " + fullAddressDirt() + " " + ownerSurname.Text + " " + ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " " + bankName.Text + ".doc";
+            string fileName = "отчет номер " + contractNum.Text + " от " + calculationDate.Text + " договор от" +
+                              contractDate.Text + " " + fullAddressDirt() + " " + ownerSurname.Text + " " +
+                              ownerName.Text + " для " + customerSurname.Text + " " + customerName.Text + " " +
+                              bankName.Text + ".doc";
             saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
             saveFileDialog1.FileName = saveFileDialog1.FileName.Replace(",", " ").ToLower();
@@ -10221,11 +9175,12 @@ if (newSentence.Contains("@@uvaj@@"))
             {
                 if (DialogResult.OK == saveFileDialog1.ShowDialog())
                 {
-                    wdApp = new Microsoft.Office.Interop.Word.Application();
-                    Microsoft.Office.Interop.Word.Document wdDoc = new Microsoft.Office.Interop.Word.Document();
+                    wdApp = new Application();
+                    var wdDoc = new Document();
 
-                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\земля.doc", Missing, true);
-                    object replaceAll = Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll;
+                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\земля.doc", Missing,
+                                                 true);
+                    object replaceAll = WdReplace.wdReplaceAll;
 
                     // Gets a NumberFormatInfo associated with the en-US culture.
                     NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
@@ -10234,7 +9189,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     nfi.NumberGroupSeparator = " ";
 
                     nfi.PositiveSign = "";
-
 
 
                     string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
@@ -10275,9 +9229,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = MO.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@dirtCost@@";
@@ -10285,9 +9239,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = dirtCalcGrid.Rows[31].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@cost@@";
@@ -10295,9 +9249,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = dirtCalcGrid.Rows[31].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@dirtm2@@";
@@ -10305,9 +9259,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = dirtm2.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@dirtCostR@@";
@@ -10315,9 +9269,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = dirtCalcGrid.Rows[32].Cells[1].Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@calculationDateStr@@";
@@ -10325,9 +9279,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = calculationDateStr;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@houseType@@";
@@ -10335,9 +9289,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = houseType.Text.ToLower();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@roomsT@@";
@@ -10347,9 +9301,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = roomsT;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@roomsX@@";
@@ -10357,9 +9311,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = roomsX;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@lm2@@";
@@ -10367,9 +9321,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = lm2text.Text;
 
                     wdApp.Selection.Find.Execute(
-                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@m2@@";
@@ -10377,9 +9331,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = m2text.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerNameInits@@";
@@ -10387,9 +9341,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerFamiliyR + " " + getInits();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@calculationDate@@";
@@ -10397,9 +9351,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = calculationDate.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerFullname@@";
@@ -10407,9 +9361,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerFullName;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerFullname@@";
@@ -10417,9 +9371,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerFullName;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@rooms1@@";
@@ -10428,9 +9382,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = rooms1;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerFullnameR@@";
@@ -10438,9 +9392,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerFullNameR;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -10449,9 +9403,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerFullNameR;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -10460,9 +9414,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerFullNameT;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerFullnameD@@";
@@ -10470,9 +9424,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerFullNameD;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -10481,9 +9435,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerFullNameT;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*
                     /*
                        if (newSentence.Contains("@@customerFullnameD@@"))
@@ -10497,9 +9451,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerFullNameD;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@rooms@@";
@@ -10507,9 +9461,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = roomsAsString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@appartmentNum@@";
@@ -10517,9 +9471,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = "№" + appartmentNum.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /* if (newSentence.Contains("@@town@@"))
                      {
                          newSentence = newSentence.Replace("@@town@@", town.Text);
@@ -10531,9 +9485,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = street.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (newSentence.Contains("@@houseNum@@"))
                     {
                         newSentence = newSentence.Replace("@@houseNum@@", houseNum.Text);
@@ -10545,21 +9499,19 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = houseNum.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     buildNum = null;
                     if (buildingNum.Text != "")
                     {
                         buildNum = " корп." + buildingNum.Text;
-
                     }
                     else
                     {
                         buildNum = buildingNum.Text;
                     }
-
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -10568,9 +9520,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = buildNum;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /* if (newSentence.Contains("@@customerAddress@@"))
                      {
                          newSentence = newSentence.Replace("@@customerAddress@@", customerAddres.Text);
@@ -10582,9 +9534,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (newSentence.Contains("@@floor@@"))
                     {
                         newSentence = newSentence.Replace("@@floor@@", floor.Value.ToString());
@@ -10597,9 +9549,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = floor.Value.ToString();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (newSentence.Contains("@@floors@@"))
                     {
                         newSentence = newSentence.Replace("@@floors@@", floors.Text);
@@ -10611,9 +9563,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = floors.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@town@@";
@@ -10621,9 +9573,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = town.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@cost@@";
@@ -10631,9 +9583,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = finalCostRounded.ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (newSentence.Contains("@@contractNum@@"))
                     {
                         newSentence = newSentence.Replace("@@contractNum@@", contractNum.Text);
@@ -10645,9 +9597,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = contractNum.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (newSentence.Contains("@@contractDate@@"))
                     {
                         newSentence = newSentence.Replace("@@contractDate@@", contractDate.Text);
@@ -10660,9 +9612,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = contractDate.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (newSentence.Contains("@@customerName@@"))
                     {
                         newSentence = newSentence.Replace("@@customerName@@", customerName.Text);
@@ -10675,9 +9627,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerName.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (newSentence.Contains("@@customerInit@@"))
                     {
                         newSentence = newSentence.Replace("@@customerInit@@", customerInit.Text);
@@ -10690,9 +9642,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerInit.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     /* if (newSentence.Contains("@@likvidCost@@"))
             {
@@ -10705,9 +9657,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = likvidCost.ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     /* if (newSentence.Contains("@@stringCost@@"))
            {
@@ -10721,9 +9673,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = costStr.ToLower();
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*
     if (newSentence.Contains("@@uvaj@@"))
     {
@@ -10737,9 +9689,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = uvaj;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*if (changed)
                     {
                         wdDoc.Sentences[i].Text = newSentence;
@@ -10770,9 +9722,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerPassport.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassNum@@";
@@ -10780,9 +9732,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerPassNum.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassOVD@@";
@@ -10790,9 +9742,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerPassOVD.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassDate@@";
@@ -10800,9 +9752,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerPassDate.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerFullAddress@@";
@@ -10810,9 +9762,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = customerAddres.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     //owner Passport
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@passportSerial@@";
@@ -10820,9 +9772,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerPassport.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerPassNum@@";
@@ -10830,9 +9782,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerPassNum.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerPassOVD@@";
@@ -10840,9 +9792,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerPassOVD.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerPassDate@@";
@@ -10850,9 +9802,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerPassDate.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerFullAddress@@";
@@ -10860,11 +9812,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerAddress.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
-
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
                     wdApp.Selection.Find.ClearFormatting();
@@ -10873,9 +9823,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = ownerDocs.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@registrationDoc@@";
@@ -10883,9 +9833,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.Replacement.Text = registrationDoc.Text;
 
                     wdApp.Selection.Find.Execute(
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                 ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                     /*
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@tehPass@@";
@@ -11498,9 +10448,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "м2";
                     while (wdApp.Selection.Find.Execute(
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                        ref Missing, ref Missing, ref Missing, ref Missing, ref Missing))
                     {
                         wdApp.Selection.Characters[2].Font.Superscript = 1;
                     }
@@ -11512,19 +10462,18 @@ if (newSentence.Contains("@@uvaj@@"))
                         x = wdDoc.Shapes.Count;
                         for (int k = 1; k < x; k++)
                         {
-                            Microsoft.Office.Interop.Word.Shape shape = wdDoc.Shapes[k];
+                            Shape shape = wdDoc.Shapes[k];
 
                             //string l = shape.AlternativeText;
                             if (shape.AlternativeText.Contains("cont"))
                             {
-                                wdDoc.Shapes[k].TextEffect.Text = "№ " + contractNum.Text + " от " + calculationDate.Text + "г.";
+                                wdDoc.Shapes[k].TextEffect.Text = "№ " + contractNum.Text + " от " +
+                                                                  calculationDate.Text + "г.";
                             }
                         }
-
                     }
                     catch (Exception exp)
                     {
-
                     }
 
 
@@ -11539,35 +10488,28 @@ if (newSentence.Contains("@@uvaj@@"))
                 wdApp.Quit();
                 MessageBox.Show(except.Message);
             }
-
         }
-        
+
         private void ownerDocs_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void dirtCalcGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-           
         }
 
         private void houseCalcGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-           
         }
 
         private void dirtGridAnalogs_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-
         }
 
         private void houseCalcGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            
         }
 
-        
 
         private void dirtCalcGrid_Enter(object sender, EventArgs e)
         {
@@ -11616,7 +10558,6 @@ if (newSentence.Contains("@@uvaj@@"))
 
         private void dirtCalcGrid_CellLeave_1(object sender, DataGridViewCellEventArgs e)
         {
-            
         }
 
         private void dirtCalcGrid_CellEndEdit_1(object sender, DataGridViewCellEventArgs e)
@@ -11704,7 +10645,5 @@ if (newSentence.Contains("@@uvaj@@"))
             houseCalcGrid.Rows[0].Cells[4].Value = t;
             calculateCostHouse();
         }
-
     }
-
 }

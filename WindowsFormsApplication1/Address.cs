@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HouseCostCalculation
+﻿namespace HouseCostCalculation
 {
     public class Address
     {
         public string fullAddress(string type)
         {
-            string fullAddress="";
+            string fullAddress = "";
             string buildNum = null;
             if (type == "квартира")
             {
@@ -18,10 +13,7 @@ namespace HouseCostCalculation
                     buildNum = ", корп. " + building;
                 }
 
-
-
                 fullAddress = " квартира №" + room + " " + town + ", " + street + ", " + house + buildNum;
-                
             }
             else if (type == "домовладение")
             {
@@ -30,8 +22,6 @@ namespace HouseCostCalculation
                     buildNum = ", корп. " + building;
                 }
 
-
-
                 fullAddress = " домовладение " + town + ", " + street + ", " + house + buildNum;
             }
             else if (type == "земельный участок")
@@ -39,15 +29,15 @@ namespace HouseCostCalculation
                 fullAddress = " земельный участок " + town + ", " + street + ", " + house + buildNum;
             }
             return fullAddress;
-        }       
-        
+        }
+
         private string town;
         private string street;
         private string region;
         private string building;
         private int room;
-        private int house;        
-    
+        private int house;
+
         public string Town
         {
             get
