@@ -493,7 +493,7 @@ namespace WindowsFormsApplication1
 
 
                 excelApp.ActiveWorkbook.Save();
-                excelApp.ActiveWorkbook.SaveAs(contractNum.Text + "Calc.xls");
+                excelApp.ActiveWorkbook.SaveAs(System.Windows.Forms.Application.StartupPath +"\\"+contractNum.Text + "Calc.xls");
                 excelApp.ActiveWorkbook.Close(Missing);
                 excelApp.Quit();
 
@@ -519,7 +519,7 @@ namespace WindowsFormsApplication1
 
 
                 excelApp.ActiveWorkbook.Save();
-                excelApp.ActiveWorkbook.SaveAs(contractNum.Text + "Analogs.xls");
+                excelApp.ActiveWorkbook.SaveAs(System.Windows.Forms.Application.StartupPath + "\\" + contractNum.Text + "Analogs.xls");
                 excelApp.ActiveWorkbook.Close(Missing);
                 excelApp.Quit();
 
@@ -3766,101 +3766,97 @@ namespace WindowsFormsApplication1
 
                             if (docTypeT == "Квартира")
                             {
-                                //objectDataGrid.Rows[2].Cells[1].Value = settings.GetAttribute("data2.1.1.2");
-                                //objectDataGrid.Rows[3].Cells[1].Value = settings.GetAttribute("data2.1.1.3");
-                                //objectDataGrid.Rows[4].Cells[1].Value = settings.GetAttribute("data2.1.1.4");
-                                //objectDataGrid.Rows[5].Cells[1].Value = settings.GetAttribute("data2.1.1.5");
-                                //objectDataGrid.Rows[6].Cells[1].Value = settings.GetAttribute("data2.1.1.6");
-                                //objectDataGrid.Rows[7].Cells[1].Value = settings.GetAttribute("data2.1.1.7");
-                                //objectDataGrid.Rows[8].Cells[1].Value = settings.GetAttribute("data2.1.1.8");
-                                //objectDataGrid.Rows[9].Cells[1].Value = settings.GetAttribute("data2.1.1.9");
-                                //objectDataGrid.Rows[10].Cells[1].Value = settings.GetAttribute("data2.1.1.10");
-                                //objectDataGrid.Rows[11].Cells[1].Value = settings.GetAttribute("data2.1.1.11");
-                                //objectDataGrid.Rows[12].Cells[1].Value = settings.GetAttribute("data2.1.1.12");
-                                //objectDataGrid.Rows[13].Cells[1].Value = settings.GetAttribute("data2.1.1.13");
-                                //objectDataGrid.Rows[14].Cells[1].Value = settings.GetAttribute("data2.1.1.14");
-                                //objectDataGrid.Rows[15].Cells[1].Value = settings.GetAttribute("data2.1.1.15");
-                                //objectDataGrid.Rows[16].Cells[1].Value = settings.GetAttribute("data2.1.1.16");
+                                objectDataGrid.Rows[2].Cells[1].Value = settings.GetAttribute("data2.1.1.2");
+                                objectDataGrid.Rows[3].Cells[1].Value = settings.GetAttribute("data2.1.1.3");
+                                objectDataGrid.Rows[4].Cells[1].Value = settings.GetAttribute("data2.1.1.4");
+                                objectDataGrid.Rows[5].Cells[1].Value = settings.GetAttribute("data2.1.1.5");
+                                objectDataGrid.Rows[6].Cells[1].Value = settings.GetAttribute("data2.1.1.6");
+                                objectDataGrid.Rows[7].Cells[1].Value = settings.GetAttribute("data2.1.1.7");
+                                objectDataGrid.Rows[8].Cells[1].Value = settings.GetAttribute("data2.1.1.8");
+                                objectDataGrid.Rows[9].Cells[1].Value = settings.GetAttribute("data2.1.1.9");
+                                objectDataGrid.Rows[10].Cells[1].Value = settings.GetAttribute("data2.1.1.10");
+                                objectDataGrid.Rows[11].Cells[1].Value = settings.GetAttribute("data2.1.1.11");
+                                objectDataGrid.Rows[12].Cells[1].Value = settings.GetAttribute("data2.1.1.12");
+                                objectDataGrid.Rows[13].Cells[1].Value = settings.GetAttribute("data2.1.1.13");
+                                objectDataGrid.Rows[14].Cells[1].Value = settings.GetAttribute("data2.1.1.14");
+                                objectDataGrid.Rows[15].Cells[1].Value = settings.GetAttribute("data2.1.1.15");
+                                objectDataGrid.Rows[16].Cells[1].Value = settings.GetAttribute("data2.1.1.16");
 
-                                //objectDataGrid.Rows[18].Cells[1].Value = settings.GetAttribute("data2.1.2.1");
-                                //objectDataGrid.Rows[19].Cells[1].Value = settings.GetAttribute("data2.1.2.2");
-                                //objectDataGrid.Rows[20].Cells[1].Value = settings.GetAttribute("data2.1.2.3");
-                                //objectDataGrid.Rows[21].Cells[1].Value = settings.GetAttribute("data2.1.2.4");
-                                //objectDataGrid.Rows[22].Cells[1].Value = settings.GetAttribute("data2.1.2.5");
-                                //objectDataGrid.Rows[23].Cells[1].Value = settings.GetAttribute("data2.1.2.6");
-                                //objectDataGrid.Rows[24].Cells[1].Value = settings.GetAttribute("data2.1.2.7");
-                                //objectDataGrid.Rows[25].Cells[1].Value = settings.GetAttribute("data2.1.2.8");
-                                //objectDataGrid.Rows[26].Cells[1].Value = settings.GetAttribute("data2.1.2.9");
-                                //objectDataGrid.Rows[27].Cells[1].Value = settings.GetAttribute("data2.1.2.10");
-                                //objectDataGrid.Rows[28].Cells[1].Value = settings.GetAttribute("data2.1.2.11");
-                                //objectDataGrid.Rows[29].Cells[1].Value = settings.GetAttribute("data2.1.2.12");
-                                //objectDataGrid.Rows[30].Cells[1].Value = settings.GetAttribute("data2.1.2.13");
-                                //objectDataGrid.Rows[31].Cells[1].Value = settings.GetAttribute("data2.1.2.14");
-                                //objectDataGrid.Rows[32].Cells[1].Value = settings.GetAttribute("data2.1.2.15");
-                                //objectDataGrid.Rows[33].Cells[1].Value = settings.GetAttribute("data2.1.2.16");
-                                //objectDataGrid.Rows[34].Cells[1].Value = settings.GetAttribute("data2.1.2.17");
-                                //objectDataGrid.Rows[35].Cells[1].Value = settings.GetAttribute("data2.1.2.18");
-                                //objectDataGrid.Rows[36].Cells[1].Value = settings.GetAttribute("data2.1.2.19");
-                                //objectDataGrid.Rows[37].Cells[1].Value = settings.GetAttribute("data2.1.2.20");
-                                //objectDataGrid.Rows[38].Cells[1].Value = settings.GetAttribute("data2.1.2.21");
-                                //objectDataGrid.Rows[39].Cells[1].Value = settings.GetAttribute("data2.1.2.22");
+                                objectDataGrid.Rows[18].Cells[1].Value = settings.GetAttribute("data2.1.2.1");
+                                objectDataGrid.Rows[19].Cells[1].Value = settings.GetAttribute("data2.1.2.2");
+                                objectDataGrid.Rows[20].Cells[1].Value = settings.GetAttribute("data2.1.2.3");
+                                objectDataGrid.Rows[21].Cells[1].Value = settings.GetAttribute("data2.1.2.4");
+                                objectDataGrid.Rows[22].Cells[1].Value = settings.GetAttribute("data2.1.2.5");
+                                objectDataGrid.Rows[23].Cells[1].Value = settings.GetAttribute("data2.1.2.6");
+                                objectDataGrid.Rows[24].Cells[1].Value = settings.GetAttribute("data2.1.2.7");
+                                objectDataGrid.Rows[25].Cells[1].Value = settings.GetAttribute("data2.1.2.8");
+                                objectDataGrid.Rows[26].Cells[1].Value = settings.GetAttribute("data2.1.2.9");
+                                objectDataGrid.Rows[27].Cells[1].Value = settings.GetAttribute("data2.1.2.10");
+                                objectDataGrid.Rows[28].Cells[1].Value = settings.GetAttribute("data2.1.2.11");
+                                objectDataGrid.Rows[29].Cells[1].Value = settings.GetAttribute("data2.1.2.12");
+                                objectDataGrid.Rows[30].Cells[1].Value = settings.GetAttribute("data2.1.2.13");
+                                objectDataGrid.Rows[31].Cells[1].Value = settings.GetAttribute("data2.1.2.14");
+                                objectDataGrid.Rows[32].Cells[1].Value = settings.GetAttribute("data2.1.2.15");
+                                objectDataGrid.Rows[33].Cells[1].Value = settings.GetAttribute("data2.1.2.16");
+                                objectDataGrid.Rows[34].Cells[1].Value = settings.GetAttribute("data2.1.2.17");
+                                objectDataGrid.Rows[35].Cells[1].Value = settings.GetAttribute("data2.1.2.18");
+                                objectDataGrid.Rows[36].Cells[1].Value = settings.GetAttribute("data2.1.2.19");
+                                objectDataGrid.Rows[37].Cells[1].Value = settings.GetAttribute("data2.1.2.20");
+                                objectDataGrid.Rows[38].Cells[1].Value = settings.GetAttribute("data2.1.2.21");
+                                objectDataGrid.Rows[39].Cells[1].Value = settings.GetAttribute("data2.1.2.22");
 
-                                //objectDataGrid.Rows[41].Cells[1].Value = settings.GetAttribute("data2.1.3.1");
-                                //objectDataGrid.Rows[42].Cells[1].Value = settings.GetAttribute("data2.1.3.2");
-                                //objectDataGrid.Rows[43].Cells[1].Value = settings.GetAttribute("data2.1.3.3");
-                                //objectDataGrid.Rows[44].Cells[1].Value = settings.GetAttribute("data2.1.3.4");
-                                //objectDataGrid.Rows[45].Cells[1].Value = settings.GetAttribute("data2.1.3.5");
-                                //objectDataGrid.Rows[46].Cells[1].Value = settings.GetAttribute("data2.1.3.6");
-                                //objectDataGrid.Rows[47].Cells[1].Value = settings.GetAttribute("data2.1.3.7");
-                                //objectDataGrid.Rows[48].Cells[1].Value = settings.GetAttribute("data2.1.3.8");
-                                //objectDataGrid.Rows[49].Cells[1].Value = settings.GetAttribute("data2.1.3.9");
-                                //objectDataGrid.Rows[50].Cells[1].Value = settings.GetAttribute("data2.1.3.10");
-                                //objectDataGrid.Rows[51].Cells[1].Value = settings.GetAttribute("data2.1.3.11");
-                                //objectDataGrid.Rows[52].Cells[1].Value = settings.GetAttribute("data2.1.3.12");
-                                //objectDataGrid.Rows[53].Cells[1].Value = settings.GetAttribute("data2.1.3.13");
-                                //objectDataGrid.Rows[54].Cells[1].Value = settings.GetAttribute("data2.1.3.14");
-                                //objectDataGrid.Rows[55].Cells[1].Value = settings.GetAttribute("data2.1.3.15");
-                                //objectDataGrid.Rows[56].Cells[1].Value = settings.GetAttribute("data2.1.3.16");
-                                //objectDataGrid.Rows[57].Cells[1].Value = settings.GetAttribute("data2.1.3.17");
-                                //objectDataGrid.Rows[58].Cells[1].Value = settings.GetAttribute("data2.1.3.18");
-                                //objectDataGrid.Rows[59].Cells[1].Value = settings.GetAttribute("data2.1.3.19");
-                                //objectDataGrid.Rows[60].Cells[1].Value = settings.GetAttribute("data2.1.3.20");
-                                //objectDataGrid.Rows[61].Cells[1].Value = settings.GetAttribute("data2.1.3.21");
-                                //objectDataGrid.Rows[62].Cells[1].Value = settings.GetAttribute("data2.1.3.22");
-                                //objectDataGrid.Rows[63].Cells[1].Value = settings.GetAttribute("data2.1.3.23");
-                                //objectDataGrid.Rows[64].Cells[1].Value = settings.GetAttribute("data2.1.3.24");
-                                //objectDataGrid.Rows[65].Cells[1].Value = settings.GetAttribute("data2.1.3.25");
-                                //objectDataGrid.Rows[66].Cells[1].Value = settings.GetAttribute("data2.1.3.26");
-                                //objectDataGrid.Rows[67].Cells[1].Value = settings.GetAttribute("data2.1.3.27");
-                                //objectDataGrid.Rows[68].Cells[1].Value = settings.GetAttribute("data2.1.3.28");
-                                //objectDataGrid.Rows[69].Cells[1].Value = settings.GetAttribute("data2.1.3.29");
-                                //objectDataGrid.Rows[70].Cells[1].Value = settings.GetAttribute("data2.1.3.30");
-                                //objectDataGrid.Rows[71].Cells[1].Value = settings.GetAttribute("data2.1.3.31");
-                                //objectDataGrid.Rows[72].Cells[1].Value = settings.GetAttribute("data2.1.3.32");
-                                //objectDataGrid.Rows[73].Cells[1].Value = settings.GetAttribute("data2.1.3.33");
-                                //objectDataGrid.Rows[74].Cells[1].Value = settings.GetAttribute("data2.1.3.34");
-                                //objectDataGrid.Rows[75].Cells[1].Value = settings.GetAttribute("data2.1.3.35");
-                                //objectDataGrid.Rows[76].Cells[1].Value = settings.GetAttribute("data2.1.3.36");
-                                //objectDataGrid.Rows[77].Cells[1].Value = settings.GetAttribute("data2.1.3.37");
-                                //objectDataGrid.Rows[78].Cells[1].Value = settings.GetAttribute("data2.1.3.38");
-                                //objectDataGrid.Rows[79].Cells[1].Value = settings.GetAttribute("data2.1.3.39");
-                                ////int colsCount = int.Parse(settings.GetAttribute("analogsColsCount"));
-                                ////for (int i = 0; i <  19; i++)
-                                ////{
-                                ////    for (int j = 0; j <colsCount ; j++)
-                                ////    {
-                                ////        analogsGrid.Rows[i].Cells[j].Value=settings.GetAttribute("analog"+i.ToString()+"."+j.ToString());
-                                ////    }
-                                ////}
-                                ////colsCount = int.Parse(settings.GetAttribute("calcColsCount"));
+                                objectDataGrid.Rows[41].Cells[1].Value = settings.GetAttribute("data2.1.3.1");
+                                objectDataGrid.Rows[42].Cells[1].Value = settings.GetAttribute("data2.1.3.2");
+                                objectDataGrid.Rows[43].Cells[1].Value = settings.GetAttribute("data2.1.3.3");
+                                objectDataGrid.Rows[44].Cells[1].Value = settings.GetAttribute("data2.1.3.4");
+                                objectDataGrid.Rows[45].Cells[1].Value = settings.GetAttribute("data2.1.3.5");
+                                objectDataGrid.Rows[46].Cells[1].Value = settings.GetAttribute("data2.1.3.6");
+                                objectDataGrid.Rows[47].Cells[1].Value = settings.GetAttribute("data2.1.3.7");
+                                objectDataGrid.Rows[48].Cells[1].Value = settings.GetAttribute("data2.1.3.8");
+                                objectDataGrid.Rows[49].Cells[1].Value = settings.GetAttribute("data2.1.3.9");
+                                objectDataGrid.Rows[50].Cells[1].Value = settings.GetAttribute("data2.1.3.10");
+                                objectDataGrid.Rows[51].Cells[1].Value = settings.GetAttribute("data2.1.3.11");
+                                objectDataGrid.Rows[52].Cells[1].Value = settings.GetAttribute("data2.1.3.12");
+                                objectDataGrid.Rows[53].Cells[1].Value = settings.GetAttribute("data2.1.3.13");
+                                objectDataGrid.Rows[54].Cells[1].Value = settings.GetAttribute("data2.1.3.14");
+                                objectDataGrid.Rows[55].Cells[1].Value = settings.GetAttribute("data2.1.3.15");
+                                objectDataGrid.Rows[56].Cells[1].Value = settings.GetAttribute("data2.1.3.16");
+                                objectDataGrid.Rows[57].Cells[1].Value = settings.GetAttribute("data2.1.3.17");
+                                objectDataGrid.Rows[58].Cells[1].Value = settings.GetAttribute("data2.1.3.18");
+                                objectDataGrid.Rows[59].Cells[1].Value = settings.GetAttribute("data2.1.3.19");
+                                objectDataGrid.Rows[60].Cells[1].Value = settings.GetAttribute("data2.1.3.20");
+                                objectDataGrid.Rows[61].Cells[1].Value = settings.GetAttribute("data2.1.3.21");
+                                objectDataGrid.Rows[62].Cells[1].Value = settings.GetAttribute("data2.1.3.22");
+                                objectDataGrid.Rows[63].Cells[1].Value = settings.GetAttribute("data2.1.3.23");
+                                objectDataGrid.Rows[64].Cells[1].Value = settings.GetAttribute("data2.1.3.24");
+                                objectDataGrid.Rows[65].Cells[1].Value = settings.GetAttribute("data2.1.3.25");
+                                objectDataGrid.Rows[66].Cells[1].Value = settings.GetAttribute("data2.1.3.26");
+                                objectDataGrid.Rows[67].Cells[1].Value = settings.GetAttribute("data2.1.3.27");
+                                objectDataGrid.Rows[68].Cells[1].Value = settings.GetAttribute("data2.1.3.28");
+                                objectDataGrid.Rows[69].Cells[1].Value = settings.GetAttribute("data2.1.3.29");
+                                objectDataGrid.Rows[70].Cells[1].Value = settings.GetAttribute("data2.1.3.30");
+                                objectDataGrid.Rows[71].Cells[1].Value = settings.GetAttribute("data2.1.3.31");
+                                objectDataGrid.Rows[72].Cells[1].Value = settings.GetAttribute("data2.1.3.32");
+                                objectDataGrid.Rows[73].Cells[1].Value = settings.GetAttribute("data2.1.3.33");
+                                objectDataGrid.Rows[74].Cells[1].Value = settings.GetAttribute("data2.1.3.34");
+                                objectDataGrid.Rows[75].Cells[1].Value = settings.GetAttribute("data2.1.3.35");
+                                objectDataGrid.Rows[76].Cells[1].Value = settings.GetAttribute("data2.1.3.36");
+                                objectDataGrid.Rows[77].Cells[1].Value = settings.GetAttribute("data2.1.3.37");
+                                objectDataGrid.Rows[78].Cells[1].Value = settings.GetAttribute("data2.1.3.38");
+                                objectDataGrid.Rows[79].Cells[1].Value = settings.GetAttribute("data2.1.3.39");
+                                
+                                //Костыль, надо переделать                                
+                                //analogsGrid.Columns.RemoveAt(0);
+                                //analogsGrid.Columns.RemoveAt(0);
+                                //analogsGrid.Columns.RemoveAt(0);
+                                //analogsGrid.Columns.RemoveAt(0);
+                                //analogsGrid.Columns.RemoveAt(0);
 
-                                ////for (int i = 0; i < 39; i++)
-                                ////{
-                                ////    for (int j = 0; j < colsCount; j++)
-                                ////    {
-                                ////        calculationAppartaments.Rows[i].Cells[j].Value = settings.GetAttribute("calc" + i.ToString() + "." + j.ToString());                                        
-                                ////    }
-                                ////}
+                                calculationAppartaments.Columns.RemoveAt(0);
+                                calculationAppartaments.Columns.RemoveAt(0);
+                                calculationAppartaments.Columns.RemoveAt(0);
+                                calculationAppartaments.Columns.RemoveAt(0);
+                                calculationAppartaments.Columns.RemoveAt(0);
                             }
                             ownerDocs.Text = settings.GetAttribute(ownerDocs.Name);
                         }
