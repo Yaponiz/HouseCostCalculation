@@ -3750,6 +3750,13 @@ namespace WindowsFormsApplication1
                             string fname = fileName.Substring(0, fileName.LastIndexOf("."));
                             DataTable test = getDataFromXLS(fname + "Calc.xls");
                             calculationAppartaments.DataSource = test;
+                                                    //Костыль, надо переделать   
+                            calculationAppartaments.Columns.RemoveAt(0);
+                            calculationAppartaments.Columns.RemoveAt(0);
+                            calculationAppartaments.Columns.RemoveAt(0);
+                            calculationAppartaments.Columns.RemoveAt(0);
+                            calculationAppartaments.Columns.RemoveAt(0);
+
                             calculationAppartaments.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
                             calculationAppartaments.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                             calculationAppartaments.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -3759,10 +3766,20 @@ namespace WindowsFormsApplication1
                             test = null;
                             test = getDataFromXLS(fname + "Analogs.xls");
                             analogsGrid.DataSource = test;
-                            analogsGrid.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
-                            analogsGrid.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-                            analogsGrid.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
-                            analogsGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                            //Костыль, надо переделать                                
+                            analogsGrid.Columns.RemoveAt(0);
+                            analogsGrid.Columns.RemoveAt(0);
+                            analogsGrid.Columns.RemoveAt(0);
+                            analogsGrid.Columns.RemoveAt(0);
+                            analogsGrid.Columns.RemoveAt(0);
+
+                            //analogsGrid.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            //analogsGrid.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            //analogsGrid.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                            //analogsGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+
+
 
                             if (docTypeT == "Квартира")
                             {
@@ -3845,18 +3862,7 @@ namespace WindowsFormsApplication1
                                 objectDataGrid.Rows[78].Cells[1].Value = settings.GetAttribute("data2.1.3.38");
                                 objectDataGrid.Rows[79].Cells[1].Value = settings.GetAttribute("data2.1.3.39");
                                 
-                                //Костыль, надо переделать                                
-                                //analogsGrid.Columns.RemoveAt(0);
-                                //analogsGrid.Columns.RemoveAt(0);
-                                //analogsGrid.Columns.RemoveAt(0);
-                                //analogsGrid.Columns.RemoveAt(0);
-                                //analogsGrid.Columns.RemoveAt(0);
 
-                                calculationAppartaments.Columns.RemoveAt(0);
-                                calculationAppartaments.Columns.RemoveAt(0);
-                                calculationAppartaments.Columns.RemoveAt(0);
-                                calculationAppartaments.Columns.RemoveAt(0);
-                                calculationAppartaments.Columns.RemoveAt(0);
                             }
                             ownerDocs.Text = settings.GetAttribute(ownerDocs.Name);
                         }
