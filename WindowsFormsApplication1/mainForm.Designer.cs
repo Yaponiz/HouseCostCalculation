@@ -2,6 +2,7 @@
 using System.IO;
 using System;
 using System.Windows.Forms;
+using HouseCostCalculation;
 
 namespace WindowsFormsApplication1
 {
@@ -1748,7 +1749,8 @@ namespace WindowsFormsApplication1
             this.houseType.FormattingEnabled = true;
             this.houseType.Items.AddRange(new object[] {
             "Кирпичный",
-            "Панельный"});
+            "Панельный",
+            "Монолитный"});
             this.houseType.Location = new System.Drawing.Point(108, 257);
             this.houseType.Name = "houseType";
             this.houseType.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -2785,8 +2787,9 @@ namespace WindowsFormsApplication1
                 default: break;
             }
 
-
-            bankName.Text = banks;
+            Bank bank = new Bank();
+            bank.BankName = banks;
+            bankName.Text = bank.BankName;
             
 
         }

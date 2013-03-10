@@ -73,11 +73,12 @@
             this.banksList.FormattingEnabled = true;
             this.banksList.Items.AddRange(new object[] {
             "сбербанк",
-            "брр",
             "втб 24",
             "аижк",
             "банк москвы",
-            "адамон"});
+            "адамон",
+            "россельхозбанк",
+            "брр"});
             this.banksList.Location = new System.Drawing.Point(12, 87);
             this.banksList.Name = "banksList";
             this.banksList.Size = new System.Drawing.Size(214, 69);

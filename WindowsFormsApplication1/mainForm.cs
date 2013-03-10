@@ -16,12 +16,14 @@ using WMPLib;
 using Application = Microsoft.Office.Interop.Word.Application;
 using DataTable = System.Data.DataTable;
 using Shape = Microsoft.Office.Interop.Word.Shape;
+using HouseCostCalculation;
 
 namespace WindowsFormsApplication1
 {
     [Serializable]
     public partial class mainForm : Form
     {
+        public static Bank bank;
         public static string rooms1;
         public static string roomsT;
         public static string customerFullNameR;
@@ -316,7 +318,7 @@ namespace WindowsFormsApplication1
             }
 
 
-            fullAddress = " домовладение " + town.Text + ", " + street.Text + ", " + houseNum.Text + buildNum;
+            fullAddress = " домовладение и земельный участок" + town.Text + ", " + street.Text + ", " + houseNum.Text + buildNum;
             return fullAddress;
         }
 
@@ -1732,10 +1734,7 @@ namespace WindowsFormsApplication1
                         ;
 
 
-                    ReplaceTextWord(ref wdApp, "@@ownerPassOVD@@",
-                                    ownerPassOVD.Text
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@ownerPassOVD@@", ownerPassOVD.Text                        )                        ;
 
 
                     ReplaceTextWord(ref wdApp, "@@ownerPassDate@@",
@@ -4047,7 +4046,11 @@ namespace WindowsFormsApplication1
                         houseType1 = "панельного";
                     }
                     break;
-
+                case "Монолитный":
+                    {
+                        houseType1 = "монолитного";
+                    }
+                    break;
 
                 default:
                     break;
@@ -4060,8 +4063,7 @@ namespace WindowsFormsApplication1
                     wdApp = new Application();
                     var wdDoc = new Document();
 
-                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\m2.doc", Missing,
-                                                 true);
+                    wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + "\\m2.doc", Missing, true);
                     wdApp.ActiveDocument.Words[1].Select();
                     wdApp.Selection.Copy();
                     wdDoc.Close();
@@ -4072,6 +4074,12 @@ namespace WindowsFormsApplication1
                     {
                         template = "\\шаблоны\\ВТБ24.doc";
                     }
+
+                    if (ownerOrg.Checked)
+                    {
+                        template = "\\шаблоны\\Организация.doc";
+                    }
+
                     wdDoc = wdApp.Documents.Open(System.Windows.Forms.Application.StartupPath + template, Missing, true);
                     object replaceAll = WdReplace.wdReplaceAll;
 
@@ -4129,7 +4137,18 @@ namespace WindowsFormsApplication1
                             ReplaceTextWord(ref wdApp, "@@KPP@@", "231002001");
                             ReplaceTextWord(ref wdApp, "@@orgAddress@@", "РСО-Алания, г. Владикавказ, ул. Коцоева, д.13");
                         }
+                        else
+                        {
+                            ReplaceTextWord(ref wdApp, "@@ownerOrgname@@", orgName.Text);
+                            ReplaceTextWord(ref wdApp, "@@INN@@", orgINN.Text);
+                            ReplaceTextWord(ref wdApp, "@@OGRN@@", orgOGRN.Text);
+                            ReplaceTextWord(ref wdApp, "@@KPP@@", orgKPP.Text);
+                            ReplaceTextWord(ref wdApp, "@@orgAddress@@", orgAdd.Text);
+                        }
                     }
+
+
+
                     ReplaceTextWord(ref wdApp, "@@houseType1@@", houseType1);
                     ReplaceTextWord(ref wdApp, "@@calculationDateStr@@", calculationDateStr);
                     ReplaceTextWord(ref wdApp, "@@houseType@@", houseType.Text.ToLower());
@@ -8055,7 +8074,7 @@ if (newSentence.Contains("@@uvaj@@"))
             }
             else
             {
-                fileName = "приложение отчет " + contractNum.Text + "домовладение " + appartmentNum.Text + " " +
+                fileName = "приложение отчет " + contractNum.Text + "домовладение и земельный участок " + appartmentNum.Text + " " +
                            street.Text + " " + houseNum.Text + " для " + bankName.Text;
                 saveFileDialog1.FileName = fileName.Replace("\"", " ").ToLower();
                 saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("/", " ").ToLower();
@@ -8549,26 +8568,29 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
 
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@ownerDoc@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = ownerDocs.Text;
+                //wdApp.Selection.Find.ClearFormatting();
+                //wdApp.Selection.Find.Text = "@@ownerDoc@@";
+                //wdApp.Selection.Find.Replacement.ClearFormatting();
+                //wdApp.Selection.Find.Replacement.Text = ownerDocs.Text;
 
-                wdApp.Selection.Find.Execute(
-                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                //wdApp.Selection.Find.Execute(
+                //    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                //    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                //    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-                wdApp.Selection.Find.ClearFormatting();
-                wdApp.Selection.Find.Text = "@@registrationDoc@@";
-                wdApp.Selection.Find.Replacement.ClearFormatting();
-                wdApp.Selection.Find.Replacement.Text = registrationDoc.Text;
+                ReplaceTextWord(ref wdApp, "@@ownerDoc@@", ownerDocs.Text);
 
-                wdApp.Selection.Find.Execute(
-                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
-                    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+                //wdApp.Selection.Find.ClearFormatting();
+                //wdApp.Selection.Find.Text = "@@registrationDoc@@";
+                //wdApp.Selection.Find.Replacement.ClearFormatting();
+                //wdApp.Selection.Find.Replacement.Text = registrationDoc.Text;
 
+                //wdApp.Selection.Find.Execute(
+                //    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                //    ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
+                //    ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
+
+                ReplaceTextWord(ref wdApp, "@@registrationDoc@@", registrationDoc.Text);
 
                 string te = wdApp.Selection.Text;
                 //saving
