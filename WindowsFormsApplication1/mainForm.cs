@@ -16,7 +16,6 @@ using WMPLib;
 using Application = Microsoft.Office.Interop.Word.Application;
 using DataTable = System.Data.DataTable;
 using Shape = Microsoft.Office.Interop.Word.Shape;
-using HouseCostCalculation;
 
 namespace WindowsFormsApplication1
 {
@@ -108,12 +107,12 @@ namespace WindowsFormsApplication1
                         {
                             objectDataGrid.Rows[43].Cells[1].Value = floor.Value.ToString() + " этаж";
                             analogsGrid.Rows[6].Cells[1].Value = floor.Value.ToString().ToLower();
+
                             //analogsGrid.Rows[6].Cells[2].Value = floor.Value.ToString().ToLower();
                             //analogsGrid.Rows[6].Cells[3].Value = floor.Value.ToString().ToLower();
                             //analogsGrid.Rows[6].Cells[4].Value = floor.Value.ToString().ToLower();
                         }
                         break;
-
 
                     default:
                         break;
@@ -134,7 +133,6 @@ namespace WindowsFormsApplication1
                 analogsGrid.Rows[2].Cells[4].Value = street.Text;
             }
         }
-
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -202,7 +200,6 @@ namespace WindowsFormsApplication1
                 buildNum = ", корп. " + buildingNum.Text + ".";
             }
 
-
             fullAddress = "Объект оценки - " + rooms + " квартира №" + appartmentNum.Text + " по адресу: " + town.Text +
                           ", " + street.Text + " " + houseNum.Text + buildNum;
             return fullAddress;
@@ -219,7 +216,6 @@ namespace WindowsFormsApplication1
                 buildNum = ", корп. " + buildingNum.Text + ".";
             }
 
-
             fullAddress = "Частное домовладение и зем. участок по адресу: " + town.Text + ", " + street.Text + " " +
                           houseNum.Text + buildNum;
             return fullAddress;
@@ -233,7 +229,7 @@ namespace WindowsFormsApplication1
             string rooms = null;
             switch (roomsNum.Value.ToString())
             {
-                    //ToDo проверить комнаты
+                //ToDo проверить комнаты
                 case "1":
                     rooms = "однокомнатная";
                     rooms1 = "однокомнатной";
@@ -241,6 +237,7 @@ namespace WindowsFormsApplication1
                     roomsN = "1 комн";
                     roomsX = "1-на комн. квартира";
                     break;
+
                 case "2":
                     rooms = "двухкомнатная";
                     rooms1 = "двухкомнатной";
@@ -248,6 +245,7 @@ namespace WindowsFormsApplication1
                     roomsN = "2 комн";
                     roomsX = "2-ух комн. квартира";
                     break;
+
                 case "3":
                     rooms = "трехкомнатная";
                     rooms1 = "трехкомнатной";
@@ -255,6 +253,7 @@ namespace WindowsFormsApplication1
                     roomsN = "3 комн";
                     roomsX = "3-ех комн. квартира";
                     break;
+
                 case "4":
                     rooms = "четырехкомнатная";
                     rooms1 = "четырехкомнатной";
@@ -262,6 +261,7 @@ namespace WindowsFormsApplication1
                     roomsN = "4 комн";
                     roomsX = "4-ех комн. квартира";
                     break;
+
                 case "5":
                     rooms = "пятикомнатная";
                     rooms1 = "пятикомнатной";
@@ -269,6 +269,7 @@ namespace WindowsFormsApplication1
                     roomsN = "5 комн";
                     roomsX = "5-ти комн. квартира";
                     break;
+
                 case "6":
                     rooms = "шестикомнатная";
                     rooms1 = "шестикомнатной";
@@ -276,9 +277,10 @@ namespace WindowsFormsApplication1
                     roomsN = "6 комн";
                     roomsX = "6-ти комн. квартира";
                     break;
-                    //case "7": rooms = "семикомнатная"; break;
-                    //case '8': roomsNum = "однокомнатная": break;
-                    //case '9': roomsNum = "однокомнатная": break;
+
+                //case "7": rooms = "семикомнатная"; break;
+                //case '8': roomsNum = "однокомнатная": break;
+                //case '9': roomsNum = "однокомнатная": break;
                 default:
                     rooms = "";
                     break;
@@ -300,7 +302,6 @@ namespace WindowsFormsApplication1
                 buildNum = ", корп. " + buildingNum.Text;
             }
 
-
             fullAddress = rooms + " квартира №" + appartmentNum.Text + " " + town.Text + ", " + street.Text + ", " +
                           houseNum.Text + buildNum;
             return fullAddress;
@@ -317,7 +318,6 @@ namespace WindowsFormsApplication1
                 buildNum = ", корп. " + buildingNum.Text;
             }
 
-
             fullAddress = " домовладение и земельный участок" + town.Text + ", " + street.Text + ", " + houseNum.Text + buildNum;
             return fullAddress;
         }
@@ -332,7 +332,6 @@ namespace WindowsFormsApplication1
             {
                 buildNum = ", корп. " + buildingNum.Text;
             }
-
 
             fullAddress = " земельный участок " + town.Text + ", " + street.Text + ", " + houseNum.Text + buildNum;
             return fullAddress;
@@ -356,10 +355,9 @@ namespace WindowsFormsApplication1
             return (name + Init);
         }
 
-
         private void Player_PlayStateChange(int NewState)
         {
-            if ((WMPPlayState) NewState == WMPPlayState.wmppsStopped)
+            if ((WMPPlayState)NewState == WMPPlayState.wmppsStopped)
             {
             }
         }
@@ -369,7 +367,6 @@ namespace WindowsFormsApplication1
             MessageBox.Show("Cannot play media file.");
             Close();
         }
-
 
         public void addObjectData()
         {
@@ -420,6 +417,7 @@ namespace WindowsFormsApplication1
             objectDataGrid.Rows.Add("2.1.3", "Описание оцениваемой квартиры"); //39
             objectDataGrid.Rows.Add(
                 "Документ органа (организации), осуществившей технический учет и инвентаризацию Объекта оценки", " ");
+
             //40
             objectDataGrid.Rows.Add("Литер, согласно документа технического учета и инвентаризации", " "); //41
             objectDataGrid.Rows.Add("Этаж", " "); //42
@@ -433,12 +431,14 @@ namespace WindowsFormsApplication1
                 "Общая площадь (без учета лоджий и балконов), согласно документа технического учета и инвентаризации, в кв.м.",
                 " "); //46
             objectDataGrid.Rows.Add("Жилая площадь, согласно документа технич.учета и инвентаризации, в кв.м.", " ");
+
             //47
             objectDataGrid.Rows.Add("Площадь кухни, согласно документа технич.учета и инвентаризации, кв.м.", " "); //48
             objectDataGrid.Rows.Add("Санузел, количество санузлов", " "); //49
             objectDataGrid.Rows.Add("Балкон/лоджия, согласно документа технич.учета и инвентаризации", " "); //50
             objectDataGrid.Rows.Add(
                 "Высота помещений по внутр. обмеру, согласно документа технического учета и инвентаризации, в м.", " ");
+
             //51
             objectDataGrid.Rows.Add(
                 "Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text +
@@ -476,7 +476,6 @@ namespace WindowsFormsApplication1
             {
                 var excelApp = new Microsoft.Office.Interop.Excel.Application();
 
-
                 excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\Черновик.xls", Missing,
                                         Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
                                         Missing, Missing, Missing, Missing);
@@ -493,15 +492,12 @@ namespace WindowsFormsApplication1
                     }
                 }
 
-
                 excelApp.ActiveWorkbook.Save();
-                excelApp.ActiveWorkbook.SaveAs(System.Windows.Forms.Application.StartupPath +"\\"+contractNum.Text + "Calc.xls");
+                excelApp.ActiveWorkbook.SaveAs(System.Windows.Forms.Application.StartupPath + "\\" + contractNum.Text + "Calc.xls");
                 excelApp.ActiveWorkbook.Close(Missing);
                 excelApp.Quit();
 
-
                 excelApp = new Microsoft.Office.Interop.Excel.Application();
-
 
                 excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\analogs.xls", Missing, Missing,
                                         Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
@@ -518,7 +514,6 @@ namespace WindowsFormsApplication1
                         excelApp.Workbooks[1].Sheets[1].Cells[i + 2, j + 1] = cell.Value;
                     }
                 }
-
 
                 excelApp.ActiveWorkbook.Save();
                 excelApp.ActiveWorkbook.SaveAs(System.Windows.Forms.Application.StartupPath + "\\" + contractNum.Text + "Analogs.xls");
@@ -732,6 +727,7 @@ namespace WindowsFormsApplication1
                                   "За собственные средства в момент оформления"); //8
             dirtCalcGrid.Rows.Add("Поправка на условия финансовых расчетов", "1", "1", "1"); //9
             dirtCalcGrid.Rows.Add("Условия продажи", "Свободная продажа", "Свободная продажа", "Свободная продажа");
+
             //10
             dirtCalcGrid.Rows.Add("Поправка на условия продажи", "1", "1", "1"); //11
             dirtCalcGrid.Rows.Add("Дата предложения", "Август 2011г.", "Август 2011г.", "Август 2011г."); //12
@@ -744,6 +740,7 @@ namespace WindowsFormsApplication1
             dirtCalcGrid.Rows.Add("Размер участка (масштаб участка), в сот.", "6,00", "6,00", "6,00"); //18
             dirtCalcGrid.Rows.Add("Поправка на размер участка (масштаб участка)", "1", "1", "1"); //19
             dirtCalcGrid.Rows.Add("Наличие коммуникаций", "Все коммуникации", "Все коммуникации", "Все коммуникации");
+
             //20
             dirtCalcGrid.Rows.Add("Поправка на наличие коммуникаций", "1", "1", "1"); //21
             dirtCalcGrid.Rows.Add("Наличие и состояние подъездных путей (дороги)", "Хорошо", "Хорошо", "Хорошо"); //22
@@ -756,6 +753,7 @@ namespace WindowsFormsApplication1
             dirtCalcGrid.Rows.Add("Весовой коэффициент, в зависимости от кол-ва произв. корректировок, доля един. ", "1",
                                   "1", "1"); //28
             dirtCalcGrid.Rows.Add("Скорректированная стоимость, доля в итоговой  стоимости, руб./сот.", "1", "1", "1");
+
             //29
             dirtCalcGrid.Rows.Add("Итоговая стоимость 1 сотки оценив. зем. участка, руб./сот.", "1", "", ""); //30
             dirtCalcGrid.Rows.Add("Общая площадь оцениваемого земельного участка, сот.", "1", "", ""); //31
@@ -765,7 +763,6 @@ namespace WindowsFormsApplication1
             dirtCalcGrid.Rows.Add("Ликвидационная стоимость оцениваемого зем. участка с учетом округления, тыс. руб.",
                                   "1", "", ""); //34
         }
-
 
         private DataTable getDataFromXLS(string strFilePath)
         {
@@ -800,6 +797,7 @@ namespace WindowsFormsApplication1
             try
             {
                 string cellValue;
+
                 //todo: Добавить цикл для обхода всех столбцов
                 cost_count1 = 0;
                 cost_count2 = 0;
@@ -808,12 +806,13 @@ namespace WindowsFormsApplication1
                 cost_count1 = CalcCost(2);
                 cost_count2 = CalcCost(3);
                 cost_count3 = CalcCost(4);
+
                 //Аналог 2
 
                 //Final costs
                 double koef_count, t2;
                 koef_count = cost_count1 + cost_count2 + cost_count3;
-                t2 = 1/koef_count;
+                t2 = 1 / koef_count;
                 cellValue = calculationAppartaments.Rows[33].Cells[2].Value.ToString();
                 if (cellValue != "")
                 {
@@ -846,12 +845,12 @@ namespace WindowsFormsApplication1
                     cor_cost313 = double.Parse(cellValue);
                 }
 
-                cor_cost_final1 = Math.Round(cor_cost113*cost_cor_koef1);
+                cor_cost_final1 = Math.Round(cor_cost113 * cost_cor_koef1);
                 calculationAppartaments.Rows[34].Cells[2].Value = cor_cost_final1.ToString();
 
                 if (cost_cor_koef2 != 0)
                 {
-                    cor_cost_final2 = Math.Round(cor_cost213*cost_cor_koef2);
+                    cor_cost_final2 = Math.Round(cor_cost213 * cost_cor_koef2);
                 }
                 else
                 {
@@ -861,7 +860,7 @@ namespace WindowsFormsApplication1
                 calculationAppartaments.Rows[34].Cells[3].Value = cor_cost_final2.ToString();
                 if (cost_cor_koef3 != 0)
                 {
-                    cor_cost_final3 = Math.Round(cor_cost313*cost_cor_koef3);
+                    cor_cost_final3 = Math.Round(cor_cost313 * cost_cor_koef3);
                 }
                 else
                 {
@@ -872,16 +871,16 @@ namespace WindowsFormsApplication1
                 final_cost_m = Math.Round(cor_cost_final1 + cor_cost_final2 + cor_cost_final3);
                 calculationAppartaments.Rows[35].Cells[2].Value = final_cost_m.ToString();
 
-
-                finalCost = Math.Round(final_cost_m*m_final);
+                finalCost = Math.Round(final_cost_m * m_final);
                 calculationAppartaments.Rows[37].Cells[2].Value = finalCost.ToString();
 
-                finalCostRounded = Math.Round(finalCost/1000);
+                finalCostRounded = Math.Round(finalCost / 1000);
                 calculationAppartaments.Rows[38].Cells[2].Value = finalCostRounded.ToString();
-                costStr = RusCurrency.Str(finalCostRounded*1000, "RUR");
+                costStr = RusCurrency.Str(finalCostRounded * 1000, "RUR");
                 costStr = costStr.Replace("00 копеек", "");
-                likvidCost = Math.Round(finalCostRounded*0.66);
+                likvidCost = Math.Round(finalCostRounded * 0.66);
                 calculationAppartaments.Rows[39].Cells[2].Value = likvidCost.ToString();
+
                 //date1 = contractDate.Text;
                 //if (date1 != "")
                 //{
@@ -1042,49 +1041,48 @@ namespace WindowsFormsApplication1
                     m_final = double.Parse(cellValue);
                 }
 
-
-                cost_m1 = Math.Round(cost1/m1);
+                cost_m1 = Math.Round(cost1 / m1);
                 calculationAppartaments.Rows[2].Cells[i].Value = cost_m1.ToString();
-                cor_cost1 = Math.Round(cost_m1*cor_torg);
+                cor_cost1 = Math.Round(cost_m1 * cor_torg);
                 calculationAppartaments.Rows[4].Cells[i].Value = cor_cost1.ToString();
 
-                cor_cost11 = Math.Round(cor1*cor_cost1);
+                cor_cost11 = Math.Round(cor1 * cor_cost1);
                 calculationAppartaments.Rows[7].Cells[i].Value = cor_cost11.ToString();
 
-                cor_cost12 = Math.Round(cor_cost11*cor_place1);
+                cor_cost12 = Math.Round(cor_cost11 * cor_place1);
                 calculationAppartaments.Rows[9].Cells[i].Value = cor_cost12.ToString();
 
-                cor_cost13 = Math.Round(cor_cost12*cor_type1);
+                cor_cost13 = Math.Round(cor_cost12 * cor_type1);
                 calculationAppartaments.Rows[11].Cells[i].Value = cor_cost13.ToString();
 
-                cor_cost14 = Math.Round(cor_cost13*cor_date1);
+                cor_cost14 = Math.Round(cor_cost13 * cor_date1);
                 calculationAppartaments.Rows[13].Cells[i].Value = cor_cost14.ToString();
 
-                cor_cost15 = Math.Round(cor_cost14*cor_floor1);
+                cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
                 calculationAppartaments.Rows[15].Cells[i].Value = cor_cost15.ToString();
 
-                cor_cost16 = Math.Round(cor_cost15*cor_m1);
+                cor_cost16 = Math.Round(cor_cost15 * cor_m1);
                 calculationAppartaments.Rows[17].Cells[i].Value = cor_cost16.ToString();
 
-                cor_cost17 = Math.Round(cor_cost16*cor_b1);
+                cor_cost17 = Math.Round(cor_cost16 * cor_b1);
                 calculationAppartaments.Rows[19].Cells[i].Value = cor_cost17.ToString();
 
-                cor_cost18 = Math.Round(cor_cost17*cor_height1);
+                cor_cost18 = Math.Round(cor_cost17 * cor_height1);
                 calculationAppartaments.Rows[21].Cells[i].Value = cor_cost18.ToString();
 
-                cor_cost19 = Math.Round(cor_cost18*cor_class1);
+                cor_cost19 = Math.Round(cor_cost18 * cor_class1);
                 calculationAppartaments.Rows[23].Cells[i].Value = cor_cost19.ToString();
 
-                cor_cost110 = Math.Round(cor_cost19*cor_phone1);
+                cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
                 calculationAppartaments.Rows[25].Cells[i].Value = cor_cost110.ToString();
 
-                cor_cost111 = Math.Round(cor_cost110*cor_com1);
+                cor_cost111 = Math.Round(cor_cost110 * cor_com1);
                 calculationAppartaments.Rows[27].Cells[i].Value = cor_cost111.ToString();
 
-                cor_cost112 = Math.Round(cor_cost111*cor_t1);
+                cor_cost112 = Math.Round(cor_cost111 * cor_t1);
                 calculationAppartaments.Rows[29].Cells[i].Value = cor_cost112.ToString();
 
-                cor_cost113 = Math.Round(cor_cost112*cor_lift1);
+                cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
                 calculationAppartaments.Rows[31].Cells[i].Value = cor_cost113.ToString();
 
                 calculationAppartaments.Rows[32].Cells[i].Value = cost_count1.ToString();
@@ -1125,7 +1123,6 @@ namespace WindowsFormsApplication1
                     cor_cost313 = double.Parse(cellValue);
                 }
 
-
                 //Final costs
                 cellValue = houseCalcGrid.Rows[34].Cells[2].Value.ToString();
                 if (cellValue != "")
@@ -1145,31 +1142,30 @@ namespace WindowsFormsApplication1
 
                 double koef_count, t2;
                 koef_count = cost_count1 + cost_count2 + cost_count3;
-                t2 = 1/koef_count;
+                t2 = 1 / koef_count;
 
-
-                cor_cost_final1 = Math.Round(cor_cost113*cost_cor_koef1);
+                cor_cost_final1 = Math.Round(cor_cost113 * cost_cor_koef1);
                 houseCalcGrid.Rows[35].Cells[2].Value = cor_cost_final1.ToString();
 
-                cor_cost_final2 = Math.Round(cor_cost213*cost_cor_koef2);
+                cor_cost_final2 = Math.Round(cor_cost213 * cost_cor_koef2);
                 houseCalcGrid.Rows[35].Cells[3].Value = cor_cost_final2.ToString();
 
-                cor_cost_final3 = Math.Round(cor_cost313*cost_cor_koef3);
+                cor_cost_final3 = Math.Round(cor_cost313 * cost_cor_koef3);
                 houseCalcGrid.Rows[35].Cells[4].Value = cor_cost_final3.ToString();
 
                 final_cost_m = Math.Round(cor_cost_final1 + cor_cost_final2 + cor_cost_final3);
                 houseCalcGrid.Rows[36].Cells[2].Value = final_cost_m.ToString();
 
-
-                finalCost = Math.Round(final_cost_m*m_final);
+                finalCost = Math.Round(final_cost_m * m_final);
                 houseCalcGrid.Rows[38].Cells[2].Value = finalCost.ToString();
 
-                finalCostRounded = Math.Round(finalCost/1000);
+                finalCostRounded = Math.Round(finalCost / 1000);
                 houseCalcGrid.Rows[39].Cells[2].Value = finalCostRounded.ToString();
-                costStr = RusCurrency.Str((finalCostRounded + finalDirtCost/1000)*1000);
+                costStr = RusCurrency.Str((finalCostRounded + finalDirtCost / 1000) * 1000);
                 costStr = costStr.Replace("00 копеек", "");
-                likvidCost = Math.Round(finalCostRounded*0.66);
+                likvidCost = Math.Round(finalCostRounded * 0.66);
                 houseCalcGrid.Rows[40].Cells[2].Value = likvidCost.ToString();
+
                 //date1 = contractDate.Text;
                 //if (date1 != "")
                 //{
@@ -1333,46 +1329,46 @@ namespace WindowsFormsApplication1
                                double.Parse(houseCalcGrid.Rows[2].Cells[i].Value.ToString()));
                 houseCalcGrid.Rows[3].Cells[i].Value = cor_cost1.ToString();
 
-                cost_m1 = Math.Round(cor_cost1/double.Parse(houseCalcGrid.Rows[4].Cells[i].Value.ToString()));
+                cost_m1 = Math.Round(cor_cost1 / double.Parse(houseCalcGrid.Rows[4].Cells[i].Value.ToString()));
                 houseCalcGrid.Rows[5].Cells[i].Value = cost_m1;
 
-                cor_cost11 = Math.Round(cor1*cost_m1);
+                cor_cost11 = Math.Round(cor1 * cost_m1);
                 houseCalcGrid.Rows[7].Cells[i].Value = cor_cost11.ToString();
 
-                cor_cost12 = Math.Round(cor_cost11*cor_place1);
+                cor_cost12 = Math.Round(cor_cost11 * cor_place1);
                 houseCalcGrid.Rows[10].Cells[i].Value = cor_cost12.ToString();
 
-                cor_cost13 = Math.Round(cor_cost12*cor_type1);
+                cor_cost13 = Math.Round(cor_cost12 * cor_type1);
                 houseCalcGrid.Rows[12].Cells[i].Value = cor_cost13.ToString();
 
-                cor_cost14 = Math.Round(cor_cost13*cor_date1);
+                cor_cost14 = Math.Round(cor_cost13 * cor_date1);
                 houseCalcGrid.Rows[14].Cells[i].Value = cor_cost14.ToString();
 
-                cor_cost15 = Math.Round(cor_cost14*cor_floor1);
+                cor_cost15 = Math.Round(cor_cost14 * cor_floor1);
                 houseCalcGrid.Rows[16].Cells[i].Value = cor_cost15.ToString();
 
-                cor_cost16 = Math.Round(cor_cost15*cor_m1);
+                cor_cost16 = Math.Round(cor_cost15 * cor_m1);
                 houseCalcGrid.Rows[18].Cells[i].Value = cor_cost16.ToString();
 
-                cor_cost17 = Math.Round(cor_cost16*cor_b1);
+                cor_cost17 = Math.Round(cor_cost16 * cor_b1);
                 houseCalcGrid.Rows[20].Cells[i].Value = cor_cost17.ToString();
 
-                cor_cost18 = Math.Round(cor_cost17*cor_height1);
+                cor_cost18 = Math.Round(cor_cost17 * cor_height1);
                 houseCalcGrid.Rows[22].Cells[i].Value = cor_cost18.ToString();
 
-                cor_cost19 = Math.Round(cor_cost18*cor_class1);
+                cor_cost19 = Math.Round(cor_cost18 * cor_class1);
                 houseCalcGrid.Rows[24].Cells[i].Value = cor_cost19.ToString();
 
-                cor_cost110 = Math.Round(cor_cost19*cor_phone1);
+                cor_cost110 = Math.Round(cor_cost19 * cor_phone1);
                 houseCalcGrid.Rows[26].Cells[i].Value = cor_cost110.ToString();
 
-                cor_cost111 = Math.Round(cor_cost110*cor_com1);
+                cor_cost111 = Math.Round(cor_cost110 * cor_com1);
                 houseCalcGrid.Rows[28].Cells[i].Value = cor_cost111.ToString();
 
-                cor_cost112 = Math.Round(cor_cost111*cor_t1);
+                cor_cost112 = Math.Round(cor_cost111 * cor_t1);
                 houseCalcGrid.Rows[30].Cells[i].Value = cor_cost112.ToString();
 
-                cor_cost113 = Math.Round(cor_cost112*cor_lift1);
+                cor_cost113 = Math.Round(cor_cost112 * cor_lift1);
                 houseCalcGrid.Rows[32].Cells[i].Value = cor_cost113.ToString();
 
                 houseCalcGrid.Rows[33].Cells[i].Value = costCount.ToString();
@@ -1385,11 +1381,9 @@ namespace WindowsFormsApplication1
             }
         }
 
-
         private void calculationAppartaments_CellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
         {
         }
-
 
         private void floors_ValueChanged(object sender, EventArgs e)
         {
@@ -1431,27 +1425,30 @@ namespace WindowsFormsApplication1
                         {
                             objectDataGrid.Rows[20].Cells[1].Value = floors.Value.ToString() + str;
                             analogsGrid.Rows[5].Cells[1].Value = floors.Value.ToString().ToLower();
+
                             //analogsGrid.Rows[5].Cells[2].Value = floors.Value.ToString().ToLower();
                             //analogsGrid.Rows[5].Cells[3].Value = floors.Value.ToString().ToLower();
                             //analogsGrid.Rows[5].Cells[4].Value = floors.Value.ToString().ToLower();
                         }
                         break;
+
                     case "Домовладение":
                         {
                             dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
                         }
                         break;
+
                     case "Земельный участок":
                         {
                             //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                         }
                         break;
+
                     case "Домовладение с земельным участком":
                         {
                             dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
                         }
                         break;
-
 
                     default:
                         break;
@@ -1526,7 +1523,6 @@ namespace WindowsFormsApplication1
 
                     nfi.PositiveSign = "";
 
-
                     string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
                     string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
                     double dirtCost = double.Parse(dirtCalcGrid.Rows[31].Cells[1].Value.ToString());
@@ -1555,26 +1551,31 @@ namespace WindowsFormsApplication1
                     int sentencesCount = wdDoc.Sentences.Count;
                     string topColontitul = topColontitulCreatorHouse();
 
-
                     wdDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Text = topColontitul;
 
                     int count = houseAnalogs.RowCount - 1;
+
                     //Объект оценки
 
                     AddHouseAnalog(count, 0);
+
                     //Аналог 1
                     AddHouseAnalog(count, 1);
+
                     //Аналог 2
                     AddHouseAnalog(count, 2);
+
                     //Аналог 3
                     AddHouseAnalog(count, 3);
 
-
                     int dirtAnalogsCount = dirtCalcGrid.RowCount - 1;
+
                     //Аналог 1
                     AddGridCost(dirtAnalogsCount, 1);
+
                     //Аналог 2
                     AddGridCost(dirtAnalogsCount, 2);
+
                     //Аналог 3
                     AddGridCost(dirtAnalogsCount, 3);
 
@@ -1586,25 +1587,19 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@kadastrNum@@", dirtKadastr.Text);
                     ReplaceTextWord(ref wdApp, "@@dirtDoc@@", gridDoc.Text);
 
+                    ReplaceTextWord(ref wdApp, "@@calculationDateStr@@", calculationDateStr);
 
-                    ReplaceTextWord(ref wdApp, "@@calculationDateStr@@", calculationDateStr ) ;
+                    ReplaceTextWord(ref wdApp, "@@houseType@@", houseType.Text.ToLower());
 
+                    ReplaceTextWord(ref wdApp, "@@roomsT@@", roomsT);
 
-                    ReplaceTextWord(ref wdApp, "@@houseType@@", houseType.Text.ToLower() ) ;
+                    ReplaceTextWord(ref wdApp, "@@roomsX@@", roomsX);
 
+                    ReplaceTextWord(ref wdApp, "@@lm2@@", lm2text.Text);
 
-                    ReplaceTextWord(ref wdApp, "@@roomsT@@", roomsT ) ;
-
-
-                    ReplaceTextWord(ref wdApp, "@@roomsX@@" , roomsX ) ;
-
-
-                    ReplaceTextWord(ref wdApp, "@@lm2@@" , lm2text.Text ) ;
-
-
-                    ReplaceTextWord(ref wdApp, "@@m2@@", m2text.Text ) ;   
-                    ReplaceTextWord(ref wdApp, "@@customerNameInits@@", customerFamiliyR + " " + getInits() ) ;   
-                    ReplaceTextWord(ref wdApp, "@@calculationDate@@", calculationDate.Text ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullname@@", ownerFullName ) ;   ReplaceTextWord(ref wdApp, "@@customerFullname@@", customerFullName ) ;  roomsAsString(); ReplaceTextWord(ref wdApp, "@@rooms1@@", rooms1 ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullnameR@@", ownerFullNameR ) ;   ReplaceTextWord(ref wdApp, "@@customerFullnameR@@", customerFullNameR ) ;   ReplaceTextWord(ref wdApp, "@@customerFullnameT@@", customerFullNameT ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullnameD@@", ownerFullNameD ) ;   ReplaceTextWord(ref wdApp, "@@ownerFullnameT@@", ownerFullNameT ) ;   ReplaceTextWord(ref wdApp, "@@customerFullnameD@@", customerFullNameD ) ;   ReplaceTextWord(ref wdApp, "@@rooms@@", roomsAsString() ) ;   ReplaceTextWord(ref wdApp, "@@appartmentNum@@", "№" + appartmentNum.Text ) ;   ReplaceTextWord(ref wdApp, "@@street@@", street.Text);   ReplaceTextWord(ref wdApp, "@@houseNum@@", houseNum.Text ) ;
+                    ReplaceTextWord(ref wdApp, "@@m2@@", m2text.Text);
+                    ReplaceTextWord(ref wdApp, "@@customerNameInits@@", customerFamiliyR + " " + getInits());
+                    ReplaceTextWord(ref wdApp, "@@calculationDate@@", calculationDate.Text); ReplaceTextWord(ref wdApp, "@@ownerFullname@@", ownerFullName); ReplaceTextWord(ref wdApp, "@@customerFullname@@", customerFullName); roomsAsString(); ReplaceTextWord(ref wdApp, "@@rooms1@@", rooms1); ReplaceTextWord(ref wdApp, "@@ownerFullnameR@@", ownerFullNameR); ReplaceTextWord(ref wdApp, "@@customerFullnameR@@", customerFullNameR); ReplaceTextWord(ref wdApp, "@@customerFullnameT@@", customerFullNameT); ReplaceTextWord(ref wdApp, "@@ownerFullnameD@@", ownerFullNameD); ReplaceTextWord(ref wdApp, "@@ownerFullnameT@@", ownerFullNameT); ReplaceTextWord(ref wdApp, "@@customerFullnameD@@", customerFullNameD); ReplaceTextWord(ref wdApp, "@@rooms@@", roomsAsString()); ReplaceTextWord(ref wdApp, "@@appartmentNum@@", "№" + appartmentNum.Text); ReplaceTextWord(ref wdApp, "@@street@@", street.Text); ReplaceTextWord(ref wdApp, "@@houseNum@@", houseNum.Text);
 
                     buildNum = null;
                     if (buildingNum.Text != "")
@@ -1616,42 +1611,35 @@ namespace WindowsFormsApplication1
                         buildNum = buildingNum.Text;
                     }
 
-
                     ReplaceTextWord(ref wdApp, "@@buildingNum@@",
                                     buildNum
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@customerAddress@@",
                                     customerAddres.Text
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@floor@@",
                                     floor.Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@floors@@", floors.Text);
-
 
                     ReplaceTextWord(ref wdApp, "@@town@@",
                                     town.Text
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@cost@@",
                                     finalCostRounded.ToString("N", nfi)
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@costFull@@",
-                                    (finalCostRounded + dirtCost/1000).ToString("N", nfi)
+                                    (finalCostRounded + dirtCost / 1000).ToString("N", nfi)
                         )
                         ;
                     ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", dirtCalcGrid.Rows[33].Cells[1].Value.ToString());
@@ -1662,27 +1650,22 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@contractDate@@", contractDate.Text);
-
 
                     ReplaceTextWord(ref wdApp, "@@customerName@@",
                                     customerName.Text
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@customerInit@@",
                                     customerInit.Text
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@likvidCost@@",
                                     likvidCost.ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@stringCost@@",
                                     costStr.ToLower()
@@ -1702,29 +1685,26 @@ namespace WindowsFormsApplication1
                                     customerPassport.Text)
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@customerPassNum@@",
                                     customerPassNum.Text
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@customerPassOVD@@",
                                     customerPassOVD.Text
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@customerPassDate@@",
                                     customerPassDate.Text
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@customerFullAddress@@",
                                     customerAddres.Text
                         )
                         ;
+
                     //owner Passport
 
                     ReplaceTextWord(ref wdApp, "@@ownerPassport@@", ownerPassport.Text);
@@ -1733,124 +1713,102 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
-                    ReplaceTextWord(ref wdApp, "@@ownerPassOVD@@", ownerPassOVD.Text                        )                        ;
-
+                    ReplaceTextWord(ref wdApp, "@@ownerPassOVD@@", ownerPassOVD.Text);
 
                     ReplaceTextWord(ref wdApp, "@@ownerPassDate@@",
                                     ownerPassDate.Text
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@ownerFullAddress@@",
                                     ownerAddress.Text)
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@ownerDoc@@", ownerDocs.Text);
-
 
                     ReplaceTextWord(ref wdApp, "@@registrationDoc@@", registrationDoc.Text);
 
                     ReplaceTextWord(ref wdApp, "@@tehPass@@", dataGridView1.Rows[41].Cells[1].Value.ToString());
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.1.2@@",
                                     dataGridView1.Rows[2].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.1.3@@",
                                     dataGridView1.Rows[3].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.1.4@@",
                                     dataGridView1.Rows[4].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.1.5@@",
                                     dataGridView1.Rows[5].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.1.6@@",
                                     dataGridView1.Rows[6].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.1.7@@",
                                     dataGridView1.Rows[7].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.1.8@@",
                                     dataGridView1.Rows[8].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.1.9@@",
                                     dataGridView1.Rows[9].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.1.10@@",
                                     dataGridView1.Rows[10].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.1.11@@",
                                     dataGridView1.Rows[11].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.1.12@@",
                                     dataGridView1.Rows[12].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.1.13@@",
                                     dataGridView1.Rows[13].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.1.14@@",
                                     dataGridView1.Rows[14].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.1.15@@",
                                     dataGridView1.Rows[15].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.1@@",
                                     dataGridView1.Rows[17].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.2@@",
                                     dataGridView1.Rows[18].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.3@@"
                                     ,
@@ -1858,13 +1816,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.4@@"
                                     ,
                                     dataGridView1.Rows[20].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.5@@"
                                     ,
@@ -1872,13 +1828,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.6@@"
                                     ,
                                     dataGridView1.Rows[22].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.7@@"
                                     ,
@@ -1886,13 +1840,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.8@@"
                                     ,
                                     dataGridView1.Rows[24].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.9@@"
                                     ,
@@ -1900,13 +1852,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.10@@"
                                     ,
                                     dataGridView1.Rows[26].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.11@@"
                                     ,
@@ -1914,13 +1864,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.12@@"
                                     ,
                                     dataGridView1.Rows[28].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.13@@"
                                     ,
@@ -1928,13 +1876,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.14@@"
                                     ,
                                     dataGridView1.Rows[30].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.15@@"
                                     ,
@@ -1942,13 +1888,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.16@@"
                                     ,
                                     dataGridView1.Rows[32].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.17@@"
                                     ,
@@ -1956,13 +1900,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.18@@"
                                     ,
                                     dataGridView1.Rows[34].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.19@@"
                                     ,
@@ -1970,13 +1912,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.20@@"
                                     ,
                                     dataGridView1.Rows[36].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.21@@"
                                     ,
@@ -1984,13 +1924,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.22@@"
                                     ,
                                     dataGridView1.Rows[38].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.23@@"
                                     ,
@@ -1998,13 +1936,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.24@@"
                                     ,
                                     dataGridView1.Rows[40].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.25@@"
                                     ,
@@ -2012,13 +1948,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.26@@"
                                     ,
                                     dataGridView1.Rows[42].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.27@@"
                                     ,
@@ -2026,13 +1960,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.28@@"
                                     ,
                                     dataGridView1.Rows[44].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.29@@"
                                     ,
@@ -2040,13 +1972,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.30@@"
                                     ,
                                     dataGridView1.Rows[46].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.31@@"
                                     ,
@@ -2054,13 +1984,11 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.32@@"
                                     ,
                                     dataGridView1.Rows[48].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.33@@"
                                     ,
@@ -2068,55 +1996,46 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.34@@"
                                     ,
                                     dataGridView1.Rows[50].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.35@@",
                                     dataGridView1.Rows[51].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.36@@",
                                     dataGridView1.Rows[52].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.37@@",
                                     dataGridView1.Rows[53].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.38@@",
                                     dataGridView1.Rows[54].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.39@@",
                                     dataGridView1.Rows[55].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@2.1.2.40@@",
                                     dataGridView1.Rows[56].Cells[1].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@2.1.2.41@@",
                                     dataGridView1.Rows[57].Cells[1].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@a1.1@@", dirtGridAnalogs.Rows[0].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.3@@", dirtGridAnalogs.Rows[2].Cells[1].Value.ToString());
@@ -2127,7 +2046,6 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@a1.8@@", dirtGridAnalogs.Rows[7].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.9@@", dirtGridAnalogs.Rows[8].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.10@@", dirtGridAnalogs.Rows[9].Cells[1].Value.ToString());
-
 
                     ReplaceTextWord(ref wdApp, "@@a2.1@@", dirtGridAnalogs.Rows[0].Cells[2].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a2.2@@", dirtGridAnalogs.Rows[1].Cells[2].Value.ToString());
@@ -2140,7 +2058,6 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@a2.9@@", dirtGridAnalogs.Rows[8].Cells[2].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a2.10@@", dirtGridAnalogs.Rows[9].Cells[2].Value.ToString());
 
-
                     ReplaceTextWord(ref wdApp, "@@a3.1@@", dirtGridAnalogs.Rows[0].Cells[3].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a3.2@@", dirtGridAnalogs.Rows[1].Cells[3].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a3.3@@", dirtGridAnalogs.Rows[2].Cells[3].Value.ToString());
@@ -2152,36 +2069,30 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@a3.9@@", dirtGridAnalogs.Rows[8].Cells[3].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a3.10@@", dirtGridAnalogs.Rows[9].Cells[3].Value.ToString());
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.1@@",
-                                    ((double) (houseCalcGrid.Rows[0].Cells[2].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[0].Cells[2].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.2@@",
-                                    ((double) (houseCalcGrid.Rows[1].Cells[2].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[1].Cells[2].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.3@@",
-                                    ((double) (houseCalcGrid.Rows[2].Cells[2].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[2].Cells[2].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.4@@",
                                     houseCalcGrid.Rows[3].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.5@@",
                                     houseCalcGrid.Rows[4].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.6@@",
                                     houseCalcGrid.Rows[5].Cells[2].Value.ToString()
@@ -2193,288 +2104,240 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.8@@",
                                     houseCalcGrid.Rows[7].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.9@@",
                                     houseCalcGrid.Rows[8].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.10@@",
                                     houseCalcGrid.Rows[9].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.11@@",
                                     houseCalcGrid.Rows[10].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.12@@",
                                     houseCalcGrid.Rows[11].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.13@@",
                                     houseCalcGrid.Rows[12].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.14@@",
                                     houseCalcGrid.Rows[13].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.15@@",
                                     houseCalcGrid.Rows[14].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.16@@",
                                     houseCalcGrid.Rows[15].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.17@@",
                                     houseCalcGrid.Rows[16].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.18@@",
                                     houseCalcGrid.Rows[17].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.19@@",
                                     houseCalcGrid.Rows[18].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.20@@",
                                     houseCalcGrid.Rows[21].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.21@@",
                                     houseCalcGrid.Rows[20].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.22@@",
                                     houseCalcGrid.Rows[21].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.23@@",
                                     houseCalcGrid.Rows[22].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.24@@",
                                     houseCalcGrid.Rows[23].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.25@@",
                                     houseCalcGrid.Rows[24].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.26@@",
                                     houseCalcGrid.Rows[25].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.27@@",
                                     houseCalcGrid.Rows[26].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.28@@",
                                     houseCalcGrid.Rows[27].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.29@@",
                                     houseCalcGrid.Rows[28].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.30@@",
                                     houseCalcGrid.Rows[29].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.31@@",
                                     houseCalcGrid.Rows[30].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.32@@",
                                     houseCalcGrid.Rows[31].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.33@@",
                                     houseCalcGrid.Rows[32].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.34@@",
                                     houseCalcGrid.Rows[33].Cells[2].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b1.35@@",
                                     houseCalcGrid.Rows[34].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.1@@",
-                                    ((double) (houseCalcGrid.Rows[0].Cells[3].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[0].Cells[3].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.2@@",
-                                    ((double) (houseCalcGrid.Rows[1].Cells[3].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[1].Cells[3].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.3@@",
-                                    ((double) (houseCalcGrid.Rows[2].Cells[3].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[2].Cells[3].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.4@@",
                                     houseCalcGrid.Rows[3].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.5@@",
                                     houseCalcGrid.Rows[4].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.6@@",
                                     houseCalcGrid.Rows[5].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.7@@",
                                     houseCalcGrid.Rows[6].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.8@@",
                                     houseCalcGrid.Rows[7].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.9@@",
                                     houseCalcGrid.Rows[8].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.10@@",
                                     houseCalcGrid.Rows[9].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.11@@",
                                     houseCalcGrid.Rows[10].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.12@@",
                                     houseCalcGrid.Rows[11].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.13@@",
                                     houseCalcGrid.Rows[12].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.14@@",
                                     houseCalcGrid.Rows[13].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.15@@",
                                     houseCalcGrid.Rows[14].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.16@@",
                                     houseCalcGrid.Rows[15].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.17@@",
                                     houseCalcGrid.Rows[16].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.18@@",
                                     houseCalcGrid.Rows[17].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.19@@",
                                     houseCalcGrid.Rows[18].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.20@@",
                                     houseCalcGrid.Rows[21].Cells[3].Value.ToString()
@@ -2486,114 +2349,95 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.22@@",
                                     houseCalcGrid.Rows[21].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.23@@",
                                     houseCalcGrid.Rows[22].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.24@@",
                                     houseCalcGrid.Rows[23].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.25@@",
                                     houseCalcGrid.Rows[24].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.26@@",
                                     houseCalcGrid.Rows[25].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.27@@",
                                     houseCalcGrid.Rows[26].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.28@@",
                                     houseCalcGrid.Rows[27].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.29@@",
                                     houseCalcGrid.Rows[28].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.30@@",
                                     houseCalcGrid.Rows[29].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.31@@",
                                     houseCalcGrid.Rows[30].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.32@@",
                                     houseCalcGrid.Rows[31].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.33@@",
                                     houseCalcGrid.Rows[32].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b2.34@@",
                                     houseCalcGrid.Rows[33].Cells[3].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b2.35@@",
                                     houseCalcGrid.Rows[34].Cells[3].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.1@@",
-                                    ((double) (houseCalcGrid.Rows[0].Cells[4].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[0].Cells[4].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.2@@",
-                                    ((double) (houseCalcGrid.Rows[1].Cells[4].Value)).ToString()
+                                    ((double)(houseCalcGrid.Rows[1].Cells[4].Value)).ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.3@@",
-                                    ((double) (houseCalcGrid.Rows[2].Cells[4].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[2].Cells[4].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.4@@",
                                     houseCalcGrid.Rows[3].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.5@@",
                                     houseCalcGrid.Rows[4].Cells[4].Value.ToString()
@@ -2605,84 +2449,70 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.7@@",
                                     houseCalcGrid.Rows[6].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.8@@",
                                     houseCalcGrid.Rows[7].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.9@@",
                                     houseCalcGrid.Rows[8].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.10@@",
                                     houseCalcGrid.Rows[9].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.11@@",
                                     houseCalcGrid.Rows[10].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.12@@",
                                     houseCalcGrid.Rows[11].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.13@@",
                                     houseCalcGrid.Rows[12].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.14@@",
                                     houseCalcGrid.Rows[13].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.15@@",
                                     houseCalcGrid.Rows[14].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.16@@",
                                     houseCalcGrid.Rows[15].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.17@@",
                                     houseCalcGrid.Rows[16].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.18@@",
                                     houseCalcGrid.Rows[17].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.19@@",
                                     houseCalcGrid.Rows[18].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.20@@",
                                     houseCalcGrid.Rows[21].Cells[4].Value.ToString()
@@ -2694,121 +2524,103 @@ namespace WindowsFormsApplication1
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.22@@",
                                     houseCalcGrid.Rows[21].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.23@@",
                                     houseCalcGrid.Rows[22].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.24@@",
                                     houseCalcGrid.Rows[23].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.25@@",
                                     houseCalcGrid.Rows[24].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.26@@",
                                     houseCalcGrid.Rows[25].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.27@@",
                                     houseCalcGrid.Rows[26].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.28@@",
                                     houseCalcGrid.Rows[27].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.29@@",
                                     houseCalcGrid.Rows[28].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.30@@",
                                     houseCalcGrid.Rows[29].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.31@@",
                                     houseCalcGrid.Rows[30].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.32@@",
                                     houseCalcGrid.Rows[31].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.33@@",
                                     houseCalcGrid.Rows[32].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b3.34@@",
                                     houseCalcGrid.Rows[33].Cells[4].Value.ToString()
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b3.35@@",
                                     houseCalcGrid.Rows[34].Cells[4].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b1.36@@",
-                                    ((double) (houseCalcGrid.Rows[35].Cells[2].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[35].Cells[2].Value)).ToString("N", nfi)
                         )
                         ;
 
                     ReplaceTextWord(ref wdApp, "@@b2.36@@",
-                                    ((double) (houseCalcGrid.Rows[35].Cells[3].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[35].Cells[3].Value)).ToString("N", nfi)
                         )
                         ;
 
                     ReplaceTextWord(ref wdApp, "@@b3.36@@",
-                                    ((double) (houseCalcGrid.Rows[35].Cells[4].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[35].Cells[4].Value)).ToString("N", nfi)
                         )
                         ;
-
 
                     ReplaceTextWord(ref wdApp, "@@b4.1@@",
                                     houseCalcGrid.Rows[36].Cells[2].Value.ToString()
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b4.2@@",
-                                    ((double) (houseCalcGrid.Rows[37].Cells[2].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[37].Cells[2].Value)).ToString("N", nfi)
                         )
                         ;
 
-
                     ReplaceTextWord(ref wdApp, "@@b4.3@@",
-                                    ((double) (houseCalcGrid.Rows[38].Cells[2].Value)).ToString("N", nfi)
+                                    ((double)(houseCalcGrid.Rows[38].Cells[2].Value)).ToString("N", nfi)
                         )
                         ;
 
@@ -2822,6 +2634,7 @@ namespace WindowsFormsApplication1
                         wdApp.Selection.Characters[2].Font.Superscript = 1;
                     }
                     string te = wdApp.Selection.Text;
+
                     //saving
                     try
                     {
@@ -2842,9 +2655,7 @@ namespace WindowsFormsApplication1
                     {
                     }
 
-
                     wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
-
 
                     wdApp.Quit();
                 }
@@ -2879,12 +2690,13 @@ namespace WindowsFormsApplication1
             }
         }
 
-
         private void saveAppartmentsCalc_Click(object sender, EventArgs e)
         {
             var excelApp = new Microsoft.Office.Interop.Excel.Application();
+
             //Microsoft.Office.Interop.Excel.Workbook excelDoc = new Microsoft.Office.Interop.Excel.Workbook();
             string v = excelApp.Version;
+
             //excelApp.;
             string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
             string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
@@ -2903,7 +2715,6 @@ namespace WindowsFormsApplication1
                 excelApp.Workbooks.Open(System.Windows.Forms.Application.StartupPath + "\\calc.xls", Missing, Missing,
                                         Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing, Missing,
                                         Missing, Missing, Missing);
-
 
                 //первый аналог
                 excelApp.Workbooks[1].Sheets[1].Cells[2, 3] = calculationAppartaments[2, 0].Value;
@@ -2937,7 +2748,6 @@ namespace WindowsFormsApplication1
                 excelApp.Workbooks[1].Sheets[1].Cells[12, 3] = calculationAppartaments[2, 10].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[12, 4] = calculationAppartaments[3, 10].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[12, 5] = calculationAppartaments[4, 10].Value;
-
 
                 excelApp.Workbooks[1].Sheets[1].Cells[14, 3] = calculationAppartaments[2, 12].Value;
                 excelApp.Workbooks[1].Sheets[1].Cells[14, 4] = calculationAppartaments[3, 12].Value;
@@ -3034,7 +2844,7 @@ namespace WindowsFormsApplication1
                 {
                     m1 = double.Parse(cellValue);
                 }
-                cost_m1 = Math.Round(cost1/m1);
+                cost_m1 = Math.Round(cost1 / m1);
                 dirtCalcGrid.Rows[3].Cells[1].Value = cost_m1;
 
                 cellValue = dirtCalcGrid.Rows[4].Cells[1].Value.ToString();
@@ -3114,10 +2924,10 @@ namespace WindowsFormsApplication1
                     cost_count1 = setCoefsCount(cellValue, cost_count1);
                 }
 
-
                 cor_cost_final1 =
-                    Math.Round(cost_m1*cor_cost11*cor_cost12*cor_cost13*cor_cost14*cor_cost15*cor_cost16*cor_cost17*
-                               cor_cost18*cor_cost19*cor_cost110*cor_cost111);
+                    Math.Round(cost_m1 * cor_cost11 * cor_cost12 * cor_cost13 * cor_cost14 * cor_cost15 * cor_cost16 * cor_cost17 *
+                               cor_cost18 * cor_cost19 * cor_cost110 * cor_cost111);
+
                 //второй аналог
 
                 cellValue = dirtCalcGrid.Rows[1].Cells[2].Value.ToString();
@@ -3131,7 +2941,7 @@ namespace WindowsFormsApplication1
                 {
                     m2 = double.Parse(cellValue);
                 }
-                cost_m2 = Math.Round(cost2/m2);
+                cost_m2 = Math.Round(cost2 / m2);
                 dirtCalcGrid.Rows[3].Cells[2].Value = cost_m2;
 
                 cellValue = dirtCalcGrid.Rows[4].Cells[2].Value.ToString();
@@ -3211,10 +3021,9 @@ namespace WindowsFormsApplication1
                     cost_count2 = setCoefsCount(cellValue, cost_count2);
                 }
 
-
                 cor_cost_final2 =
-                    Math.Round(cost_m2*cor_cost21*cor_cost22*cor_cost23*cor_cost24*cor_cost25*cor_cost26*cor_cost27*
-                               cor_cost28*cor_cost29*cor_cost210*cor_cost211);
+                    Math.Round(cost_m2 * cor_cost21 * cor_cost22 * cor_cost23 * cor_cost24 * cor_cost25 * cor_cost26 * cor_cost27 *
+                               cor_cost28 * cor_cost29 * cor_cost210 * cor_cost211);
 
                 //третий аналог
 
@@ -3229,7 +3038,7 @@ namespace WindowsFormsApplication1
                 {
                     m3 = double.Parse(cellValue);
                 }
-                cost_m3 = Math.Round(cost3/m3);
+                cost_m3 = Math.Round(cost3 / m3);
                 dirtCalcGrid.Rows[3].Cells[3].Value = cost_m3;
 
                 cellValue = dirtCalcGrid.Rows[4].Cells[3].Value.ToString();
@@ -3309,11 +3118,9 @@ namespace WindowsFormsApplication1
                     cost_count3 = setCoefsCount(cellValue, cost_count3);
                 }
 
-
                 cor_cost_final3 =
-                    Math.Round(cost_m3*cor_cost31*cor_cost32*cor_cost33*cor_cost34*cor_cost35*cor_cost36*cor_cost37*
-                               cor_cost38*cor_cost39*cor_cost310*cor_cost311);
-
+                    Math.Round(cost_m3 * cor_cost31 * cor_cost32 * cor_cost33 * cor_cost34 * cor_cost35 * cor_cost36 * cor_cost37 *
+                               cor_cost38 * cor_cost39 * cor_cost310 * cor_cost311);
 
                 dirtCalcGrid.Rows[26].Cells[1].Value = cost_count1;
                 dirtCalcGrid.Rows[25].Cells[1].Value = cor_cost_final1;
@@ -3322,11 +3129,11 @@ namespace WindowsFormsApplication1
                 dirtCalcGrid.Rows[26].Cells[3].Value = cost_count3;
                 dirtCalcGrid.Rows[25].Cells[3].Value = cor_cost_final3;
                 cor_cost_final1 =
-                    Math.Round(cor_cost_final1*Double.Parse(dirtCalcGrid.Rows[27].Cells[1].Value.ToString()));
+                    Math.Round(cor_cost_final1 * Double.Parse(dirtCalcGrid.Rows[27].Cells[1].Value.ToString()));
                 cor_cost_final2 =
-                    Math.Round(cor_cost_final2*Double.Parse(dirtCalcGrid.Rows[27].Cells[2].Value.ToString()));
+                    Math.Round(cor_cost_final2 * Double.Parse(dirtCalcGrid.Rows[27].Cells[2].Value.ToString()));
                 cor_cost_final3 =
-                    Math.Round(cor_cost_final3*Double.Parse(dirtCalcGrid.Rows[27].Cells[3].Value.ToString()));
+                    Math.Round(cor_cost_final3 * Double.Parse(dirtCalcGrid.Rows[27].Cells[3].Value.ToString()));
                 dirtCalcGrid.Rows[28].Cells[1].Value = cor_cost_final1;
                 dirtCalcGrid.Rows[28].Cells[2].Value = cor_cost_final2;
                 dirtCalcGrid.Rows[28].Cells[3].Value = cor_cost_final3;
@@ -3334,26 +3141,26 @@ namespace WindowsFormsApplication1
                 if (houseCalcGrid.Rows.Count > 0)
                 {
                     houseCalcGrid.Rows[2].Cells[2].Value =
-                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString())*
-                                   Double.Parse(houseCalcGrid.Rows[1].Cells[2].Value.ToString())/1000)*1000;
+                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()) *
+                                   Double.Parse(houseCalcGrid.Rows[1].Cells[2].Value.ToString()) / 1000) * 1000;
                     houseCalcGrid.Rows[2].Cells[3].Value =
-                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString())*
-                                   Double.Parse(houseCalcGrid.Rows[1].Cells[3].Value.ToString())/1000)*1000;
+                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()) *
+                                   Double.Parse(houseCalcGrid.Rows[1].Cells[3].Value.ToString()) / 1000) * 1000;
                     houseCalcGrid.Rows[2].Cells[4].Value =
-                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString())*
-                                   Double.Parse(houseCalcGrid.Rows[1].Cells[4].Value.ToString())/1000)*1000;
+                        Math.Round(Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()) *
+                                   Double.Parse(houseCalcGrid.Rows[1].Cells[4].Value.ToString()) / 1000) * 1000;
                 }
                 dirtCalcGrid.Rows[29].Cells[2].Value = "";
                 dirtCalcGrid.Rows[29].Cells[3].Value = "";
                 final_cost_m =
-                    Math.Round(Double.Parse(dirtCalcGrid.Rows[30].Cells[1].Value.ToString())*
+                    Math.Round(Double.Parse(dirtCalcGrid.Rows[30].Cells[1].Value.ToString()) *
                                Double.Parse(dirtCalcGrid.Rows[29].Cells[1].Value.ToString()));
                 dirtCalcGrid.Rows[31].Cells[1].Value = final_cost_m.ToString();
-                dirtCalcGrid.Rows[32].Cells[1].Value = Math.Round(final_cost_m/1000).ToString();
+                dirtCalcGrid.Rows[32].Cells[1].Value = Math.Round(final_cost_m / 1000).ToString();
                 dirtCalcGrid.Rows[33].Cells[1].Value =
-                    Math.Round(Double.Parse(dirtCalcGrid.Rows[32].Cells[1].Value.ToString())*0.66).ToString();
+                    Math.Round(Double.Parse(dirtCalcGrid.Rows[32].Cells[1].Value.ToString()) * 0.66).ToString();
                 finalDirtCost = final_cost_m;
-                likvidCostDirt = Math.Round(final_cost_m*0.66);
+                likvidCostDirt = Math.Round(final_cost_m * 0.66);
             }
             catch (Exception e)
             {
@@ -3386,22 +3193,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
-
 
                 default:
                     break;
@@ -3417,22 +3226,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
-
 
                 default:
                     break;
@@ -3448,22 +3259,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
-
 
                 default:
                     break;
@@ -3479,22 +3292,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
-
 
                 default:
                     break;
@@ -3510,22 +3325,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
-
 
                 default:
                     break;
@@ -3541,22 +3358,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
-
 
                 default:
                     break;
@@ -3572,22 +3391,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[18].Cells[1].Value = houseType.Text;
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[18].Cells[1].Value = houseType.Text;
                     }
                     break;
-
 
                 default:
                     break;
@@ -3612,6 +3433,7 @@ namespace WindowsFormsApplication1
                         analogsGrid.Rows[3].Cells[4].Value = houseType.Text.ToLower();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[38].Cells[0].Value =
@@ -3619,11 +3441,13 @@ namespace WindowsFormsApplication1
                             registrationDoc.Text + "), в кв.м.";
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[38].Cells[0].Value =
@@ -3631,7 +3455,6 @@ namespace WindowsFormsApplication1
                             registrationDoc.Text + "), в кв.м.";
                     }
                     break;
-
 
                 default:
                     break;
@@ -3651,22 +3474,24 @@ namespace WindowsFormsApplication1
                         analogsGrid.Rows[14].Cells[4].Value = lift.Text.ToLower();
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[30].Cells[1].Value = lift.Text;
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[30].Cells[1].Value = lift.Text;
                     }
                     break;
-
 
                 default:
                     break;
@@ -3749,7 +3574,8 @@ namespace WindowsFormsApplication1
                             string fname = fileName.Substring(0, fileName.LastIndexOf("."));
                             DataTable test = getDataFromXLS(fname + "Calc.xls");
                             calculationAppartaments.DataSource = test;
-                                                    //Костыль, надо переделать   
+
+                            //Костыль, надо переделать
                             calculationAppartaments.Columns.RemoveAt(0);
                             calculationAppartaments.Columns.RemoveAt(0);
                             calculationAppartaments.Columns.RemoveAt(0);
@@ -3761,12 +3587,13 @@ namespace WindowsFormsApplication1
                             calculationAppartaments.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
                             calculationAppartaments.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
                             calculationAppartaments.Columns[4].SortMode = DataGridViewColumnSortMode.NotSortable;
+
                             //calculateCost();
                             test = null;
                             test = getDataFromXLS(fname + "Analogs.xls");
                             analogsGrid.DataSource = test;
 
-                            //Костыль, надо переделать                                
+                            //Костыль, надо переделать
                             analogsGrid.Columns.RemoveAt(0);
                             analogsGrid.Columns.RemoveAt(0);
                             analogsGrid.Columns.RemoveAt(0);
@@ -3777,8 +3604,6 @@ namespace WindowsFormsApplication1
                             //analogsGrid.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                             //analogsGrid.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
                             //analogsGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
-
-
 
                             if (docTypeT == "Квартира")
                             {
@@ -3860,8 +3685,6 @@ namespace WindowsFormsApplication1
                                 objectDataGrid.Rows[77].Cells[1].Value = settings.GetAttribute("data2.1.3.37");
                                 objectDataGrid.Rows[78].Cells[1].Value = settings.GetAttribute("data2.1.3.38");
                                 objectDataGrid.Rows[79].Cells[1].Value = settings.GetAttribute("data2.1.3.39");
-                                
-
                             }
                             ownerDocs.Text = settings.GetAttribute(ownerDocs.Name);
                         }
@@ -3875,7 +3698,6 @@ namespace WindowsFormsApplication1
             }
             f.Close();
         }
-
 
         private void customerSurname_TextChanged(object sender, EventArgs e)
         {
@@ -3899,6 +3721,7 @@ namespace WindowsFormsApplication1
                         analogsGrid.Rows[7].Cells[1].Value = m2text.Text;
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[35].Cells[1].Value = m2text.Text;
@@ -3907,11 +3730,13 @@ namespace WindowsFormsApplication1
                         houseAnalogs.Rows[6].Cells[1].Value = m2text.Text;
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[35].Cells[1].Value = m2text.Text;
@@ -3920,7 +3745,6 @@ namespace WindowsFormsApplication1
                         houseAnalogs.Rows[6].Cells[1].Value = m2text.Text;
                     }
                     break;
-
 
                 default:
                     break;
@@ -3936,22 +3760,24 @@ namespace WindowsFormsApplication1
                         objectDataGrid.Rows[49].Cells[1].Value = lm2text.Text;
                     }
                     break;
+
                 case "Домовладение":
                     {
                         dataGridView1.Rows[36].Cells[1].Value = lm2text.Text;
                     }
                     break;
+
                 case "Земельный участок":
                     {
                         //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
+
                 case "Домовладение с земельным участком":
                     {
                         dataGridView1.Rows[36].Cells[1].Value = lm2text.Text;
                     }
                     break;
-
 
                 default:
                     break;
@@ -4026,10 +3852,10 @@ namespace WindowsFormsApplication1
             fileName = fileName.Replace("№", " ").ToLower();
             fileName = fileName.Replace(".", " ").ToLower();
             fileName = fileName.Replace("-", " ").ToLower();
+
             //saveFileDialog1.FileName = saveFileDialog1.FileName.Replace("  ", " ").ToLower();
             return fileName;
         }
-
 
         private void saveResultButton_Click(object sender, EventArgs e)
         {
@@ -4041,11 +3867,13 @@ namespace WindowsFormsApplication1
                         houseType1 = "кирпичного";
                     }
                     break;
+
                 case "Панельный":
                     {
                         houseType1 = "панельного";
                     }
                     break;
+
                 case "Монолитный":
                     {
                         houseType1 = "монолитного";
@@ -4069,7 +3897,6 @@ namespace WindowsFormsApplication1
                     wdDoc.Close();
                     string template = "\\шаблоны\\ОсновнойШаблон.doc";
 
-
                     if (bankName.Text == "втб 24")
                     {
                         template = "\\шаблоны\\ВТБ24.doc";
@@ -4091,7 +3918,6 @@ namespace WindowsFormsApplication1
 
                     nfi.PositiveSign = "";
                     customerPadeg();
-
 
                     string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
                     string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
@@ -4121,7 +3947,6 @@ namespace WindowsFormsApplication1
                     int sentencesCount = wdDoc.Sentences.Count;
                     string topColontitul = topColontitulCreator();
 
-
                     wdDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Text = topColontitul;
 
                     ReplaceTextWord(ref wdApp, "@@MO@@", MO.Text);
@@ -4146,8 +3971,6 @@ namespace WindowsFormsApplication1
                             ReplaceTextWord(ref wdApp, "@@orgAddress@@", orgAdd.Text);
                         }
                     }
-
-
 
                     ReplaceTextWord(ref wdApp, "@@houseType1@@", houseType1);
                     ReplaceTextWord(ref wdApp, "@@calculationDateStr@@", calculationDateStr);
@@ -4226,7 +4049,6 @@ namespace WindowsFormsApplication1
 
                     getUvaj();
                     ReplaceTextWord(ref wdApp, "@@uvaj@@", uvaj);
-
 
                     //Customer Passport
                     wdApp.Selection.Find.ClearFormatting();
@@ -4438,6 +4260,7 @@ namespace WindowsFormsApplication1
                         ReplaceTextWord(ref wdApp, "@@ownerPassDate@@", ownerPassDate.Text);
                         ReplaceTextWord(ref wdApp, "@@ownerFullAddress@@", ownerAddress.Text);
                     }
+
                     //
                     ReplaceTextWord(ref wdApp, "@@ownerDoc@@", ownerDocs.Text);
                     ReplaceTextWord(ref wdApp, "@@registrationDoc@@", registrationDoc.Text);
@@ -4535,7 +4358,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.9@@";
@@ -4667,7 +4489,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.6@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -4698,7 +4519,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.9@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -4719,7 +4539,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.11@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -4729,7 +4548,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.12@@";
@@ -4741,7 +4559,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.13@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -4751,7 +4568,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.14@@";
@@ -4763,7 +4579,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.15@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -4774,7 +4589,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.16@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -4784,7 +4598,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.17@@";
@@ -5086,11 +4899,11 @@ namespace WindowsFormsApplication1
 
                         //r1.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
                         wdApp.Selection.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
+
                         //wdApp.Selection.Font.Superscript = 1;
                         //                        wdApp.Selection.PasteAndFormat(Microsoft.Office.Interop.Word.WdRecoveryType.wdPasteDefault);
                         wdApp.ActiveDocument.Sections[1].Range.Select();
                     }
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.3.24@@";
@@ -5103,10 +4916,12 @@ namespace WindowsFormsApplication1
 
                         //r1.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
                         wdApp.Selection.Text = objectDataGrid.Rows[64].Cells[1].Value.ToString();
+
                         //wdApp.Selection.Font.Superscript = 1;
                         //                        wdApp.Selection.PasteAndFormat(Microsoft.Office.Interop.Word.WdRecoveryType.wdPasteDefault);
                         wdApp.ActiveDocument.Sections[1].Range.Select();
                     }
+
                     //wdApp.Selection.Find.ClearFormatting();
                     //wdApp.Selection.Find.Text = "@@2.1.3.24@@";
                     //wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -5128,6 +4943,7 @@ namespace WindowsFormsApplication1
 
                         wdApp.ActiveDocument.Sections[1].Range.Select();
                     }
+
                     //wdApp.Selection.Find.ClearFormatting();
                     //wdApp.Selection.Find.Text = "@@2.1.3.25@@";
                     //wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -5278,7 +5094,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a0.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -5428,7 +5243,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.1@@";
@@ -5619,7 +5433,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a1.20@@";
@@ -5821,7 +5634,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a2.20@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -6002,7 +5814,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.18@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -6023,7 +5834,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@a3.20@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -6034,12 +5844,11 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[0].Cells[2].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[0].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6050,7 +5859,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b1.2@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[1].Cells[2].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[1].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6061,7 +5870,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b1.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[2].Cells[2].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[2].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6094,7 +5903,6 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.6@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-
 
                     wdApp.Selection.Find.Replacement.Text = d1;
 
@@ -6212,7 +6020,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.18@@";
@@ -6374,7 +6181,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b1.34@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -6395,12 +6201,11 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[0].Cells[3].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[0].Cells[3].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6411,7 +6216,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b2.2@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[1].Cells[3].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[1].Cells[3].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6422,7 +6227,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b2.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[2].Cells[3].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[2].Cells[3].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6452,7 +6257,6 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.6@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-
 
                     wdApp.Selection.Find.Replacement.Text = d2;
 
@@ -6570,7 +6374,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.18@@";
@@ -6731,7 +6534,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b2.34@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -6756,7 +6558,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b3.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[0].Cells[4].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[0].Cells[4].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6767,7 +6569,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b3.2@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[1].Cells[4].Value)).ToString();
+                        ((double)(calculationAppartaments.Rows[1].Cells[4].Value)).ToString();
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6778,7 +6580,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b3.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[2].Cells[4].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[2].Cells[4].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -6925,7 +6727,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.18@@";
@@ -7086,7 +6887,6 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b3.34@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -7107,12 +6907,11 @@ namespace WindowsFormsApplication1
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@b4.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[35].Cells[2].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[35].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -7133,7 +6932,7 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b4.3@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[37].Cells[2].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[37].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
@@ -7144,13 +6943,12 @@ namespace WindowsFormsApplication1
                     wdApp.Selection.Find.Text = "@@b4.4@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
                     wdApp.Selection.Find.Replacement.Text =
-                        ((double) (calculationAppartaments.Rows[38].Cells[2].Value)).ToString("N", nfi);
+                        ((double)(calculationAppartaments.Rows[38].Cells[2].Value)).ToString("N", nfi);
 
                     wdApp.Selection.Find.Execute(
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "м2";
@@ -7161,7 +6959,6 @@ namespace WindowsFormsApplication1
                     {
                         wdApp.Selection.Characters[2].Font.Superscript = 1;
                     }
-
 
                     //saving
                     try
@@ -7179,7 +6976,7 @@ namespace WindowsFormsApplication1
                                                                   calculationDate.Text + "г.";
                             }
                         }
-                        /*  
+                        /*
                        for (int k = 1; k < x; k++)
                         {
                             Microsoft.Office.Interop.Word.Shape shape = wdDoc.Shapes[k];
@@ -7187,18 +6984,18 @@ namespace WindowsFormsApplication1
                             if (shape.AlternativeText.Contains("first"))
                             {
                                 System.Drawing.Image firstPageImg = System.Drawing.Image.FromFile(imagesGrid.Rows[0].Cells[2].Value.ToString());
-                                
+
                                //Clipboard.SetImage(firstPageImg);
                                 shape.Select();
                                 wdDoc.Shapes[k].CanvasItems.AddPicture(imagesGrid.Rows[0].Cells[2].Value.ToString());
                                 wdDoc.Shapes[k].Apply();
+
                                // wdApp.Selection.PasteSpecial();
                                // wdApp.ActiveDocument.Shapes.AddPicture(imagesGrid.Rows[0].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing, Type.Missing, 500, 370, Type.Missing);
                                 //wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[0].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                 //wdApp.Selection.InlineShapes
                                 //Clipboard.Clear();
                             }
-
                         }*/
                     }
                     catch (Exception exp)
@@ -7207,16 +7004,12 @@ namespace WindowsFormsApplication1
 
                     /*foreach (Microsoft.Office.Interop.Word.Table table in wdApp.ActiveDocument.Tables)
                     {
-
                         try
                         {
-                            
-
                             //  if (table.Columns[0].Cells[0].Range.Text.Contains("@@1@@"))
                             //{
                             foreach (Microsoft.Office.Interop.Word.Column col in table.Columns)
                             {
-
                                 foreach (Microsoft.Office.Interop.Word.Cell cell in col.Cells)
                                 {
                                     int rowCount = imagesGrid.RowCount;
@@ -7240,6 +7033,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@2@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[2].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7255,6 +7049,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@3@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[3].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7271,6 +7066,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@4@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[4].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7287,6 +7083,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@5@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[5].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7303,6 +7100,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@6@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[6].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7319,6 +7117,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@7@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[7].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7335,6 +7134,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@8@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[8].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7351,6 +7151,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@9@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[9].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7367,6 +7168,7 @@ namespace WindowsFormsApplication1
                                     if (l.Contains("@@10@@"))
                                     {
                                         cell.Select();
+
                                         //cell.Range.Text = "";
                                         wdApp.Selection.InlineShapes.AddPicture(imagesGrid.Rows[10].Cells[2].Value.ToString(), Type.Missing, Type.Missing, Type.Missing);
                                         wdApp.Selection.Find.ClearFormatting();
@@ -7379,26 +7181,15 @@ namespace WindowsFormsApplication1
                                                      ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                                      ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                                     }
-
-
-
-
                                 }
                             }
-
                         }
+
                         //  }
                         catch (Exception except)
                         {
                         }
                     }
-
-
-
-
-
-
-
 
                     /*for (int k = 1; k < x; k++)
                     {
@@ -7408,28 +7199,24 @@ namespace WindowsFormsApplication1
                         if (l == "facade")
                         {
                             shape.IncrementTop(-shift);
-
                         }
                         if (l == "appartmentNum")
                         {
                             shape.IncrementTop(-shift);
+
                             //shape. = "Оцениваемая квартира №"+appartmentNum.Text;
                         }
                         if (l == "podezd")
                         {
                             shape.IncrementTop(-shift);
-                        
-
                         }
                         if (l == "stairway")
                         {
                             shape.IncrementTop(-shift);
-
                         }
                     }*/
 
-
-                    // 
+                    //
 
                     wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
 
@@ -7442,6 +7229,7 @@ namespace WindowsFormsApplication1
             {
                 //MessageBox.Show(except.Message);
                 saveState();
+
                 //wdApp.Documents.Close();
                 wdApp.Quit();
             }
@@ -7497,12 +7285,10 @@ namespace WindowsFormsApplication1
 
                 nfi.PositiveSign = "";
 
-
                 string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
                 string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
                 string calculationDateStr = calculationDate.Text;
                 int sentencesCount = wdDoc.Sentences.Count;
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@MO@@";
@@ -7539,7 +7325,6 @@ namespace WindowsFormsApplication1
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@lm2@@";
                 wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -7559,7 +7344,6 @@ namespace WindowsFormsApplication1
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@calculationDate@@";
@@ -7595,7 +7379,6 @@ namespace WindowsFormsApplication1
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@rooms@@";
@@ -7650,20 +7433,19 @@ namespace WindowsFormsApplication1
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@buildingNum@@"))
                 {
-            
-           
-
                 }*/
                 string buildNum = null;
                 if (buildingNum.Text != "")
                 {
                     buildNum = "корп." + buildingNum.Text + ".";
+
                     //newSentence = newSentence.Replace("@@buildingNum@@", houseNum.Text);
                     //changed = true;
                 }
                 else
                 {
                     buildNum = buildingNum.Text;
+
                     //changed = true;
                 }
 
@@ -7866,12 +7648,10 @@ if (newSentence.Contains("@@uvaj@@"))
                     if (wdDoc.Shapes[i].TextEffect.Text.Contains("@@contractDate@@"))
                     {
                         wdDoc.Shapes[i].TextEffect.Text.Replace("@@contractDate@@", contractDate.Text);
-
                     }
                 }
-
-               
                 }*/
+
                 //Customer Passport
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@customerPassport@@";
@@ -7973,7 +7753,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@ownerDoc@@";
                 wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -8004,7 +7783,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@b4.4@@";
@@ -8047,11 +7825,10 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
                 string te = wdApp.Selection.Text;
+
                 //saving
 
-
                 wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
-
 
                 wdApp.Quit();
             }
@@ -8104,12 +7881,10 @@ if (newSentence.Contains("@@uvaj@@"))
 
                 nfi.PositiveSign = "";
 
-
                 string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
                 string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
                 string calculationDateStr = calculationDate.Text;
                 int sentencesCount = wdDoc.Sentences.Count;
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@MO@@";
@@ -8120,7 +7895,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@houseType@@";
@@ -8137,7 +7911,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@lm2@@";
@@ -8159,7 +7932,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 ReplaceTextWord(ref wdApp, "@@dirtm2@@", dirtm2.Text);
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@calculationDate@@";
@@ -8195,7 +7967,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@rooms@@";
@@ -8250,20 +8021,19 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
                 /*if (newSentence.Contains("@@buildingNum@@"))
                 {
-            
-           
-
                 }*/
                 string buildNum = null;
                 if (buildingNum.Text != "")
                 {
                     buildNum = "корп." + buildingNum.Text + ".";
+
                     //newSentence = newSentence.Replace("@@buildingNum@@", houseNum.Text);
                     //changed = true;
                 }
                 else
                 {
                     buildNum = buildingNum.Text;
+
                     //changed = true;
                 }
 
@@ -8416,7 +8186,7 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-                //ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@", 
+                //ReplaceTextWord(ref wdApp, "@@likvidCostDirt@@",
 
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@stringCost@@";
@@ -8460,12 +8230,10 @@ if (newSentence.Contains("@@uvaj@@"))
                     if (wdDoc.Shapes[i].TextEffect.Text.Contains("@@contractDate@@"))
                     {
                         wdDoc.Shapes[i].TextEffect.Text.Replace("@@contractDate@@", contractDate.Text);
-
                     }
                 }
-
-               
                 }*/
+
                 //Customer Passport
                 wdApp.Selection.Find.ClearFormatting();
                 wdApp.Selection.Find.Text = "@@customerPassport@@";
@@ -8567,7 +8335,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                     ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                 //wdApp.Selection.Find.ClearFormatting();
                 //wdApp.Selection.Find.Text = "@@ownerDoc@@";
                 //wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -8593,11 +8360,10 @@ if (newSentence.Contains("@@uvaj@@"))
                 ReplaceTextWord(ref wdApp, "@@registrationDoc@@", registrationDoc.Text);
 
                 string te = wdApp.Selection.Text;
+
                 //saving
 
-
                 wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
-
 
                 wdApp.Quit();
             }
@@ -8617,7 +8383,6 @@ if (newSentence.Contains("@@uvaj@@"))
                         objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
                     }
                     break;
-
 
                 default:
                     break;
@@ -8829,6 +8594,7 @@ if (newSentence.Contains("@@uvaj@@"))
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+
                 //this.Close();
             }
         }
@@ -8909,8 +8675,9 @@ if (newSentence.Contains("@@uvaj@@"))
                         return result;
                     }
                     else
-                    { 
+                    {
                         throw new Exception("1");
+
                         //return false;
                     }*/
                 return true;
@@ -8956,27 +8723,25 @@ if (newSentence.Contains("@@uvaj@@"))
                     }
                 }
                 f.Close();
-               
+
                 string CommandText = "select accessLevel, idusers from ads_paper.users";
                 string Connect = "Database=" + dbname + ";Data Source=" + server + ";User Id=" + dbuser + ";Password=" + dbpass;
+
                 //Переменная Connect - это строка подключения в которой:
                 //БАЗА - Имя базы в MySQL
                 //ХОСТ - Имя или IP-адрес сервера (если локально то можно и localhost)
                 //ПОЛЬЗОВАТЕЛЬ - Имя пользователя MySQL
                 //ПАРОЛЬ - говорит само за себя - пароль пользователя БД MySQL
 
-
                 MySqlConnection myConnection = new MySqlConnection(Connect);
                 MySqlCommand myCommand = new MySqlCommand(CommandText, myConnection);
                 myConnection.Open(); //Устанавливаем соединение с базой данных.
                 MySqlDataReader MyDataReader;
 
-
                 MyDataReader = myCommand.ExecuteReader();
 
                if (MyDataReader.Read())
                 {
-
                     if (!MyDataReader.IsDBNull(0))
                     {
                        // MessageBox.Show("Подключение к базе данных прошло успешно");
@@ -8985,10 +8750,9 @@ if (newSentence.Contains("@@uvaj@@"))
                     {
                       //  MessageBox.Show("Не удалось подключиться к базе данных");
                     }
-
                 }
                 MyDataReader.Close();
-                myConnection.Close(); //Обязательно закрываем соединение!   
+                myConnection.Close(); //Обязательно закрываем соединение!
                 * */
                 saveState();
             }
@@ -9022,6 +8786,7 @@ if (newSentence.Contains("@@uvaj@@"))
 
                     //r1.Text = objectDataGrid.Rows[63].Cells[1].Value.ToString();
                     wdApp.Selection.InsertParagraph();
+
                     //wdApp.Selection.Font.Superscript = 1;
                     //                        wdApp.Selection.PasteAndFormat(Microsoft.Office.Interop.Word.WdRecoveryType.wdPasteDefault);
                     wdApp.ActiveDocument.Sections[1].Range.Select();
@@ -9037,6 +8802,7 @@ if (newSentence.Contains("@@uvaj@@"))
         private void button1_Click(object sender, EventArgs e)
         {
             var excelApp = new Microsoft.Office.Interop.Excel.Application();
+
             //Microsoft.Office.Interop.Excel.Workbook excelDoc = new Microsoft.Office.Interop.Excel.Workbook();
             string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
             string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
@@ -9068,6 +8834,7 @@ if (newSentence.Contains("@@uvaj@@"))
                         }
                     }
                 }
+
                 //первый аналог
 
                 //string pattern = "MMMM yyyyг.";
@@ -9077,7 +8844,6 @@ if (newSentence.Contains("@@uvaj@@"))
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 3] = d1;
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 4] = d2;
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 5] = d3;
-
 
                 excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing,
                                                Type.Missing, Type.Missing,
@@ -9091,6 +8857,7 @@ if (newSentence.Contains("@@uvaj@@"))
         private void button8_Click(object sender, EventArgs e)
         {
             var excelApp = new Microsoft.Office.Interop.Excel.Application();
+
             //Microsoft.Office.Interop.Excel.Workbook excelDoc = new Microsoft.Office.Interop.Excel.Workbook();
             string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
             string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
@@ -9122,6 +8889,7 @@ if (newSentence.Contains("@@uvaj@@"))
                         }
                     }
                 }
+
                 //первый аналог
 
                 //string pattern = "MMMM yyyyг.";
@@ -9135,7 +8903,6 @@ if (newSentence.Contains("@@uvaj@@"))
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 3] = d1;
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 4] = d2;
                 //excelApp.Workbooks[1].Sheets[1].Cells[7, 5] = d3;
-
 
                 excelApp.ActiveWorkbook.SaveAs(saveFileDialog1.FileName, Type.Missing, Type.Missing, Type.Missing,
                                                Type.Missing, Type.Missing,
@@ -9214,7 +8981,6 @@ if (newSentence.Contains("@@uvaj@@"))
 
                     nfi.PositiveSign = "";
 
-
                     string ownerFullName = ownerSurname.Text + " " + ownerName.Text + " " + ownerInit.Text;
                     string customerFullName = customerSurname.Text + " " + customerName.Text + " " + customerInit.Text;
 
@@ -9243,9 +9009,7 @@ if (newSentence.Contains("@@uvaj@@"))
                     int sentencesCount = wdDoc.Sentences.Count;
                     string topColontitul = topColontitulCreatorHouse();
 
-
                     wdDoc.Sections[1].Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range.Text = topColontitul;
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@MO@@";
@@ -9320,7 +9084,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@roomsT@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
-
 
                     wdApp.Selection.Find.Replacement.Text = roomsT;
 
@@ -9420,7 +9183,6 @@ if (newSentence.Contains("@@uvaj@@"))
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerFullnameR@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -9430,7 +9192,6 @@ if (newSentence.Contains("@@uvaj@@"))
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerFullnameT@@";
@@ -9451,7 +9212,6 @@ if (newSentence.Contains("@@uvaj@@"))
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerFullnameT@@";
@@ -9536,7 +9296,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     {
                         buildNum = buildingNum.Text;
                     }
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@buildingNum@@";
@@ -9733,12 +9492,10 @@ if (newSentence.Contains("@@uvaj@@"))
                         if (wdDoc.Shapes[i].TextEffect.Text.Contains("@@contractDate@@"))
                         {
                             wdDoc.Shapes[i].TextEffect.Text.Replace("@@contractDate@@", contractDate.Text);
-
                         }
                     }
-
-               
                     }*/
+
                     //Customer Passport
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@customerPassport@@";
@@ -9840,7 +9597,6 @@ if (newSentence.Contains("@@uvaj@@"))
                         ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                         ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@ownerDoc@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -9941,7 +9697,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.1.9@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10012,8 +9767,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.1@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10064,7 +9817,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.6@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10095,7 +9847,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.9@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10116,7 +9867,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.11@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10126,7 +9876,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.12@@";
@@ -10138,7 +9887,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.13@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10148,7 +9896,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.14@@";
@@ -10160,7 +9907,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.15@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10171,7 +9917,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
 
-
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.16@@";
                     wdApp.Selection.Find.Replacement.ClearFormatting();
@@ -10181,7 +9926,6 @@ if (newSentence.Contains("@@uvaj@@"))
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref Missing, ref Missing, ref Missing, ref Missing, ref Missing,
                                  ref replaceAll, ref Missing, ref Missing, ref Missing, ref Missing);
-
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "@@2.1.2.17@@";
@@ -10445,7 +10189,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ReplaceTextWord(ref wdApp, "@@a1.9@@", dirtGridAnalogs.Rows[8].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.10@@", dirtGridAnalogs.Rows[9].Cells[1].Value.ToString());
 
-
                     ReplaceTextWord(ref wdApp, "@@a2.1@@", dirtGridAnalogs.Rows[0].Cells[2].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a2.2@@", dirtGridAnalogs.Rows[1].Cells[2].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a2.3@@", dirtGridAnalogs.Rows[2].Cells[2].Value.ToString());
@@ -10456,7 +10199,6 @@ if (newSentence.Contains("@@uvaj@@"))
                     ReplaceTextWord(ref wdApp, "@@a2.8@@", dirtGridAnalogs.Rows[7].Cells[2].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a2.9@@", dirtGridAnalogs.Rows[8].Cells[2].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a2.10@@", dirtGridAnalogs.Rows[9].Cells[2].Value.ToString());
-
 
                     ReplaceTextWord(ref wdApp, "@@a3.1@@", dirtGridAnalogs.Rows[0].Cells[3].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a3.2@@", dirtGridAnalogs.Rows[1].Cells[3].Value.ToString());
@@ -10479,6 +10221,7 @@ if (newSentence.Contains("@@uvaj@@"))
                         wdApp.Selection.Characters[2].Font.Superscript = 1;
                     }
                     string te = wdApp.Selection.Text;
+
                     //saving
                     try
                     {
@@ -10500,9 +10243,7 @@ if (newSentence.Contains("@@uvaj@@"))
                     {
                     }
 
-
                     wdApp.ActiveDocument.SaveAs(saveFileDialog1.FileName);
-
 
                     wdApp.Quit();
                 }
@@ -10534,7 +10275,6 @@ if (newSentence.Contains("@@uvaj@@"))
         {
         }
 
-
         private void dirtCalcGrid_Enter(object sender, EventArgs e)
         {
             try
@@ -10556,7 +10296,6 @@ if (newSentence.Contains("@@uvaj@@"))
                 MessageBox.Show(except.Message);
             }
         }
-
 
         private void houseCalcGrid_Enter(object sender, EventArgs e)
         {
@@ -10657,6 +10396,7 @@ if (newSentence.Contains("@@uvaj@@"))
             t = houseAnalogs.Rows[9].Cells[4].Value.ToString();
             t = t.Replace(" ", "");
             houseCalcGrid.Rows[1].Cells[4].Value = t;
+
             //цена
             t = houseAnalogs.Rows[14].Cells[2].Value.ToString();
             t = t.Replace(" ", "");

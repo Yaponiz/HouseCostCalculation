@@ -6,11 +6,6 @@
 
 namespace HouseCostCalculation
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using WindowsFormsApplication1;
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -18,7 +13,7 @@ namespace HouseCostCalculation
     {
         private string bankName;
         private string calculationName;
-    
+
         public string BankName
         {
             get
@@ -33,13 +28,9 @@ namespace HouseCostCalculation
 
         public string appartmentFileName()
         {
-            string fileName="";
-
-           
+            string fileName = "";
 
             return fileName;
         }
-
-        
     }
 }

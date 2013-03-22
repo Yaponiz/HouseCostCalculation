@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{810892FC-7BED-48E6-BDDB-7AA3165069CA}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "Setup1\Setup1.vdproj", "{518864BA-A9E2-43ED-AF2C-8A44362C1D07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HouseCostCalculation", "WindowsFormsApplication1\HouseCostCalculation.csproj", "{810892FC-7BED-48E6-BDDB-7AA3165069CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +13,6 @@ Global
 		{810892FC-7BED-48E6-BDDB-7AA3165069CA}.Debug|x86.Build.0 = Debug|x86
 		{810892FC-7BED-48E6-BDDB-7AA3165069CA}.Release|x86.ActiveCfg = Release|x86
 		{810892FC-7BED-48E6-BDDB-7AA3165069CA}.Release|x86.Build.0 = Release|x86
-		{518864BA-A9E2-43ED-AF2C-8A44362C1D07}.Debug|x86.ActiveCfg = Debug
-		{518864BA-A9E2-43ED-AF2C-8A44362C1D07}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
