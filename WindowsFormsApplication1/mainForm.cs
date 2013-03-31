@@ -99,8 +99,59 @@ namespace WindowsFormsApplication1
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
+            updateTables();
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateTables();
+        }
+
+        private void updateTables()
+        {
             try
             {
+                string str;
+
+                if (floors.Value == 1)
+                {
+                    str = "-но";
+                }
+                else if (floors.Value == 2)
+                {
+                    str = "-ух";
+                }
+                else if (floors.Value == 3)
+                {
+                    str = "-ех";
+                }
+                else if (floors.Value == 4)
+                {
+                    str = "-ех";
+                }
+                else if (floors.Value == 7)
+                {
+                    str = "-и";
+                }
+                else if (floors.Value == 8)
+                {
+                    str = "-и";
+                }
+                else
+                {
+                    str = "-ти";
+                }
+
+                if (floors.Value < 6)
+                {
+                    lift.SelectedIndex = 1;
+                }
+                else if (floors.Value > 6)
+                {
+                    lift.SelectedIndex = 0;
+                }
+
+
                 switch (docTypeT)
                 {
                     case "Квартира":
@@ -111,26 +162,99 @@ namespace WindowsFormsApplication1
                             //analogsGrid.Rows[6].Cells[2].Value = floor.Value.ToString().ToLower();
                             //analogsGrid.Rows[6].Cells[3].Value = floor.Value.ToString().ToLower();
                             //analogsGrid.Rows[6].Cells[4].Value = floor.Value.ToString().ToLower();
+                            objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
+                            analogsGrid.Rows[2].Cells[1].Value = street.Text;
+                            analogsGrid.Rows[2].Cells[2].Value = street.Text;
+                            analogsGrid.Rows[2].Cells[3].Value = street.Text;
+                            analogsGrid.Rows[2].Cells[4].Value = street.Text;
+
+                            objectDataGrid.Rows[30].Cells[1].Value = lift.Text;
+                            analogsGrid.Rows[14].Cells[1].Value = lift.Text.ToLower();
+                            analogsGrid.Rows[14].Cells[2].Value = lift.Text.ToLower();
+                            analogsGrid.Rows[14].Cells[3].Value = lift.Text.ToLower();
+                            analogsGrid.Rows[14].Cells[4].Value = lift.Text.ToLower();
+                            objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
+                            objectDataGrid.Rows[20].Cells[1].Value = floors.Value.ToString() + str;
+                            analogsGrid.Rows[5].Cells[1].Value = floors.Value.ToString().ToLower();
+
+                            objectDataGrid.Rows[54].Cells[0].Value =
+                            "Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text +
+                            "), в кв.м.";
+                            objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
+                            objectDataGrid.Rows[21].Cells[1].Value = houseType.Text;
+                            objectDataGrid.Rows[22].Cells[1].Value = houseType.Text;
+                            analogsGrid.Rows[3].Cells[1].Value = houseType.Text.ToLower();
+                            analogsGrid.Rows[3].Cells[2].Value = houseType.Text.ToLower();
+                            analogsGrid.Rows[3].Cells[3].Value = houseType.Text.ToLower();
+                            analogsGrid.Rows[3].Cells[4].Value = houseType.Text.ToLower();
+
+
+                        }
+                        break;
+
+                    case "Домовладение":
+                        {
+                            dataGridView1.Rows[30].Cells[1].Value = lift.Text;
+                            dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
+                            dataGridView1.Rows[38].Cells[0].Value =
+                           "Общая площадь домовладения, согласно правоустанавливающим документам (" +
+                           registrationDoc.Text + "), в кв.м.";
+                            dataGridView1.Rows[1].Cells[1].Value = fullAddressHouse();
+                            dataGridView1.Rows[18].Cells[1].Value = houseType.Text;
+                        }
+                        break;
+
+                    case "Земельный участок":
+                        {
+                            //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
+                        }
+                        break;
+
+                    case "Домовладение с земельным участком":
+                        {
+                            dataGridView1.Rows[30].Cells[1].Value = lift.Text;
+                            dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
+
+                            dataGridView1.Rows[38].Cells[0].Value =
+                            "Общая площадь домовладения, согласно правоустанавливающим документам (" +
+                            registrationDoc.Text + "), в кв.м.";
+                            dataGridView1.Rows[1].Cells[1].Value = fullAddressHouse();
+                            dataGridView1.Rows[18].Cells[1].Value = houseType.Text;
+
+                            if (!town.Text.Contains("г.Владикавказ"))
+                            {
+                                houseAnalogs.Rows[2].Cells[1].Value = town.Text;
+                                houseAnalogs.Rows[2].Cells[2].Value = town.Text;
+                                houseAnalogs.Rows[2].Cells[3].Value = town.Text;
+                                houseAnalogs.Rows[2].Cells[4].Value = town.Text;
+
+                                dirtGridAnalogs.Rows[0].Cells[1].Value = town.Text;
+                                dirtGridAnalogs.Rows[0].Cells[2].Value = town.Text;
+                                dirtGridAnalogs.Rows[0].Cells[3].Value = town.Text;
+                                dirtGridAnalogs.Rows[0].Cells[4].Value = town.Text;
+                            }
+                            else
+                            {
+                                houseAnalogs.Rows[2].Cells[1].Value = street.Text;
+                                houseAnalogs.Rows[2].Cells[2].Value = street.Text;
+                                houseAnalogs.Rows[2].Cells[3].Value = street.Text;
+                                houseAnalogs.Rows[2].Cells[4].Value = street.Text;
+
+                                dirtGridAnalogs.Rows[0].Cells[1].Value = street.Text;
+                                dirtGridAnalogs.Rows[0].Cells[2].Value = street.Text;
+                                dirtGridAnalogs.Rows[0].Cells[3].Value = street.Text;
+                                dirtGridAnalogs.Rows[0].Cells[4].Value = street.Text;
+                            }
                         }
                         break;
 
                     default:
                         break;
+
                 }
             }
             catch (Exception exp)
             {
-            }
-        }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (docTypeT == "Квартира")
-            {
-                analogsGrid.Rows[2].Cells[1].Value = street.Text;
-                analogsGrid.Rows[2].Cells[2].Value = street.Text;
-                analogsGrid.Rows[2].Cells[3].Value = street.Text;
-                analogsGrid.Rows[2].Cells[4].Value = street.Text;
             }
         }
 
@@ -353,19 +477,6 @@ namespace WindowsFormsApplication1
             }
 
             return (name + Init);
-        }
-
-        private void Player_PlayStateChange(int NewState)
-        {
-            if ((WMPPlayState)NewState == WMPPlayState.wmppsStopped)
-            {
-            }
-        }
-
-        private void Player_MediaError(object pMediaObject)
-        {
-            MessageBox.Show("Cannot play media file.");
-            Close();
         }
 
         public void addObjectData()
@@ -1389,79 +1500,7 @@ namespace WindowsFormsApplication1
         {
             try
             {
-                string str;
-
-                if (floors.Value == 1)
-                {
-                    str = "-но";
-                }
-                else if (floors.Value == 2)
-                {
-                    str = "-ух";
-                }
-                else if (floors.Value == 3)
-                {
-                    str = "-ех";
-                }
-                else if (floors.Value == 4)
-                {
-                    str = "-ех";
-                }
-                else if (floors.Value == 7)
-                {
-                    str = "-и";
-                }
-                else if (floors.Value == 8)
-                {
-                    str = "-и";
-                }
-                else
-                {
-                    str = "-ти";
-                }
-                switch (docTypeT)
-                {
-                    case "Квартира":
-                        {
-                            objectDataGrid.Rows[20].Cells[1].Value = floors.Value.ToString() + str;
-                            analogsGrid.Rows[5].Cells[1].Value = floors.Value.ToString().ToLower();
-
-                            //analogsGrid.Rows[5].Cells[2].Value = floors.Value.ToString().ToLower();
-                            //analogsGrid.Rows[5].Cells[3].Value = floors.Value.ToString().ToLower();
-                            //analogsGrid.Rows[5].Cells[4].Value = floors.Value.ToString().ToLower();
-                        }
-                        break;
-
-                    case "Домовладение":
-                        {
-                            dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
-                        }
-                        break;
-
-                    case "Земельный участок":
-                        {
-                            //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                        }
-                        break;
-
-                    case "Домовладение с земельным участком":
-                        {
-                            dataGridView1.Rows[43].Cells[1].Value = floor.Value.ToString();
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-
-                if (floors.Value < 6)
-                {
-                    lift.SelectedIndex = 1;
-                }
-                else if (floors.Value > 6)
-                {
-                    lift.SelectedIndex = 0;
-                }
+                updateTables();
             }
             catch (Exception exp)
             {
@@ -3186,316 +3225,47 @@ namespace WindowsFormsApplication1
 
         private void town_TextChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void street_TextChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void houseNum_TextChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void buildingNum_TextChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void appartmentNum_TextChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void MO_TextChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void houseType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[18].Cells[1].Value = houseType.Text;
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[18].Cells[1].Value = houseType.Text;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void registrationDoc_TextChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[54].Cells[0].Value =
-                            "Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text +
-                            "), в кв.м.";
-                        objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
-                        objectDataGrid.Rows[21].Cells[1].Value = houseType.Text;
-                        objectDataGrid.Rows[22].Cells[1].Value = houseType.Text;
-                        analogsGrid.Rows[3].Cells[1].Value = houseType.Text.ToLower();
-                        analogsGrid.Rows[3].Cells[2].Value = houseType.Text.ToLower();
-                        analogsGrid.Rows[3].Cells[3].Value = houseType.Text.ToLower();
-                        analogsGrid.Rows[3].Cells[4].Value = houseType.Text.ToLower();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[38].Cells[0].Value =
-                            "Общая площадь домовладения, согласно правоустанавливающим документам (" +
-                            registrationDoc.Text + "), в кв.м.";
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[38].Cells[0].Value =
-                            "Общая площадь домовладения, согласно правоустанавливающим документам (" +
-                            registrationDoc.Text + "), в кв.м.";
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         private void lift_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (docTypeT)
-            {
-                case "Квартира":
-                    {
-                        objectDataGrid.Rows[30].Cells[1].Value = lift.Text;
-                        analogsGrid.Rows[14].Cells[1].Value = lift.Text.ToLower();
-                        analogsGrid.Rows[14].Cells[2].Value = lift.Text.ToLower();
-                        analogsGrid.Rows[14].Cells[3].Value = lift.Text.ToLower();
-                        analogsGrid.Rows[14].Cells[4].Value = lift.Text.ToLower();
-                    }
-                    break;
-
-                case "Домовладение":
-                    {
-                        dataGridView1.Rows[30].Cells[1].Value = lift.Text;
-                    }
-                    break;
-
-                case "Земельный участок":
-                    {
-                        //objectDataGrid.Rows[1].Cells[1].Value = fullAddress();
-                    }
-                    break;
-
-                case "Домовладение с земельным участком":
-                    {
-                        dataGridView1.Rows[30].Cells[1].Value = lift.Text;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            updateTables();
         }
 
         public void addAtributeToXml(XmlTextWriter t, string name, string text)
@@ -10408,6 +10178,11 @@ if (newSentence.Contains("@@uvaj@@"))
             t = t.Replace(" ", "");
             houseCalcGrid.Rows[0].Cells[4].Value = t;
             calculateCostHouse();
+        }
+
+        private void mainForm_Load(object sender, EventArgs e)
+        {
+            updateTables();
         }
     }
 }

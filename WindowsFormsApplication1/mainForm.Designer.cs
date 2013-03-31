@@ -2430,6 +2430,7 @@ namespace WindowsFormsApplication1
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Text = "Оценка";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.mainForm_Load);
             this.dirtCalcPage.ResumeLayout(false);
             this.dirtCalcPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dirtGridAnalogs)).EndInit();
