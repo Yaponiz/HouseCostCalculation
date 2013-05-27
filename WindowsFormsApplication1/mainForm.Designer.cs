@@ -349,6 +349,7 @@ namespace WindowsFormsApplication1
             // 
             this.dirtKadastr.Location = new System.Drawing.Point(743, 613);
             this.dirtKadastr.Name = "dirtKadastr";
+            this.dirtKadastr.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.dirtKadastr.Size = new System.Drawing.Size(284, 20);
             this.dirtKadastr.TabIndex = 12;
             // 
@@ -365,6 +366,7 @@ namespace WindowsFormsApplication1
             // 
             this.dirtm2.Location = new System.Drawing.Point(743, 579);
             this.dirtm2.Name = "dirtm2";
+            this.dirtm2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.dirtm2.Size = new System.Drawing.Size(100, 20);
             this.dirtm2.TabIndex = 10;
             this.dirtm2.TextChanged += new System.EventHandler(this.dirtm2_TextChanged_1);
@@ -665,7 +667,7 @@ namespace WindowsFormsApplication1
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(692, 488);
+            this.button5.Location = new System.Drawing.Point(869, 682);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(214, 26);
             this.button5.TabIndex = 4;
@@ -674,6 +676,7 @@ namespace WindowsFormsApplication1
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -695,7 +698,7 @@ namespace WindowsFormsApplication1
             dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle12;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -707,10 +710,12 @@ namespace WindowsFormsApplication1
             dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle14;
-            this.dataGridView1.Size = new System.Drawing.Size(445, 716);
+            this.dataGridView1.Size = new System.Drawing.Size(1134, 716);
             this.dataGridView1.TabIndex = 2;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // dataGridViewTextBoxColumn5
             // 
@@ -719,6 +724,7 @@ namespace WindowsFormsApplication1
             // 
             // dataGridViewTextBoxColumn6
             // 
+            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn6.HeaderText = "Column2";
             this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             // 
@@ -869,6 +875,8 @@ namespace WindowsFormsApplication1
             // 
             // objectDataGrid
             // 
+            this.objectDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+            this.objectDataGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -890,7 +898,7 @@ namespace WindowsFormsApplication1
             dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.objectDataGrid.DefaultCellStyle = dataGridViewCellStyle23;
-            this.objectDataGrid.Dock = System.Windows.Forms.DockStyle.Left;
+            this.objectDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectDataGrid.Location = new System.Drawing.Point(3, 3);
             this.objectDataGrid.Name = "objectDataGrid";
             this.objectDataGrid.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -904,7 +912,7 @@ namespace WindowsFormsApplication1
             this.objectDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle24;
             dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.objectDataGrid.RowsDefaultCellStyle = dataGridViewCellStyle25;
-            this.objectDataGrid.Size = new System.Drawing.Size(698, 710);
+            this.objectDataGrid.Size = new System.Drawing.Size(1128, 710);
             this.objectDataGrid.TabIndex = 1;
             this.objectDataGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.objectDataGrid_CellEndEdit);
             // 
@@ -915,6 +923,7 @@ namespace WindowsFormsApplication1
             this.Column1.HeaderText = "Column1";
             this.Column1.Name = "Column1";
             this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 21;
             // 
             // Column2
             // 
@@ -923,7 +932,7 @@ namespace WindowsFormsApplication1
             this.Column2.HeaderText = "Column2";
             this.Column2.Name = "Column2";
             this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2.Width = 500;
+            this.Column2.Width = 21;
             // 
             // button2
             // 
@@ -2484,8 +2493,6 @@ namespace WindowsFormsApplication1
         private System.Windows.Forms.TabPage housePage;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private System.Windows.Forms.TabPage appartmentsCalcPage;
         private System.Windows.Forms.Button saveAddsAppartaments;
         private System.Windows.Forms.DataGridView analogsGrid;
@@ -2794,6 +2801,9 @@ namespace WindowsFormsApplication1
             
 
         }
+
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
     }
 }
 

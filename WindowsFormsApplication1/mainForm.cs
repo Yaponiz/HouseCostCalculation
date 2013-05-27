@@ -111,6 +111,22 @@ namespace WindowsFormsApplication1
         {
             try
             {
+                string ht1 = "";
+                if (houseType.Text == "Кирпичный")
+                {
+                    ht1 = "Кирпичные";
+                }
+
+                if (houseType.Text == "Панельный")
+                {
+                    ht1 = "Панельные";
+                }
+
+                if (houseType.Text == "Монолитный")
+                {
+                    ht1 = "Монолитные";
+                }
+
                 string str;
 
                 if (floors.Value == 1)
@@ -162,7 +178,7 @@ namespace WindowsFormsApplication1
                             //analogsGrid.Rows[6].Cells[2].Value = floor.Value.ToString().ToLower();
                             //analogsGrid.Rows[6].Cells[3].Value = floor.Value.ToString().ToLower();
                             //analogsGrid.Rows[6].Cells[4].Value = floor.Value.ToString().ToLower();
-                            objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
+                            objectDataGrid.Rows[18].Cells[1].Value = ht1;
                             analogsGrid.Rows[2].Cells[1].Value = street.Text;
                             analogsGrid.Rows[2].Cells[2].Value = street.Text;
                             analogsGrid.Rows[2].Cells[3].Value = street.Text;
@@ -180,9 +196,10 @@ namespace WindowsFormsApplication1
                             objectDataGrid.Rows[54].Cells[0].Value =
                             "Общая площадь квартиры, согласно правоустанавливающим документам (" + registrationDoc.Text +
                             "), в кв.м.";
+
                             objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
-                            objectDataGrid.Rows[21].Cells[1].Value = houseType.Text;
-                            objectDataGrid.Rows[22].Cells[1].Value = houseType.Text;
+objectDataGrid.Rows[21].Cells[1].Value = ht1;
+objectDataGrid.Rows[22].Cells[1].Value = ht1;
                             analogsGrid.Rows[3].Cells[1].Value = houseType.Text.ToLower();
                             analogsGrid.Rows[3].Cells[2].Value = houseType.Text.ToLower();
                             analogsGrid.Rows[3].Cells[3].Value = houseType.Text.ToLower();
@@ -2077,6 +2094,7 @@ namespace WindowsFormsApplication1
                         ;
 
                     ReplaceTextWord(ref wdApp, "@@a1.1@@", dirtGridAnalogs.Rows[0].Cells[1].Value.ToString());
+                    ReplaceTextWord(ref wdApp, "@@a1.2@@", dirtGridAnalogs.Rows[1].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.3@@", dirtGridAnalogs.Rows[2].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.4@@", dirtGridAnalogs.Rows[3].Cells[1].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a1.5@@", dirtGridAnalogs.Rows[4].Cells[1].Value.ToString());
@@ -2108,560 +2126,106 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@a3.9@@", dirtGridAnalogs.Rows[8].Cells[3].Value.ToString());
                     ReplaceTextWord(ref wdApp, "@@a3.10@@", dirtGridAnalogs.Rows[9].Cells[3].Value.ToString());
 
-                    ReplaceTextWord(ref wdApp, "@@b1.1@@",
-                                    ((double)(houseCalcGrid.Rows[0].Cells[2].Value)).ToString("N", nfi)
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b1.1@@", ((double)(houseCalcGrid.Rows[0].Cells[2].Value)).ToString("N", nfi) ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.2@@", ((double)(houseCalcGrid.Rows[1].Cells[2].Value)).ToString("N", nfi) ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.3@@", ((double)(houseCalcGrid.Rows[2].Cells[2].Value)).ToString("N", nfi) ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.4@@", houseCalcGrid.Rows[3].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.5@@", houseCalcGrid.Rows[4].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.6@@", houseCalcGrid.Rows[5].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.7@@", houseCalcGrid.Rows[6].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.8@@", houseCalcGrid.Rows[7].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.9@@", houseCalcGrid.Rows[8].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.10@@", houseCalcGrid.Rows[9].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.11@@", houseCalcGrid.Rows[10].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.12@@", houseCalcGrid.Rows[11].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.13@@", houseCalcGrid.Rows[12].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.14@@", houseCalcGrid.Rows[13].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.15@@", houseCalcGrid.Rows[14].Cells[2].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b1.16@@", houseCalcGrid.Rows[15].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.17@@", houseCalcGrid.Rows[16].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.18@@", houseCalcGrid.Rows[17].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.19@@", houseCalcGrid.Rows[18].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.20@@", houseCalcGrid.Rows[21].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.21@@", houseCalcGrid.Rows[20].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.22@@", houseCalcGrid.Rows[21].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.23@@", houseCalcGrid.Rows[22].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.24@@", houseCalcGrid.Rows[23].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.25@@", houseCalcGrid.Rows[24].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.26@@", houseCalcGrid.Rows[25].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.27@@", houseCalcGrid.Rows[26].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.28@@", houseCalcGrid.Rows[27].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.29@@", houseCalcGrid.Rows[28].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.30@@", houseCalcGrid.Rows[29].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.31@@", houseCalcGrid.Rows[30].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.32@@", houseCalcGrid.Rows[31].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.33@@", houseCalcGrid.Rows[32].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.34@@", houseCalcGrid.Rows[33].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b1.35@@", houseCalcGrid.Rows[34].Cells[2].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.1@@", ((double)(houseCalcGrid.Rows[0].Cells[3].Value)).ToString("N", nfi) ) ;  ReplaceTextWord(ref wdApp, "@@b2.2@@", ((double)(houseCalcGrid.Rows[1].Cells[3].Value)).ToString("N", nfi) ) ;  ReplaceTextWord(ref wdApp, "@@b2.3@@", ((double)(houseCalcGrid.Rows[2].Cells[3].Value)).ToString("N", nfi) ) ;  ReplaceTextWord(ref wdApp, "@@b2.4@@", houseCalcGrid.Rows[3].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.5@@", houseCalcGrid.Rows[4].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.6@@", houseCalcGrid.Rows[5].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.7@@", houseCalcGrid.Rows[6].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.8@@", houseCalcGrid.Rows[7].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.9@@", houseCalcGrid.Rows[8].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.10@@", houseCalcGrid.Rows[9].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.11@@", houseCalcGrid.Rows[10].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.12@@", houseCalcGrid.Rows[11].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.13@@", houseCalcGrid.Rows[12].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.14@@", houseCalcGrid.Rows[13].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.15@@", houseCalcGrid.Rows[14].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.16@@", houseCalcGrid.Rows[15].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.17@@", houseCalcGrid.Rows[16].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.18@@", houseCalcGrid.Rows[17].Cells[3].Value.ToString() ) ;  ReplaceTextWord(ref wdApp, "@@b2.19@@", houseCalcGrid.Rows[18].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.20@@", houseCalcGrid.Rows[21].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.21@@", houseCalcGrid.Rows[20].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.22@@", houseCalcGrid.Rows[21].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.23@@", houseCalcGrid.Rows[22].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.24@@", houseCalcGrid.Rows[23].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.25@@", houseCalcGrid.Rows[24].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.26@@", houseCalcGrid.Rows[25].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.27@@", houseCalcGrid.Rows[26].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.28@@", houseCalcGrid.Rows[27].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.29@@", houseCalcGrid.Rows[28].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.30@@", houseCalcGrid.Rows[29].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.31@@", houseCalcGrid.Rows[30].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.32@@", houseCalcGrid.Rows[31].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.33@@", houseCalcGrid.Rows[32].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.34@@", houseCalcGrid.Rows[33].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b2.35@@", houseCalcGrid.Rows[34].Cells[3].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b3.1@@", ((double)(houseCalcGrid.Rows[0].Cells[4].Value)).ToString("N", nfi) ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b3.2@@", ((double)(houseCalcGrid.Rows[1].Cells[4].Value)).ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b3.3@@", ((double)(houseCalcGrid.Rows[2].Cells[4].Value)).ToString("N", nfi) ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b3.4@@", houseCalcGrid.Rows[3].Cells[4].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b3.5@@", houseCalcGrid.Rows[4].Cells[4].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b3.6@@", houseCalcGrid.Rows[5].Cells[4].Value.ToString() ) ; 
+                    ReplaceTextWord(ref wdApp, "@@b3.7@@", houseCalcGrid.Rows[6].Cells[4].Value.ToString() ) ;
+                    ReplaceTextWord(ref wdApp, "@@b3.8@@", houseCalcGrid.Rows[7].Cells[4].Value.ToString() ) ;
+                    ReplaceTextWord(ref wdApp, "@@b3.9@@", houseCalcGrid.Rows[8].Cells[4].Value.ToString() ) ;
+                    ReplaceTextWord(ref wdApp, "@@b3.10@@", houseCalcGrid.Rows[9].Cells[4].Value.ToString() ) ;
+                    ReplaceTextWord(ref wdApp, "@@b3.11@@", houseCalcGrid.Rows[10].Cells[4].Value.ToString() ) ;
+                    ReplaceTextWord(ref wdApp, "@@b3.12@@", houseCalcGrid.Rows[11].Cells[4].Value.ToString() ) ;
+                    ReplaceTextWord(ref wdApp, "@@b3.13@@", houseCalcGrid.Rows[12].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.2@@",
-                                    ((double)(houseCalcGrid.Rows[1].Cells[2].Value)).ToString("N", nfi)
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.14@@", houseCalcGrid.Rows[13].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.3@@",
-                                    ((double)(houseCalcGrid.Rows[2].Cells[2].Value)).ToString("N", nfi)
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.15@@", houseCalcGrid.Rows[14].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.4@@",
-                                    houseCalcGrid.Rows[3].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.16@@", houseCalcGrid.Rows[15].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.5@@",
-                                    houseCalcGrid.Rows[4].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.17@@", houseCalcGrid.Rows[16].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.6@@",
-                                    houseCalcGrid.Rows[5].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.18@@", houseCalcGrid.Rows[17].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.7@@",
-                                    houseCalcGrid.Rows[6].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.19@@", houseCalcGrid.Rows[18].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.8@@",
-                                    houseCalcGrid.Rows[7].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.20@@", houseCalcGrid.Rows[21].Cells[4].Value.ToString() ) ;  
+                    ReplaceTextWord(ref wdApp, "@@b3.21@@", houseCalcGrid.Rows[20].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.9@@",
-                                    houseCalcGrid.Rows[8].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.22@@", houseCalcGrid.Rows[21].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.10@@",
-                                    houseCalcGrid.Rows[9].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.23@@", houseCalcGrid.Rows[22].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.11@@",
-                                    houseCalcGrid.Rows[10].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.24@@", houseCalcGrid.Rows[23].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.12@@",
-                                    houseCalcGrid.Rows[11].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.25@@", houseCalcGrid.Rows[24].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.13@@",
-                                    houseCalcGrid.Rows[12].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.26@@", houseCalcGrid.Rows[25].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.14@@",
-                                    houseCalcGrid.Rows[13].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.27@@", houseCalcGrid.Rows[26].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.15@@",
-                                    houseCalcGrid.Rows[14].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.28@@", houseCalcGrid.Rows[27].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.16@@",
-                                    houseCalcGrid.Rows[15].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.29@@", houseCalcGrid.Rows[28].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.17@@",
-                                    houseCalcGrid.Rows[16].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.30@@", houseCalcGrid.Rows[29].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.18@@",
-                                    houseCalcGrid.Rows[17].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.31@@", houseCalcGrid.Rows[30].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.19@@",
-                                    houseCalcGrid.Rows[18].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.32@@", houseCalcGrid.Rows[31].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.20@@",
-                                    houseCalcGrid.Rows[21].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.33@@", houseCalcGrid.Rows[32].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.21@@",
-                                    houseCalcGrid.Rows[20].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.34@@", houseCalcGrid.Rows[33].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.22@@",
-                                    houseCalcGrid.Rows[21].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.35@@", houseCalcGrid.Rows[34].Cells[4].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.23@@",
-                                    houseCalcGrid.Rows[22].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b1.36@@", ((double)(houseCalcGrid.Rows[35].Cells[2].Value)).ToString("N", nfi) ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.24@@",
-                                    houseCalcGrid.Rows[23].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b2.36@@", ((double)(houseCalcGrid.Rows[35].Cells[3].Value)).ToString("N", nfi) ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.25@@",
-                                    houseCalcGrid.Rows[24].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b3.36@@", ((double)(houseCalcGrid.Rows[35].Cells[4].Value)).ToString("N", nfi) ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.26@@",
-                                    houseCalcGrid.Rows[25].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b4.1@@", houseCalcGrid.Rows[36].Cells[2].Value.ToString() ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.27@@",
-                                    houseCalcGrid.Rows[26].Cells[2].Value.ToString()
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b4.2@@", ((double)(houseCalcGrid.Rows[37].Cells[2].Value)).ToString("N", nfi) ) ;
 
-                    ReplaceTextWord(ref wdApp, "@@b1.28@@",
-                                    houseCalcGrid.Rows[27].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.29@@",
-                                    houseCalcGrid.Rows[28].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.30@@",
-                                    houseCalcGrid.Rows[29].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.31@@",
-                                    houseCalcGrid.Rows[30].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.32@@",
-                                    houseCalcGrid.Rows[31].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.33@@",
-                                    houseCalcGrid.Rows[32].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.34@@",
-                                    houseCalcGrid.Rows[33].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.35@@",
-                                    houseCalcGrid.Rows[34].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.1@@",
-                                    ((double)(houseCalcGrid.Rows[0].Cells[3].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.2@@",
-                                    ((double)(houseCalcGrid.Rows[1].Cells[3].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.3@@",
-                                    ((double)(houseCalcGrid.Rows[2].Cells[3].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.4@@",
-                                    houseCalcGrid.Rows[3].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.5@@",
-                                    houseCalcGrid.Rows[4].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.6@@",
-                                    houseCalcGrid.Rows[5].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.7@@",
-                                    houseCalcGrid.Rows[6].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.8@@",
-                                    houseCalcGrid.Rows[7].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.9@@",
-                                    houseCalcGrid.Rows[8].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.10@@",
-                                    houseCalcGrid.Rows[9].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.11@@",
-                                    houseCalcGrid.Rows[10].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.12@@",
-                                    houseCalcGrid.Rows[11].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.13@@",
-                                    houseCalcGrid.Rows[12].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.14@@",
-                                    houseCalcGrid.Rows[13].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.15@@",
-                                    houseCalcGrid.Rows[14].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.16@@",
-                                    houseCalcGrid.Rows[15].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.17@@",
-                                    houseCalcGrid.Rows[16].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.18@@",
-                                    houseCalcGrid.Rows[17].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.19@@",
-                                    houseCalcGrid.Rows[18].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.20@@",
-                                    houseCalcGrid.Rows[21].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.21@@",
-                                    houseCalcGrid.Rows[20].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.22@@",
-                                    houseCalcGrid.Rows[21].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.23@@",
-                                    houseCalcGrid.Rows[22].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.24@@",
-                                    houseCalcGrid.Rows[23].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.25@@",
-                                    houseCalcGrid.Rows[24].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.26@@",
-                                    houseCalcGrid.Rows[25].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.27@@",
-                                    houseCalcGrid.Rows[26].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.28@@",
-                                    houseCalcGrid.Rows[27].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.29@@",
-                                    houseCalcGrid.Rows[28].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.30@@",
-                                    houseCalcGrid.Rows[29].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.31@@",
-                                    houseCalcGrid.Rows[30].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.32@@",
-                                    houseCalcGrid.Rows[31].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.33@@",
-                                    houseCalcGrid.Rows[32].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.34@@",
-                                    houseCalcGrid.Rows[33].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.35@@",
-                                    houseCalcGrid.Rows[34].Cells[3].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.1@@",
-                                    ((double)(houseCalcGrid.Rows[0].Cells[4].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.2@@",
-                                    ((double)(houseCalcGrid.Rows[1].Cells[4].Value)).ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.3@@",
-                                    ((double)(houseCalcGrid.Rows[2].Cells[4].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.4@@",
-                                    houseCalcGrid.Rows[3].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.5@@",
-                                    houseCalcGrid.Rows[4].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.6@@",
-                                    houseCalcGrid.Rows[5].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.7@@",
-                                    houseCalcGrid.Rows[6].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.8@@",
-                                    houseCalcGrid.Rows[7].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.9@@",
-                                    houseCalcGrid.Rows[8].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.10@@",
-                                    houseCalcGrid.Rows[9].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.11@@",
-                                    houseCalcGrid.Rows[10].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.12@@",
-                                    houseCalcGrid.Rows[11].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.13@@",
-                                    houseCalcGrid.Rows[12].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.14@@",
-                                    houseCalcGrid.Rows[13].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.15@@",
-                                    houseCalcGrid.Rows[14].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.16@@",
-                                    houseCalcGrid.Rows[15].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.17@@",
-                                    houseCalcGrid.Rows[16].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.18@@",
-                                    houseCalcGrid.Rows[17].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.19@@",
-                                    houseCalcGrid.Rows[18].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.20@@",
-                                    houseCalcGrid.Rows[21].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.21@@",
-                                    houseCalcGrid.Rows[20].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.22@@",
-                                    houseCalcGrid.Rows[21].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.23@@",
-                                    houseCalcGrid.Rows[22].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.24@@",
-                                    houseCalcGrid.Rows[23].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.25@@",
-                                    houseCalcGrid.Rows[24].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.26@@",
-                                    houseCalcGrid.Rows[25].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.27@@",
-                                    houseCalcGrid.Rows[26].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.28@@",
-                                    houseCalcGrid.Rows[27].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.29@@",
-                                    houseCalcGrid.Rows[28].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.30@@",
-                                    houseCalcGrid.Rows[29].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.31@@",
-                                    houseCalcGrid.Rows[30].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.32@@",
-                                    houseCalcGrid.Rows[31].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.33@@",
-                                    houseCalcGrid.Rows[32].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.34@@",
-                                    houseCalcGrid.Rows[33].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.35@@",
-                                    houseCalcGrid.Rows[34].Cells[4].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b1.36@@",
-                                    ((double)(houseCalcGrid.Rows[35].Cells[2].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b2.36@@",
-                                    ((double)(houseCalcGrid.Rows[35].Cells[3].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b3.36@@",
-                                    ((double)(houseCalcGrid.Rows[35].Cells[4].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b4.1@@",
-                                    houseCalcGrid.Rows[36].Cells[2].Value.ToString()
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b4.2@@",
-                                    ((double)(houseCalcGrid.Rows[37].Cells[2].Value)).ToString("N", nfi)
-                        )
-                        ;
-
-                    ReplaceTextWord(ref wdApp, "@@b4.3@@",
-                                    ((double)(houseCalcGrid.Rows[38].Cells[2].Value)).ToString("N", nfi)
-                        )
-                        ;
+                    ReplaceTextWord(ref wdApp, "@@b4.3@@", ((double)(houseCalcGrid.Rows[38].Cells[2].Value)).ToString("N", nfi) ) ;
 
                     wdApp.Selection.Find.ClearFormatting();
                     wdApp.Selection.Find.Text = "м2";
@@ -3749,6 +3313,7 @@ namespace WindowsFormsApplication1
                     ReplaceTextWord(ref wdApp, "@@roomsX@@", roomsX);
                     ReplaceTextWord(ref wdApp, "@@lm2@@", lm2text.Text);
                     ReplaceTextWord(ref wdApp, "@@m2@@", m2text.Text);
+                        ReplaceTextWord(ref wdApp, "@@raion@@", ", " + textBox1.Text);
                     ReplaceTextWord(ref wdApp, "@@customerNameInits@@", customerFamiliyR + " " + getInits());
                     ReplaceTextWord(ref wdApp, "@@calculationDate@@", calculationDate.Text);
                     if (newBuildingCheck.Checked)
@@ -10183,6 +9748,11 @@ if (newSentence.Contains("@@uvaj@@"))
         private void mainForm_Load(object sender, EventArgs e)
         {
             updateTables();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
