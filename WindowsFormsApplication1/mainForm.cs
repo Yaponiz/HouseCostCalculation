@@ -198,8 +198,8 @@ namespace WindowsFormsApplication1
                             "), в кв.м.";
 
                             objectDataGrid.Rows[18].Cells[1].Value = houseType.Text;
-objectDataGrid.Rows[21].Cells[1].Value = ht1;
-objectDataGrid.Rows[22].Cells[1].Value = ht1;
+                            objectDataGrid.Rows[21].Cells[1].Value = ht1;
+                            objectDataGrid.Rows[22].Cells[1].Value = ht1;
                             analogsGrid.Rows[3].Cells[1].Value = houseType.Text.ToLower();
                             analogsGrid.Rows[3].Cells[2].Value = houseType.Text.ToLower();
                             analogsGrid.Rows[3].Cells[3].Value = houseType.Text.ToLower();
@@ -376,47 +376,47 @@ objectDataGrid.Rows[22].Cells[1].Value = ht1;
                     rooms1 = "однокомнатной";
                     roomsT = "Однокомнатная";
                     roomsN = "1 комн";
-                    roomsX = "1-на комн. квартира";
+                    roomsX = "1-на комнатная квартира";
                     break;
 
                 case "2":
                     rooms = "двухкомнатная";
                     rooms1 = "двухкомнатной";
                     roomsT = "Двухкомнатная";
-                    roomsN = "2 комн";
-                    roomsX = "2-ух комн. квартира";
+                    roomsN = "2 комнатная";
+                    roomsX = "2-ух комнатная квартира";
                     break;
 
                 case "3":
                     rooms = "трехкомнатная";
                     rooms1 = "трехкомнатной";
                     roomsT = "Трехкомнатная";
-                    roomsN = "3 комн";
-                    roomsX = "3-ех комн. квартира";
+                    roomsN = "3 комнатная";
+                    roomsX = "3-ех комнатная квартира";
                     break;
 
                 case "4":
                     rooms = "четырехкомнатная";
                     rooms1 = "четырехкомнатной";
                     roomsT = "Четырехкомнатная";
-                    roomsN = "4 комн";
-                    roomsX = "4-ех комн. квартира";
+                    roomsN = "4 комнатная";
+                    roomsX = "4-ех комнатная квартира";
                     break;
 
                 case "5":
                     rooms = "пятикомнатная";
                     rooms1 = "пятикомнатной";
                     roomsT = "Пятикомнатная";
-                    roomsN = "5 комн";
-                    roomsX = "5-ти комн. квартира";
+                    roomsN = "5 комнатная";
+                    roomsX = "5-ти комнатная квартира";
                     break;
 
                 case "6":
                     rooms = "шестикомнатная";
                     rooms1 = "шестикомнатной";
                     roomsT = "Шестикомнатная";
-                    roomsN = "6 комн";
-                    roomsX = "6-ти комн. квартира";
+                    roomsN = "6 комнатная";
+                    roomsX = "6-ти комнатная квартира";
                     break;
 
                 //case "7": rooms = "семикомнатная"; break;
