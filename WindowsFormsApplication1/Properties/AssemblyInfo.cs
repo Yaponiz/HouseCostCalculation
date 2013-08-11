@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Cost Evaluation")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Yaponiz Software")]
 [assembly: AssemblyProduct("Cost Evaluation")]
-[assembly: AssemblyCopyright("Copyright ©  2010 Yaponiz.com")]
+[assembly: AssemblyCopyright("Copyright ©  2013 Yaponiz Software")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

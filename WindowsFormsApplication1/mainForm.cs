@@ -375,7 +375,7 @@ namespace WindowsFormsApplication1
                     rooms = "однокомнатная";
                     rooms1 = "однокомнатной";
                     roomsT = "Однокомнатная";
-                    roomsN = "1 комн";
+                    roomsN = "1 комнатная";
                     roomsX = "1-на комнатная квартира";
                     break;
 
@@ -9751,6 +9751,11 @@ if (newSentence.Contains("@@uvaj@@"))
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
